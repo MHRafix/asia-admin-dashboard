@@ -1,4 +1,4 @@
-import { DELETE_BOOKING_MUTATION } from '@/app/config/gql-query';
+import { DELETE_BOOKING_MUTATION } from '@/app/config/queries/bookings.query';
 import { IBooking } from '@/app/models/bookings.model';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import { handleSetUid } from '@/logic/handleSetUid';

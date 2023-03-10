@@ -8,3 +8,20 @@ export const BOOKING_TABLE_HEAD = [
 	'Track',
 	'Action',
 ];
+export const APPOINTMENT_TABLE_HEAD = [
+	'Name',
+	'Mail',
+	'Call',
+	'Subject',
+	'Track',
+	'Action',
+];
+
+export const EMPLOYEES_TABLE_HEAD = [
+	'Name',
+	'Mail',
+	'Call',
+	'Post',
+	'Comunication',
+	'Action',
+];

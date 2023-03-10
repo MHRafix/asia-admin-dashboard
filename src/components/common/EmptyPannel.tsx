@@ -1,31 +1,42 @@
 import { Button, Text } from '@mantine/core';
 import React from 'react';
-import { BsBookmarkCheck, BsBookmarkPlus } from 'react-icons/bs';
+import { BsBookmarkPlus } from 'react-icons/bs';
 
-const EmptyPannel: React.FC<{ isShow: boolean; title: string }> = ({
+interface IEmptyPannelProps {
+	isShow: boolean;
+	title: string;
+	Icon?: JSX.Element;
+	actionBtnLabel?: string;
+	ActionBtnIcon?: JSX.Element;
+}
+
+const EmptyPannel: React.FC<IEmptyPannelProps> = ({
 	isShow,
 	title,
+	Icon,
+	actionBtnLabel,
+	ActionBtnIcon,
 }) => {
 	if (!isShow) {
 		return null;
 	}
 	return (
 		<div className='text-center my-5'>
-			<div>
-				<BsBookmarkCheck size={40} color='red' />
-			</div>
+			<div>{Icon}</div>
 			<Text color='red' fw={500}>
 				{title}
 			</Text>
-			<Button
-				leftIcon={<BsBookmarkPlus size={20} />}
-				variant='light'
-				color='violet'
-				size='sm'
-				my={5}
-			>
-				Add Booking
-			</Button>
+			{actionBtnLabel && (
+				<Button
+					leftIcon={ActionBtnIcon}
+					variant='light'
+					color='violet'
+					size='sm'
+					my={5}
+				>
+					{actionBtnLabel}
+				</Button>
+			)}
 		</div>
 	);
 };

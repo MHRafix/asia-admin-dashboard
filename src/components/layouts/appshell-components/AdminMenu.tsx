@@ -2,44 +2,7 @@ import { Navbar, NavLink } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { BsBookmarkCheck } from 'react-icons/bs';
-import { FaRegChartBar } from 'react-icons/fa';
-import { HiOutlineViewGrid } from 'react-icons/hi';
-import { RiApps2Line } from 'react-icons/ri';
-import { TbSettings, TbUsers } from 'react-icons/tb';
-
-const data = [
-	{
-		label: 'Dashboard',
-		icon: <HiOutlineViewGrid size={20} />,
-		href: '/',
-	},
-	{
-		label: 'Bookings',
-		icon: <BsBookmarkCheck size={20} />,
-		href: '/bookings',
-	},
-	{
-		label: 'Customers',
-		icon: <TbUsers size={20} />,
-		href: '/customers',
-	},
-	{
-		label: 'Reports',
-		icon: <FaRegChartBar size={20} />,
-		href: '/reports',
-	},
-	{
-		label: 'Apps',
-		icon: <RiApps2Line size={20} />,
-		href: '/apps',
-	},
-	{
-		label: 'Settings',
-		icon: <TbSettings size={20} />,
-		href: '/settings',
-	},
-];
+import { menus } from './menus';
 
 interface Props {
 	opened: boolean;
@@ -68,11 +31,10 @@ const AdminMenu: React.FC<Props> = ({ opened, style, width, height }) => {
 				hidden={!opened}
 				width={{ sm: 200, lg: 300, ...width }}
 				style={{ background: '#212231' }}
-
 				// height={ { sm: 100, lg:500}}
 			>
 				<Navbar.Section mt='xs'>
-					{data.map((item) => (
+					{menus.map((menu) => (
 						<NavLink
 							// style={{ background: "#1D1E2C" }}
 							styles={{
@@ -82,12 +44,12 @@ const AdminMenu: React.FC<Props> = ({ opened, style, width, height }) => {
 								},
 								// root:{background: "#1D1E2C"}
 							}}
-							active={getNavIdentifier(asPath, Boolean(query.id)) === item.href}
-							key={item.label}
-							label={item.label}
-							icon={item?.icon}
+							active={getNavIdentifier(asPath, Boolean(query.id)) === menu.href}
+							key={menu.label}
+							label={menu.label}
+							icon={menu?.icon}
 							component={Link}
-							href={item.href}
+							href={menu.href}
 						/>
 					))}
 				</Navbar.Section>

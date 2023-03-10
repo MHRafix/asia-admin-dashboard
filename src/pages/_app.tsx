@@ -4,7 +4,6 @@ import { MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import type { AppProps } from 'next/app';
-import Head from 'next/head';
 
 export default function App({ Component, pageProps }: AppProps) {
 	const client = new ApolloClient({
@@ -13,13 +12,6 @@ export default function App({ Component, pageProps }: AppProps) {
 	});
 	return (
 		<>
-			<Head>
-				<title>Page title</title>
-				<meta
-					name='viewport'
-					content='minimum-scale=1, initial-scale=1, width=device-width'
-				/>
-			</Head>
 			<ApolloProvider client={client}>
 				<MantineProvider
 					withGlobalStyles
@@ -30,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
 					}}
 				>
 					<ModalsProvider>
-						<Notifications />
+						<Notifications position='top-right' zIndex={2077} />
 						<Component {...pageProps} />
 					</ModalsProvider>
 				</MantineProvider>

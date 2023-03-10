@@ -4,7 +4,7 @@ import { NextPage } from 'next';
 
 const CustomerPage: NextPage = () => {
 	return (
-		<AdminLayout>
+		<AdminLayout title='Customers'>
 			<CustomerTable />
 		</AdminLayout>
 	);

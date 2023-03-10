@@ -1,51 +1,50 @@
 import {
-	CUSTOMERS_TABLE_DATA_SORTBY,
-	CUSTOMERS_TABLE_DEFAULT_SORTBY,
+	EMPLOYEE_TABLE_DATA_SORTBY,
+	EMPLOYEE_TABLE_DEFAULT_SORTBY,
 	TABLE_DATA_LIMITS,
 	TABLE_DEFAULT_LIMIT,
 } from '@/app/config/configuration';
-import {
-	BULK_REMOVE_USER,
-	USERS_QUERY,
-} from '@/app/config/queries/users.query';
+import { EMPLOYEES_QUERY } from '@/app/config/queries/employees.query';
 import { IPaginationMeta } from '@/app/models/CommonPagination.model';
-import { IUser } from '@/app/models/users.model';
+import { IEmployees } from '@/app/models/employees.model';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import Pagination from '@/components/common/Pagination';
 import TableHead from '@/components/common/TableHead';
-import { CUSTOMER_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
+import { EMPLOYEES_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
 import { Query_Variable } from '@/logic/queryVariables';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { Button, Select, Space, Table } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FiTrash } from 'react-icons/fi';
-import { TbUsers } from 'react-icons/tb';
-import CustomersTableBody from './CustomersTableBody';
+import { RiTeamLine } from 'react-icons/ri';
+import { TbCalendarTime } from 'react-icons/tb';
+import EmployeesTableBody from './EmployeesTableBody';
 
-const CustomerTable: React.FC<{}> = () => {
+const EmployeesTable: React.FC<{}> = () => {
 	const [page, setPage] = useState<number>(1);
 	const [limit, setLimit] = useState<number>(5);
-	const [customerIds, setCustomerIds] = useState<string[]>([]);
+	const [employeesIds, setEmployeesIds] = useState<string[]>([]);
+
 	const router = useRouter();
 
 	// get booking packages
 	const {
-		data: customers,
+		data: employeesData,
 		loading: fetching,
 		refetch,
 	} = useQuery<{
-		users: { nodes: IUser[]; meta: IPaginationMeta };
+		teams: { nodes: IEmployees[]; meta: IPaginationMeta };
 	}>(
-		USERS_QUERY,
+		EMPLOYEES_QUERY,
 		Query_Variable(
 			router.query.page as string,
 			router.query.limit as string,
 			page,
-			limit
+			limit,
+			router.query.sort as string
 		)
 	);
 
@@ -58,42 +57,43 @@ const CustomerTable: React.FC<{}> = () => {
 	};
 
 	const handleSortChange = (sortBy: string) => {
-		// Router.replace({
-		// 	query: { ...Router.query, limit, page: 1 },
-		// });
-		// setLimit(parseInt(limit));
-		console.log(sortBy);
+		Router.replace({
+			query: { ...Router.query, sort: sortBy },
+		});
 	};
 
 	// remove bulk bookings
-	const [bulkDeleteCustomer, { loading: bulkDeleting }] = useMutation(
-		BULK_REMOVE_USER,
-		{
-			onCompleted: () => {
-				refetch();
-				showNotification({
-					title: 'Customers bulk delete successfull!',
-					color: 'red',
-					icon: <FiTrash size={20} />,
-					message: '',
-				});
-			},
-		}
-	);
+	// const [bulkDeleteBooking, { loading: bulkDeleting }] = useMutation(
+	// 	BULK_REMOVE_BOOKING,
+	// 	{
+	// 		variables: {
+	// 			uIds: bookingIds,
+	// 		},
 
+	// 		onCompleted: () => {
+	// 			refetch();
+	// 			showNotification({
+	// 				title: 'Bookings bulk delete successfull!',
+	// 				color: 'red',
+	// 				icon: <FiTrash size={20} />,
+	// 				message: '',
+	// 			});
+	// 		},
+	// 	}
+	// );
 	return (
 		<>
 			<PageTitleArea
-				title='Our customers'
-				tagline='Our solid customers'
+				title='Employees'
+				tagline='Our employees'
 				actionComponent={
 					<div className='flex items-center gap-2'>
 						<Button
-							loading={bulkDeleting}
-							disabled={!customerIds?.length}
+							// loading={bulkDeleting}
+							disabled={!employeesIds?.length}
 							color='red'
 							leftIcon={<FiTrash size={16} />}
-							onClick={() => bulkDeleteCustomer()}
+							// onClick={() => bulkDeleteBooking()}
 						>
 							Bulk Remove
 						</Button>
@@ -108,10 +108,11 @@ const CustomerTable: React.FC<{}> = () => {
 							w={120}
 							placeholder='Pick one'
 							onChange={(value) => handleSortChange(value!)}
-							nothingFound='No options'
-							data={CUSTOMERS_TABLE_DATA_SORTBY}
-							defaultValue={CUSTOMERS_TABLE_DEFAULT_SORTBY}
+							data={EMPLOYEE_TABLE_DATA_SORTBY}
+							defaultValue={EMPLOYEE_TABLE_DEFAULT_SORTBY}
 						/>
+						<TbCalendarTime size={20} />
+						<span className='text-dimmed'>{new Date().toDateString()}</span>
 					</div>
 				}
 			/>
@@ -120,43 +121,45 @@ const CustomerTable: React.FC<{}> = () => {
 				<Table>
 					<thead>
 						<tr>
-							{CUSTOMER_TABLE_HEAD.map((head: string, idx: number) => (
+							{EMPLOYEES_TABLE_HEAD?.map((head: string, idx: number) => (
 								<TableHead key={idx} headData={head} />
 							))}
 						</tr>
 					</thead>
 					<tbody>
-						{customers?.users?.nodes?.map((customer: IUser, idx: number) => (
-							<CustomersTableBody
-								key={idx}
-								customer={customer}
-								refetchUser={refetch}
-								onStoreId={setCustomerIds}
-							/>
-						))}
+						{employeesData?.teams?.nodes?.map(
+							(employee: IEmployees, idx: number) => (
+								<EmployeesTableBody
+									key={idx}
+									employee={employee}
+									refetchEmployee={refetch}
+									onStoreId={setEmployeesIds}
+								/>
+							)
+						)}
 					</tbody>
 				</Table>
-
 				<EmptyPannel
-					isShow={!customers?.users?.nodes?.length && !fetching}
-					title='There is no customers found!'
-					Icon={<TbUsers size={40} color='red' />}
+					isShow={!employeesData?.teams?.nodes?.length && !fetching}
+					title='There is no employees found!'
+					Icon={<RiTeamLine size={40} color='red' />}
 				/>
 				<CircularLoader isShow={fetching} />
 				<Pagination
 					isShow={
-						(customers?.users?.nodes?.length! as number) &&
+						(employeesData?.teams?.nodes?.length! as number) &&
 						(!fetching as boolean)
 					}
 					limit={limit}
 					onPageChange={setPage}
 					page={page}
-					meta={customers?.users?.meta!}
+					meta={employeesData?.teams?.meta!}
 				/>
+
 				<Space h={10} />
 			</div>
 		</>
 	);
 };
 
-export default CustomerTable;
+export default EmployeesTable;

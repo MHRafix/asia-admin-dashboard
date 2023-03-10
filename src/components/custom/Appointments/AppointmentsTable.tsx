@@ -1,49 +1,45 @@
 import {
-	BOOKING_TABLE_DATA_SORTBY,
-	BOOKING_TABLE_DEFAULT_SORTBY,
+	APPOINTMENTS_TABLE_DATA_SORTBY,
+	APPOINTMENTS_TABLE_DEFAULT_SORTBY,
 	TABLE_DATA_LIMITS,
 	TABLE_DEFAULT_LIMIT,
 } from '@/app/config/configuration';
-import {
-	BULK_REMOVE_BOOKING,
-	PACAKGE_BOOKINGS_QUERY,
-} from '@/app/config/queries/bookings.query';
-
-import { IBooking } from '@/app/models/bookings.model';
+import { APPOINTMENTS_QUERY } from '@/app/config/queries/appointments.query';
+import { IAppointment } from '@/app/models/appointment.model';
 import { IPaginationMeta } from '@/app/models/CommonPagination.model';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import Pagination from '@/components/common/Pagination';
 import TableHead from '@/components/common/TableHead';
-import { BOOKING_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
+import { APPOINTMENT_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
 import { Query_Variable } from '@/logic/queryVariables';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { Button, Select, Space, Table } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { BsBookmarkCheck } from 'react-icons/bs';
 import { FiTrash } from 'react-icons/fi';
+import { SiGotomeeting } from 'react-icons/si';
 import { TbCalendarTime } from 'react-icons/tb';
-import BookingTableBody from './BookingTableBody';
+import AppointmentsTableBody from './AppointmentsTableBody';
 
-const BookingTable: React.FC<{}> = () => {
+const AppointmentsTable: React.FC<{}> = () => {
 	const [page, setPage] = useState<number>(1);
 	const [limit, setLimit] = useState<number>(5);
-	const [bookingIds, setBookingIds] = useState<string[]>([]);
+	const [appointmentIds, setAppointmentIds] = useState<string[]>([]);
 
 	const router = useRouter();
 
 	// get booking packages
 	const {
-		data: bookings,
+		data: appointmentsData,
 		loading: fetching,
 		refetch,
 	} = useQuery<{
-		bookings: { nodes: IBooking[]; meta: IPaginationMeta };
+		appointments: { nodes: IAppointment[]; meta: IPaginationMeta };
 	}>(
-		PACAKGE_BOOKINGS_QUERY,
+		APPOINTMENTS_QUERY,
 		Query_Variable(
 			router.query.page as string,
 			router.query.limit as string,
@@ -68,37 +64,38 @@ const BookingTable: React.FC<{}> = () => {
 	};
 
 	// remove bulk bookings
-	const [bulkDeleteBooking, { loading: bulkDeleting }] = useMutation(
-		BULK_REMOVE_BOOKING,
-		{
-			variables: {
-				uIds: bookingIds,
-			},
+	// const [bulkDeleteBooking, { loading: bulkDeleting }] = useMutation(
+	// 	BULK_REMOVE_BOOKING,
+	// 	{
+	// 		variables: {
+	// 			uIds: bookingIds,
+	// 		},
 
-			onCompleted: () => {
-				refetch();
-				showNotification({
-					title: 'Bookings bulk delete successfull!',
-					color: 'red',
-					icon: <FiTrash size={20} />,
-					message: '',
-				});
-			},
-		}
-	);
+	// 		onCompleted: () => {
+	// 			refetch();
+	// 			showNotification({
+	// 				title: 'Bookings bulk delete successfull!',
+	// 				color: 'red',
+	// 				icon: <FiTrash size={20} />,
+	// 				message: '',
+	// 			});
+	// 		},
+	// 	}
+	// );
+
 	return (
 		<>
 			<PageTitleArea
-				title='Package Bookings'
-				tagline='Booked travel packages'
+				title='Appointments'
+				tagline='Booked appointments'
 				actionComponent={
 					<div className='flex items-center gap-2'>
 						<Button
-							loading={bulkDeleting}
-							disabled={!bookingIds?.length}
+							// loading={bulkDeleting}
+							disabled={!appointmentIds?.length}
 							color='red'
 							leftIcon={<FiTrash size={16} />}
-							onClick={() => bulkDeleteBooking()}
+							// onClick={() => bulkDeleteBooking()}
 						>
 							Bulk Remove
 						</Button>
@@ -113,11 +110,11 @@ const BookingTable: React.FC<{}> = () => {
 							w={120}
 							placeholder='Pick one'
 							onChange={(value) => handleSortChange(value!)}
-							data={BOOKING_TABLE_DATA_SORTBY}
-							defaultValue={BOOKING_TABLE_DEFAULT_SORTBY}
+							data={APPOINTMENTS_TABLE_DATA_SORTBY}
+							defaultValue={APPOINTMENTS_TABLE_DEFAULT_SORTBY}
 						/>
 						<TbCalendarTime size={20} />
-						<span className='text-dimmed'>{'12 Feb, 23'}</span>
+						<span className='text-dimmed'>{new Date().toDateString()}</span>
 					</div>
 				}
 			/>
@@ -126,39 +123,39 @@ const BookingTable: React.FC<{}> = () => {
 				<Table>
 					<thead>
 						<tr>
-							{BOOKING_TABLE_HEAD?.map((head: string, idx: number) => (
+							{APPOINTMENT_TABLE_HEAD?.map((head: string, idx: number) => (
 								<TableHead key={idx} headData={head} />
 							))}
 						</tr>
 					</thead>
 					<tbody>
-						{bookings?.bookings?.nodes?.map(
-							(booking: IBooking, idx: number) => (
-								<BookingTableBody
+						{appointmentsData?.appointments?.nodes?.map(
+							(appointment: IAppointment, idx: number) => (
+								<AppointmentsTableBody
 									key={idx}
-									booking={booking}
-									refetchBooking={refetch}
-									onStoreId={setBookingIds}
+									appointment={appointment}
+									refetchAppointment={refetch}
+									onStoreId={setAppointmentIds}
 								/>
 							)
 						)}
 					</tbody>
 				</Table>
 				<EmptyPannel
-					isShow={!bookings?.bookings?.nodes?.length && !fetching}
-					title='There is no bookings found!'
-					Icon={<BsBookmarkCheck size={40} color='red' />}
+					isShow={!appointmentsData?.appointments?.nodes?.length && !fetching}
+					title='There is no appointments found!'
+					Icon={<SiGotomeeting size={40} color='red' />}
 				/>
 				<CircularLoader isShow={fetching} />
 				<Pagination
 					isShow={
-						(bookings?.bookings?.nodes?.length! as number) &&
+						(appointmentsData?.appointments?.nodes?.length! as number) &&
 						(!fetching as boolean)
 					}
 					limit={limit}
 					onPageChange={setPage}
 					page={page}
-					meta={bookings?.bookings?.meta!}
+					meta={appointmentsData?.appointments?.meta!}
 				/>
 
 				<Space h={10} />
@@ -167,4 +164,4 @@ const BookingTable: React.FC<{}> = () => {
 	);
 };
 
-export default BookingTable;
+export default AppointmentsTable;

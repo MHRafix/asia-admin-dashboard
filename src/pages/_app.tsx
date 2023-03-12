@@ -10,6 +10,8 @@ export default function App({ Component, pageProps }: AppProps) {
 		uri: process.env.NEXT_PUBLIC_API_URL,
 		cache: new InMemoryCache(),
 	});
+	console.log(client);
+
 	return (
 		<>
 			<ApolloProvider client={client}>

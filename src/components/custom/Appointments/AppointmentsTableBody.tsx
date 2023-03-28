@@ -1,5 +1,5 @@
+import { IAppointment } from '@/app/api/models/appointment.model';
 import { DELETE_APPOINTMENT_MUTATION } from '@/app/config/queries/appointments.query';
-import { IAppointment } from '@/app/models/appointment.model';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import { handleSetUid } from '@/logic/handleSetUid';
 import { useMutation } from '@apollo/client';

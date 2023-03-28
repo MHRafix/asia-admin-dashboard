@@ -1,5 +1,5 @@
+import { IUser } from '@/app/api/models/users.model';
 import { REMOVE_USER } from '@/app/config/queries/users.query';
-import { IUser } from '@/app/models/users.model';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import { handleSetUid } from '@/logic/handleSetUid';
 import { useMutation } from '@apollo/client';

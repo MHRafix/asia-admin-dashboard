@@ -1,3 +1,5 @@
+import { IAppointment } from '@/app/api/models/appointment.model';
+import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import {
 	APPOINTMENTS_TABLE_DATA_SORTBY,
 	APPOINTMENTS_TABLE_DEFAULT_SORTBY,
@@ -5,8 +7,6 @@ import {
 	TABLE_DEFAULT_LIMIT,
 } from '@/app/config/configuration';
 import { APPOINTMENTS_QUERY } from '@/app/config/queries/appointments.query';
-import { IAppointment } from '@/app/models/appointment.model';
-import { IPaginationMeta } from '@/app/models/CommonPagination.model';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';
@@ -18,7 +18,6 @@ import { useQuery } from '@apollo/client';
 import { Button, Select, Space, Table } from '@mantine/core';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { BsBookmarkCheck } from 'react-icons/bs';
 import { FiTrash } from 'react-icons/fi';
 import { SiGotomeeting } from 'react-icons/si';
 import { TbCalendarTime } from 'react-icons/tb';

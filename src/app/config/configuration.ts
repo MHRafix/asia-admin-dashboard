@@ -56,3 +56,20 @@ export const EMPLOYEE_TABLE_DATA_SORTBY: SelectItem[] = [
 ];
 
 export const EMPLOYEE_TABLE_DEFAULT_SORTBY = '_id';
+
+export const SERVICES_TYPE = [
+	{
+		label: 'Upcoming',
+		value: 'UPCOMING',
+	},
+	{
+		label: 'On-Going',
+		value: 'ON-GOING',
+	},
+	{
+		label: 'Finished',
+		value: 'FINISHED',
+	},
+];
+
+export const SERVICES_DEFAULT_VALUE = 'UPCOMING';

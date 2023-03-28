@@ -1,3 +1,5 @@
+import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
+import { IEmployees } from '@/app/api/models/employees.model';
 import {
 	EMPLOYEE_TABLE_DATA_SORTBY,
 	EMPLOYEE_TABLE_DEFAULT_SORTBY,
@@ -5,8 +7,6 @@ import {
 	TABLE_DEFAULT_LIMIT,
 } from '@/app/config/configuration';
 import { EMPLOYEES_QUERY } from '@/app/config/queries/employees.query';
-import { IPaginationMeta } from '@/app/models/CommonPagination.model';
-import { IEmployees } from '@/app/models/employees.model';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';

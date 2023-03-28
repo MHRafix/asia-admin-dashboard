@@ -1,3 +1,5 @@
+import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
+import { IUser } from '@/app/api/models/users.model';
 import {
 	CUSTOMERS_TABLE_DATA_SORTBY,
 	CUSTOMERS_TABLE_DEFAULT_SORTBY,
@@ -8,8 +10,6 @@ import {
 	BULK_REMOVE_USER,
 	USERS_QUERY,
 } from '@/app/config/queries/users.query';
-import { IPaginationMeta } from '@/app/models/CommonPagination.model';
-import { IUser } from '@/app/models/users.model';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';

@@ -1,5 +1,5 @@
+import { IEmployees } from '@/app/api/models/employees.model';
 import { REMOVE_EMPLOYEE } from '@/app/config/queries/employees.query';
-import { IEmployees } from '@/app/models/employees.model';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import { handleSetUid } from '@/logic/handleSetUid';
 import { useMutation } from '@apollo/client';

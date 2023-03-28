@@ -1,4 +1,4 @@
-import { IPaginationMeta } from '@/app/models/CommonPagination.model';
+import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { Button, Text } from '@mantine/core';
 import Router from 'next/router';
 import React from 'react';

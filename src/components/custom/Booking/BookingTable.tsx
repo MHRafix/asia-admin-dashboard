@@ -9,8 +9,8 @@ import {
 	PACAKGE_BOOKINGS_QUERY,
 } from '@/app/config/queries/bookings.query';
 
-import { IBooking } from '@/app/models/bookings.model';
-import { IPaginationMeta } from '@/app/models/CommonPagination.model';
+import { IBooking } from '@/app/api/models/bookings.model';
+import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';

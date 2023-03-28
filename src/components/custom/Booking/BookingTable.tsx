@@ -25,7 +25,6 @@ import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { BsBookmarkCheck } from 'react-icons/bs';
 import { FiTrash } from 'react-icons/fi';
-import { TbCalendarTime } from 'react-icons/tb';
 import BookingTableBody from './BookingTableBody';
 
 const BookingTable: React.FC<{}> = () => {
@@ -116,8 +115,6 @@ const BookingTable: React.FC<{}> = () => {
 							data={BOOKING_TABLE_DATA_SORTBY}
 							defaultValue={BOOKING_TABLE_DEFAULT_SORTBY}
 						/>
-						<TbCalendarTime size={20} />
-						<span className='text-dimmed'>{'12 Feb, 23'}</span>
 					</div>
 				}
 			/>

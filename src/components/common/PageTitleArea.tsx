@@ -1,4 +1,4 @@
-import { Flex, Indicator, Text, Title } from '@mantine/core';
+import { Box, Indicator, Text, Title } from '@mantine/core';
 import React from 'react';
 
 interface IPageTitleProps {
@@ -13,8 +13,11 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 	actionComponent,
 }) => {
 	return (
-		<Flex justify='space-between' align='center' mb={30}>
-			<div>
+		<Box
+			className='lg:flex justify-between items-center xs:grid gap-10'
+			mb={30}
+		>
+			<div className='mb-5'>
 				<Title order={3} fw={500} my={5}>
 					{title}
 				</Title>
@@ -24,9 +27,8 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 					</Text>
 				</Indicator>
 			</div>
-
 			<div>{actionComponent}</div>
-		</Flex>
+		</Box>
 	);
 };
 

@@ -1,4 +1,4 @@
-import { Navbar, NavLink } from '@mantine/core';
+import { ActionIcon, Navbar, NavLink } from '@mantine/core';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -6,12 +6,13 @@ import { menus } from './menus';
 
 interface Props {
 	opened: boolean;
+	setOpened: (state: boolean) => void;
 	style: string;
 	width: any;
 	height: number;
 }
 
-const AdminMenu: React.FC<Props> = ({ opened, style, width, height }) => {
+const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 	const { query, asPath } = useRouter();
 
 	const getNavIdentifier = (path: string, hasId: boolean) => {
@@ -26,20 +27,24 @@ const AdminMenu: React.FC<Props> = ({ opened, style, width, height }) => {
 	return (
 		<div className=''>
 			<Navbar
-				p='md'
 				hiddenBreakpoint='sm'
 				hidden={!opened}
-				width={{ sm: 200, lg: 300, ...width }}
-				style={{ background: '#212231' }}
-				// height={ { sm: 100, lg:500}}
+				width={{ sm: 200, lg: 300 }}
+				style={{ background: '#212231', zIndex: 100000000 }}
+				py={20}
 			>
-				<Navbar.Section mt='xs'>
+				{opened && (
+					<div className='p-3 ml-auto'>
+						<ActionIcon size='lg' color='red' onClick={() => setOpened(false)}>
+							✖
+						</ActionIcon>
+					</div>
+				)}
+				<Navbar.Section>
 					{menus.map((menu) => (
 						<NavLink
-							// style={{ background: "#1D1E2C" }}
 							styles={{
 								label: {
-									// background: "#1D1E2C",
 									color: 'white',
 								},
 								// root:{background: "#1D1E2C"}

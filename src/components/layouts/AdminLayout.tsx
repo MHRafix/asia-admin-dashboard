@@ -36,6 +36,7 @@ const AdminLayout: React.FC<PropsWithChildren<Props>> = ({
 						height={500}
 						style={'dark:bg-black'}
 						opened={opened}
+						setOpened={setOpened}
 					/>
 				}
 				header={
@@ -47,7 +48,7 @@ const AdminLayout: React.FC<PropsWithChildren<Props>> = ({
 					/>
 				}
 			>
-				<div className='bg-[#1D1E2B] pr-5 mt-5'>{children}</div>
+				<div className='bg-[#1D1E2B] lg:pr-5 mt-5'>{children}</div>
 			</AppShell>
 		</div>
 	);

@@ -1,5 +1,6 @@
 import { IService } from '@/app/api/models/service.model';
 import { Box, Button, Flex, Group, Text, ThemeIcon } from '@mantine/core';
+import Router from 'next/router';
 import React from 'react';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import { TiPlaneOutline } from 'react-icons/ti';
@@ -26,6 +27,7 @@ const ServiceCard: React.FC<IServiceCardProp> = ({ service }) => {
 						color='violet'
 						size='sm'
 						className='rounded-xl'
+						onClick={() => Router.push(`/services/${service?._id}`)}
 					>
 						<FiEdit size={16} />
 					</Button>

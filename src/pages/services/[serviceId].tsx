@@ -100,7 +100,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 						<TimeInput
 							variant={'unstyled'}
 							radius={0}
-							size='lg'
+							size='md'
 							className='!bg-[#1D1E2B] border-[1px] border-solid border-[#32344b] w-[150px] px-1'
 							//@ts-ignore
 							ref={ref}

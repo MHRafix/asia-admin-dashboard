@@ -18,7 +18,7 @@ const AdminLayout: React.FC<PropsWithChildren<Props>> = ({
 	return (
 		<div className='text-white'>
 			<Head>
-				<title>Asia Admin - {title}</title>
+				<title>Asia admin - {title}</title>
 				<meta
 					name='viewport'
 					content='minimum-scale=1, initial-scale=1, width=device-width'

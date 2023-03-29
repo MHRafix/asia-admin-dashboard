@@ -11,10 +11,15 @@ import {
 	Text,
 } from '@mantine/core';
 import React from 'react';
-import TimeInput from 'react-advanced-time-input';
+// import TimeInput from 'react-advanced-time-input';
+import { ActionIcon } from '@mantine/core';
+import { TimeInput } from '@mantine/dates';
+import { useRef } from 'react';
+import { AiOutlineClockCircle } from 'react-icons/ai';
 import { FaNotesMedical } from 'react-icons/fa';
 
 const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
+	const ref = useRef<HTMLInputElement>();
 	return (
 		<AdminLayout title='Single service'>
 			<form>
@@ -91,27 +96,33 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 					my={10}
 					// error={errors?.name?.message as string}
 				>
-					<Flex gap={20} align='center'>
+					<Flex gap={20} align='center' justify='flex-start'>
 						<TimeInput
-							style={{
-								display: 'block',
-								width: '100px',
-								height: '50px',
-								fontSize: '25px',
-								border: '1px solid #414252',
-								padding: '10px',
-								background: 'transparent',
-								outline: 'none',
-								borderRadius: '5px',
-							}}
-							value={'10:20'}
-							// onChange={(event, value) => {...}}
-							colon=':'
+							variant={'unstyled'}
+							radius={0}
+							size='lg'
+							className='!bg-[#1D1E2B] border-[1px] border-solid border-[#32344b] w-[150px] px-1'
+							//@ts-ignore
+							ref={ref}
+							rightSection={
+								<ActionIcon
+									onClick={() =>
+										//@ts-ignore
+										ref.current.showPicker()
+									}
+								>
+									<AiOutlineClockCircle size='1rem' />
+								</ActionIcon>
+							}
 						/>
 						<Switch
 							size='lg'
 							labelPosition='left'
-							label='Is customizeable ?'
+							label={
+								<Text fz={18} fw={500}>
+									Is customizeable ?
+								</Text>
+							}
 							color='red'
 						/>
 					</Flex>

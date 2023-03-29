@@ -21,22 +21,6 @@ const Services: NextPage = () => {
 				tagline='Our provided services'
 				actionComponent={
 					<div className='flex items-center gap-2'>
-						{/* <Button
-							loading={bulkDeleting}
-							disabled={!customerIds?.length}
-							color='red'
-							leftIcon={<FiTrash size={16} />}
-							onClick={() => bulkDeleteCustomer()}
-						>
-							Bulk Remove
-						</Button>
-						<Select
-							w={120}
-							placeholder='Pick one'
-							onChange={(value) => handleLimitChange(value!)}
-							data={TABLE_DATA_LIMITS}
-							defaultValue={TABLE_DEFAULT_LIMIT}
-						/> */}
 						<Select
 							variant='filled'
 							color='red'
@@ -52,7 +36,7 @@ const Services: NextPage = () => {
 			/>
 
 			<div className='grid md:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-10 '>
-				<ServiceSkeleton show={!services?.length} />
+				<ServiceSkeleton show={getingServices} />
 				{services?.map((service: IService, idx: number) => (
 					<ServiceCard key={idx} service={service} />
 				))}

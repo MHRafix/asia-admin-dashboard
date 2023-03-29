@@ -1,15 +1,18 @@
+import NotepadEditor from '@/components/common/NotepadEditor';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import {
 	Button,
 	Flex,
+	Input,
 	NumberInput,
+	Space,
 	Switch,
 	Text,
-	Textarea,
-	TextInput,
 } from '@mantine/core';
 import React from 'react';
+import TimeInput from 'react-advanced-time-input';
+import { FaNotesMedical } from 'react-icons/fa';
 
 const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 	return (
@@ -18,69 +21,101 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 				<PageTitleArea
 					title='Edit service details'
 					tagline='Update service details'
-					actionComponent={
-						<Flex gap={20} align='center'>
-							<Switch
-								size='lg'
-								labelPosition='left'
-								label='Is customizeable ?'
-								color='red'
-							/>
-							<Button color='teal'>Save Details</Button>
-						</Flex>
-					}
+					actionComponent={<Button color='teal'>Save Details</Button>}
 				/>
 
-				<TextInput
+				<div className='grid lg:grid-cols-2 gap-5'>
+					<Input.Wrapper
+						label={
+							<Text fz={18} my={5}>
+								Title
+							</Text>
+						}
+						my={10}
+						// error={errors?.name?.message as string}
+					>
+						<Input
+							variant='unstyled'
+							size={'md'}
+							className='!border-[1px] !border-[#32344b] border-solid px-2'
+						/>
+					</Input.Wrapper>
+
+					<Input.Wrapper
+						label={
+							<Text fz={18} my={5}>
+								Price
+							</Text>
+						}
+						my={10}
+						// error={errors?.name?.message as string}
+					>
+						<NumberInput
+							variant='unstyled'
+							size={'md'}
+							className='!border-[1px] !border-[#32344b] border-solid px-2'
+						/>
+					</Input.Wrapper>
+				</div>
+				<Input.Wrapper
 					label={
-						<Text size='lg' my={5}>
-							Service title
-						</Text>
-					}
-					size='md'
-					my={10}
-					className='!bg-[#1D1E2B]'
-				/>
-				<Textarea
-					label={
-						<Text size='lg' my={5}>
+						<Text fz={18} my={5}>
 							Short descrition
 						</Text>
 					}
-					size='md'
 					my={10}
-					className='!bg-[#1D1E2B]'
-				/>
-				<Textarea
+					// error={errors?.name?.message as string}
+				>
+					<NotepadEditor title='Short Desc' icon={<FaNotesMedical />} />
+				</Input.Wrapper>
+				<Space h={40} />
+				<Input.Wrapper
 					label={
-						<Text size='lg' my={5}>
+						<Text fz={18} my={5}>
 							Descrition
 						</Text>
 					}
-					size='md'
 					my={10}
-					className='!bg-[#1D1E2B]'
-				/>
-				<NumberInput
+					// error={errors?.name?.message as string}
+				>
+					<NotepadEditor title='Short Desc' icon={<FaNotesMedical />} />
+				</Input.Wrapper>
+				<Space h={40} />
+
+				<Input.Wrapper
 					label={
-						<Text size='lg' my={5}>
-							Service price
-						</Text>
-					}
-					size='md'
-					my={10}
-					className='!bg-[#1D1E2B]'
-				/>
-				<TextInput
-					label={
-						<Text size='lg' my={5}>
+						<Text fz={18} my={5}>
 							Meet time
 						</Text>
 					}
-					size='md'
 					my={10}
-					className='!bg-[#1D1E2B]'
-				/>
+					// error={errors?.name?.message as string}
+				>
+					<Flex gap={20} align='center'>
+						<TimeInput
+							style={{
+								display: 'block',
+								width: '100px',
+								height: '50px',
+								fontSize: '25px',
+								border: '1px solid #414252',
+								padding: '10px',
+								background: 'transparent',
+								outline: 'none',
+								borderRadius: '5px',
+							}}
+							value={'10:20'}
+							// onChange={(event, value) => {...}}
+							colon=':'
+						/>
+						<Switch
+							size='lg'
+							labelPosition='left'
+							label='Is customizeable ?'
+							color='red'
+						/>
+					</Flex>
+				</Input.Wrapper>
 			</form>
 		</AdminLayout>
 	);

@@ -7,7 +7,7 @@ const ServiceSkeleton: React.FC<{ show: boolean }> = ({ show }) => {
 	}
 	return (
 		<>
-			{new Array(6).fill(6).map((_, idx: number) => (
+			{new Array(9).fill(9).map((_, idx: number) => (
 				<div className='relative' key={idx}>
 					<Skeleton height={200} />
 				</div>

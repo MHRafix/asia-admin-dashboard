@@ -4,3 +4,11 @@
 body {
 	font-size: 18px;
 }
+
+.ql-toolbar.ql-snow {
+	border: 1px solid #32344b !important;
+}
+
+.ql-container.ql-snow {
+	border: 1px solid #32344b !important;
+}

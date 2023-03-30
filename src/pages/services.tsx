@@ -39,7 +39,7 @@ const Services: NextPage = () => {
 				title='Services'
 				tagline='Our provided services'
 				actionComponent={
-					<div className='flex items-center gap-2'>
+					<div className='flex items-center gap-2 my-5'>
 						<Select
 							variant='filled'
 							color='red'
@@ -73,7 +73,7 @@ const Services: NextPage = () => {
 				}
 			/>
 
-			<div className='grid md:grid-cols-2 lg:grid-cols-3 gap-x-5 gap-y-10 '>
+			<div className='grid md:grid-cols-2 lg:grid-cols-3 gap-5'>
 				<ServiceSkeleton show={getingServices} />
 				{services?.map((service: IService, idx: number) => (
 					<ServiceCard

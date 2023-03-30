@@ -66,7 +66,7 @@ const ServiceCard: React.FC<IServiceCardProp> = ({
 					</Button>
 				</Flex>
 			</Flex>
-			<Flex justify='center'>
+			<Flex justify='center' className='mt-5'>
 				<ThemeIcon size={60} color='pink' radius='xl' mb={8}>
 					<TiPlaneOutline size={25} />
 				</ThemeIcon>

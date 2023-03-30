@@ -1,9 +1,11 @@
+import { Notify } from '@/app/config/alertNotification/Notification';
 import {
 	GET_SERVICE_QUERY,
 	GET_SINGLE_SERVICE,
 } from '@/app/config/queries/service.query';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { IService } from '../models/service.model';
+import { UPDATE_SERVICE } from './../../config/queries/service.query';
 
 export const useGetServices = () => {
 	const {
@@ -34,4 +36,17 @@ export const useGetService = (id: string) => {
 		},
 	});
 	return { service: data?.service, getingService, refetchService };
+};
+
+export const useUpdateService = (actionFunc: () => void) => {
+	const [updateService, { loading: updatingService }] = useMutation(
+		UPDATE_SERVICE,
+		Notify({
+			sucTitle: 'Service details updated successfully!',
+			sucMessage: 'Refetch service details.',
+			errMessage: 'Try again to update service details.',
+			action: actionFunc,
+		})
+	);
+	return { updateService, updatingService };
 };

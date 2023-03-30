@@ -10,8 +10,6 @@ export const loginSchema = Yup.object().shape({
 export const updateServiceSchema = Yup.object().shape({
 	title: Yup.string().nullable().required().label('Service title'),
 	shortDesc: Yup.string().nullable().required().label('Short description'),
-	desc: Yup.string().required().nullable().label('Description'),
-	preRequirements: Yup.string().nullable().label('Pre requirements'),
 	price: Yup.string().required().nullable().label('Service price'),
 	isCustomizeable: Yup.boolean().nullable().label('Service price'),
 });

@@ -1,21 +1,16 @@
 import { createStyles } from '@mantine/core';
 import dynamic from 'next/dynamic';
-import { ReactNode, useState } from 'react';
 import 'react-quill/dist/quill.snow.css';
 const ReactQuill =
 	typeof window === 'object'
 		? dynamic(import('react-quill'), { ssr: false })
 		: null;
 
-const NotepadEditor = ({ title, icon }: Props) => {
+const NotepadEditor = ({ value, setValue }: Props) => {
 	const { classes } = useStyles();
-	const [value, setValue] = useState('');
-	// console.log(value);
 
 	return (
 		<div>
-			{/* drawer body */}
-			{/* <ScrollArea className={classes.drawerBody}> */}
 			{ReactQuill ? (
 				<ReactQuill
 					className={classes.quillBody}
@@ -24,7 +19,6 @@ const NotepadEditor = ({ title, icon }: Props) => {
 					onChange={setValue}
 				/>
 			) : null}
-			{/* </ScrollArea> */}
 		</div>
 	);
 };
@@ -49,6 +43,6 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
 // component props
 type Props = {
-	title: string;
-	icon: ReactNode;
+	value: string;
+	setValue: (state: string) => void;
 };

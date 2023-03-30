@@ -5,5 +5,5 @@ export interface IService {
 	desc: string;
 	preRequirements: string;
 	price: number;
-	meetTime: Date;
+	isCustomizeable: boolean;
 }

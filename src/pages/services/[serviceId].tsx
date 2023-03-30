@@ -1,35 +1,60 @@
+import { useGetService } from '@/app/api/api-hooks/service.api';
+import { UPDATE_SERVICE_DEFAULT_VALUES } from '@/app/config/formDefaultsValue/formDefaultValues';
+import { updateServiceSchema } from '@/app/config/validationSchema/Schema';
 import NotepadEditor from '@/components/common/NotepadEditor';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import {
 	Button,
-	Flex,
 	Input,
 	NumberInput,
-	Space,
 	Switch,
 	Text,
+	Textarea,
 } from '@mantine/core';
-import React from 'react';
-// import TimeInput from 'react-advanced-time-input';
-import { ActionIcon } from '@mantine/core';
-import { TimeInput } from '@mantine/dates';
-import { useRef } from 'react';
-import { AiOutlineClockCircle } from 'react-icons/ai';
+import { useForm, yupResolver } from '@mantine/form';
+import React, { useEffect, useRef } from 'react';
 import { FaNotesMedical } from 'react-icons/fa';
 
 const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
+	const { getingService, service, refetchService } = useGetService(serviceId);
 	const ref = useRef<HTMLInputElement>();
+
+	const form = useForm({
+		initialValues: UPDATE_SERVICE_DEFAULT_VALUES,
+		validate: yupResolver(updateServiceSchema),
+	});
+
+	// update initial info with service data
+	useEffect(() => {
+		form.setValues({
+			title: service?.title,
+			shortDesc: service?.shortDesc,
+			desc: service?.desc,
+			preRequirements: service?.preRequirements,
+			price: service?.price,
+			isCustomizeable: service?.isCustomizeable,
+		});
+	}, [service]);
+
+	const handleUpdateForm = (values: any) => {
+		console.log(values);
+	};
+
 	return (
 		<AdminLayout title='Single service'>
-			<form>
+			<form onSubmit={form.onSubmit(handleUpdateForm)}>
 				<PageTitleArea
 					title='Edit service details'
 					tagline='Update service details'
-					actionComponent={<Button color='teal'>Save Details</Button>}
+					actionComponent={
+						<Button color='teal' type='submit'>
+							Save Details
+						</Button>
+					}
 				/>
 
-				<div className='grid lg:grid-cols-2 gap-5'>
+				<div className='grid lg:grid-cols-2 lg:gap-5'>
 					<Input.Wrapper
 						label={
 							<Text fz={18} my={5}>
@@ -37,12 +62,13 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							</Text>
 						}
 						my={10}
-						// error={errors?.name?.message as string}
+						error={form.errors.title}
 					>
 						<Input
 							variant='unstyled'
 							size={'md'}
 							className='!border-[1px] !border-[#32344b] border-solid px-2'
+							{...form.getInputProps('title')}
 						/>
 					</Input.Wrapper>
 
@@ -53,12 +79,13 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							</Text>
 						}
 						my={10}
-						// error={errors?.name?.message as string}
+						error={form.errors.price}
 					>
 						<NumberInput
 							variant='unstyled'
 							size={'md'}
 							className='!border-[1px] !border-[#32344b] border-solid px-2'
+							{...form.getInputProps('price')}
 						/>
 					</Input.Wrapper>
 				</div>
@@ -68,65 +95,62 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							Short descrition
 						</Text>
 					}
-					my={10}
-					// error={errors?.name?.message as string}
+					my={15}
+					error={form.errors.shortDesc}
 				>
-					<NotepadEditor title='Short Desc' icon={<FaNotesMedical />} />
+					<Textarea
+						variant='unstyled'
+						size={'md'}
+						className='!border-[1px] !border-[#32344b] border-solid px-2'
+						{...form.getInputProps('shortDesc')}
+					/>
 				</Input.Wrapper>
-				<Space h={40} />
-				<Input.Wrapper
-					label={
-						<Text fz={18} my={5}>
-							Descrition
-						</Text>
-					}
-					my={10}
-					// error={errors?.name?.message as string}
-				>
-					<NotepadEditor title='Short Desc' icon={<FaNotesMedical />} />
-				</Input.Wrapper>
-				<Space h={40} />
+				<div className='block h-[200px] my-2'>
+					<Input.Wrapper
+						label={
+							<Text fz={18} my={5}>
+								Pre Requirements
+							</Text>
+						}
+						error={form.errors.preRequirements}
+					>
+						<NotepadEditor
+							title='Short Desc'
+							{...form.getInputProps('preRequirements')}
+							icon={<FaNotesMedical />}
+						/>
+					</Input.Wrapper>
+				</div>
+				<div className='block h-[200px]'>
+					<Input.Wrapper
+						label={
+							<Text fz={18} my={5}>
+								Descrition
+							</Text>
+						}
+						error={form.errors.desc}
+					>
+						<NotepadEditor
+							{...form.getInputProps('desc')}
+							title='Short Desc'
+							icon={<FaNotesMedical />}
+						/>
+					</Input.Wrapper>
+				</div>
 
-				<Input.Wrapper
-					label={
-						<Text fz={18} my={5}>
-							Meet time
-						</Text>
-					}
-					my={10}
-					// error={errors?.name?.message as string}
-				>
-					<Flex gap={20} align='center' justify='flex-start'>
-						<TimeInput
-							variant={'unstyled'}
-							radius={0}
-							size='md'
-							className='!bg-[#1D1E2B] border-[1px] border-solid border-[#32344b] w-[150px] px-1'
-							//@ts-ignore
-							ref={ref}
-							rightSection={
-								<ActionIcon
-									onClick={() =>
-										//@ts-ignore
-										ref.current.showPicker()
-									}
-								>
-									<AiOutlineClockCircle size='1rem' />
-								</ActionIcon>
-							}
-						/>
-						<Switch
-							size='lg'
-							labelPosition='left'
-							label={
-								<Text fz={18} fw={500}>
-									Is customizeable ?
-								</Text>
-							}
-							color='red'
-						/>
-					</Flex>
-				</Input.Wrapper>
+				<div className='grid lg:flex justify-between items-center gap-5'>
+					<Switch
+						{...form.getInputProps('isCustomizeable')}
+						size='lg'
+						labelPosition='left'
+						label={
+							<Text fz={18} fw={500}>
+								Is customizeable ?
+							</Text>
+						}
+						color='red'
+					/>
+				</div>
 			</form>
 		</AdminLayout>
 	);
@@ -140,6 +164,6 @@ export async function getServerSideProps({
 	params: { serviceId: string };
 }) {
 	return {
-		props: { serviceId: params?.serviceId }, // will be passed to the page component as props
+		props: { serviceId: params?.serviceId },
 	};
 }

@@ -6,3 +6,12 @@ export const loginSchema = Yup.object().shape({
 		.email('Type a valid email.'),
 	password: Yup.string().min(6, 'Password should have atleast 6 charecters!'),
 });
+
+export const updateServiceSchema = Yup.object().shape({
+	title: Yup.string().nullable().required().label('Service title'),
+	shortDesc: Yup.string().nullable().required().label('Short description'),
+	desc: Yup.string().required().nullable().label('Description'),
+	preRequirements: Yup.string().nullable().label('Pre requirements'),
+	price: Yup.string().required().nullable().label('Service price'),
+	isCustomizeable: Yup.boolean().nullable().label('Service price'),
+});

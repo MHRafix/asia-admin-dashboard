@@ -1,14 +1,36 @@
 import { IService } from '@/app/api/models/service.model';
+import { Notify } from '@/app/config/alertNotification/Notification';
+import { DELETE_SERVICE } from '@/app/config/queries/service.query';
+import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
+import { useMutation } from '@apollo/client';
 import { Box, Button, Flex, Group, Text, ThemeIcon } from '@mantine/core';
-import Router from 'next/router';
+import Link from 'next/link';
 import React from 'react';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import { TiPlaneOutline } from 'react-icons/ti';
 
 interface IServiceCardProp {
 	service: IService;
+	refetchServices: () => void;
 }
-const ServiceCard: React.FC<IServiceCardProp> = ({ service }) => {
+const ServiceCard: React.FC<IServiceCardProp> = ({
+	service,
+	refetchServices,
+}) => {
+	const callAfterSuccess = () => {
+		refetchServices();
+	};
+
+	const [deleteService, { loading: deletingService }] = useMutation(
+		DELETE_SERVICE,
+		Notify({
+			sucTitle: 'Service deleted successfully!',
+			sucMessage: 'Refetch services again.',
+			errMessage: 'Try again to delete service.',
+			action: callAfterSuccess,
+		})
+	);
+
 	return (
 		<Box
 			style={{
@@ -22,22 +44,23 @@ const ServiceCard: React.FC<IServiceCardProp> = ({ service }) => {
 					${service?.price}
 				</ThemeIcon>
 				<Flex color='teal' gap={5}>
+					<Link href={`/services/${service?._id}`}>
+						<Button
+							variant='filled'
+							color='violet'
+							size='sm'
+							className='rounded-xl'
+						>
+							<FiEdit size={16} />
+						</Button>
+					</Link>
 					<Button
-						variant='filled'
-						color='violet'
-						size='sm'
 						className='rounded-xl'
-						onClick={() => Router.push(`/services/${service?._id}`)}
-					>
-						<FiEdit size={16} />
-					</Button>
-					<Button
-						className='rounded-xl'
-						// loading={deletingBooking}
+						loading={deletingService}
 						variant='filled'
 						color='red'
 						size='sm'
-						// onClick={() => deleteConfirmModal(deleteBooking, booking?._id!)}
+						onClick={() => deleteConfirmModal(deleteService, service?._id!)}
 					>
 						<FiTrash size={16} />
 					</Button>

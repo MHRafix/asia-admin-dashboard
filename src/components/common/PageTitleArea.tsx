@@ -13,10 +13,7 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 	actionComponent,
 }) => {
 	return (
-		<Box
-			className='lg:flex justify-between items-center xs:grid gap-10'
-			mb={30}
-		>
+		<Box className='lg:flex justify-between items-center xs:grid gap-10 lg:mb-5'>
 			<div className='mb-5'>
 				<Title order={3} fw={500} my={5}>
 					{title}
@@ -27,7 +24,7 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 					</Text>
 				</Indicator>
 			</div>
-			<div>{actionComponent}</div>
+			<div className='text-right'>{actionComponent}</div>
 		</Box>
 	);
 };

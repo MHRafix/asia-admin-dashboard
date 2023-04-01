@@ -30,7 +30,7 @@ export const GET_SERVICE_QUERY = gql`
 				desc
 				preRequirements
 				price
-				meetTime
+				isCustomizeable
 			}
 		}
 	}
@@ -45,7 +45,7 @@ export const GET_SINGLE_SERVICE = gql`
 			desc
 			preRequirements
 			price
-			meetTime
+			isCustomizeable
 		}
 	}
 `;
@@ -58,7 +58,7 @@ export const UPDATE_SERVICE = gql`
 		$desc: String
 		$price: Float
 		$preRequirements: String
-		$meetTime: String
+		$isCustomizeable: Boolean
 	) {
 		updateService(
 			input: {
@@ -68,7 +68,7 @@ export const UPDATE_SERVICE = gql`
 				desc: $desc
 				price: $price
 				preRequirements: $preRequirements
-				meetTime: $meetTime
+				isCustomizeable: $isCustomizeable
 			}
 		) {
 			_id

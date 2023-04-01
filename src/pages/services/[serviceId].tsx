@@ -17,11 +17,10 @@ import {
 	Textarea,
 } from '@mantine/core';
 import { useForm, yupResolver } from '@mantine/form';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 	const { getingService, service, refetchService } = useGetService(serviceId);
-	const ref = useRef<HTMLInputElement>();
 	const [preRequirements, setPreRequirements] = useState(
 		service?.preRequirements
 	);
@@ -47,6 +46,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 	const { updateService, updatingService } = useUpdateService(refetchService);
 
 	const handleUpdateForm = (values: any) => {
+		// if (form.isDirty()) return;
 		updateService({
 			variables: {
 				...values,
@@ -164,6 +164,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 								</Text>
 							}
 							color='red'
+							defaultChecked={service?.isCustomizeable}
 						/>
 					</div>
 				</form>

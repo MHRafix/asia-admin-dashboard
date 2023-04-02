@@ -35,8 +35,8 @@ export const DELETE_APPOINTMENT_MUTATION = gql`
 `;
 
 // bulk booking query
-// export const BULK_REMOVE_APPOINTMENT = gql`
-// 	mutation BULK_REMOVE_APPOINTMENT($uIds: [String!]!) {
-// 		bulkRemoveBooking(uIds: $uIds)
-// 	}
-// `;
+export const BULK_REMOVE_APPOINTMENT = gql`
+	mutation BULK_REMOVE_APPOINTMENT($uIds: [String!]!) {
+		bulkRemoveAppointments(uIds: $uIds)
+	}
+`;

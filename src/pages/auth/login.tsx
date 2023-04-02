@@ -23,7 +23,7 @@ const LoginPage: NextPage = () => {
 		<Box className='flex items-center justify-center w-full h-screen bg-[#1c1d29]'>
 			<form
 				onSubmit={form.onSubmit(handleSubmitForm)}
-				className='w-4/12 p-3 rounded-md bg-[#212231] drop-shadow-2xl mx-2'
+				className='lg:w-4/12 p-3 rounded-md bg-[#212231] drop-shadow-2xl lg:mx-2'
 			>
 				<Title order={3} my={10}>
 					Login Now

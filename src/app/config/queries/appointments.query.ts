@@ -13,9 +13,13 @@ export const APPOINTMENTS_QUERY = gql`
 				name
 				email
 				phone
-				subject
 				serviceId
-				note
+				subService
+				profession
+				clientQuestions {
+					qTitle
+					qDesc
+				}
 			}
 			meta {
 				totalCount

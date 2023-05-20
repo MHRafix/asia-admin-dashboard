@@ -1,6 +1,7 @@
 import { useGetServices } from '@/app/api/api-hooks/service.api';
 import { IService } from '@/app/api/models/service.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import { CREATE_SERVICE } from '@/app/config/queries/service.query';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import ServiceCard from '@/components/custom/Services/ServiceCard';
@@ -15,9 +16,9 @@ import { AiOutlinePlus } from 'react-icons/ai';
 const Services: NextPage = () => {
 	const { getingServices, services, refetchServices } = useGetServices();
 
-	const callAfterSuccess = (id: string) => {
+	const callAfterSuccess = (res: { createService: IService }) => {
 		refetchServices();
-		Router?.push(`/services/${id}`);
+		Router?.push(`/services/${res?.createService?._id}`);
 	};
 	const [createService, { loading: creatingService }] = useMutation(
 		CREATE_SERVICE,
@@ -72,4 +73,4 @@ const Services: NextPage = () => {
 	);
 };
 
-export default Services;
+export default protectWithSession(Services);

@@ -1,3 +1,4 @@
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import AppointmentsTable from '@/components/custom/Appointments/AppointmentsTable';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { NextPage } from 'next';
@@ -10,4 +11,4 @@ const Appointments: NextPage = () => {
 	);
 };
 
-export default Appointments;
+export default protectWithSession(Appointments);

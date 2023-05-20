@@ -1,57 +1,121 @@
 import { IAuthPayload } from '@/app/api/models/auth.model';
 import { loginSchema } from '@/app/config/validationSchema/Schema';
-import { Box, Button, PasswordInput, TextInput, Title } from '@mantine/core';
-import { useForm, yupResolver } from '@mantine/form';
+import {
+	Box,
+	Button,
+	Input,
+	PasswordInput,
+	TextInput,
+	Title,
+} from '@mantine/core';
+import { yupResolver } from '@hookform/resolvers/yup';
+// import { useForm, yupResolver } from '@mantine/form';
 import { NextPage } from 'next';
+import { useForm } from 'react-hook-form';
 import { FiAtSign, FiLock } from 'react-icons/fi';
+import { ErrorMessage } from '@hookform/error-message';
+import Cookies from 'js-cookie';
+import Router from 'next/router';
+import { useMutation } from '@apollo/client';
+import { Notify } from '@/app/config/alertNotification/Notification';
+import { LOGIN_QUERY } from '@/app/config/queries/auth.query';
+import protectWithoutSession from '@/app/config/authProtection/potectWithoutSession';
+
+export interface IAuthResponse {
+	_id: string;
+	accessToken: string;
+}
 
 const LoginPage: NextPage = () => {
-	const form = useForm({
-		initialValues: {
+	const {
+		handleSubmit,
+		register,
+		formState: { errors },
+	} = useForm({
+		defaultValues: {
 			email: '',
 			password: '',
 		},
 
-		validate: yupResolver(loginSchema),
+		resolver: yupResolver(loginSchema),
 	});
 
+	const callAfterSuccess = (response: { signIn: IAuthResponse }) => {
+		console.log(response);
+		Cookies.set('user', JSON.stringify(response?.signIn), {
+			expires: 30,
+			secure: true,
+			domain: '',
+			path: '',
+		});
+		Router?.push('/');
+	};
+
+	// login or signup mutation
+	const [login, { data: user, loading: authenticating }] = useMutation(
+		LOGIN_QUERY,
+		Notify({
+			sucTitle: 'You are logged in successfully',
+			sucMessage: '',
+			errMessage: 'Failed to authenticate',
+			action: callAfterSuccess,
+		})
+	);
+
 	const handleSubmitForm = (payload: IAuthPayload) => {
-		//
+		login({ variables: payload });
 	};
 
 	return (
 		<Box className='flex items-center justify-center w-full h-screen bg-[#1c1d29]'>
 			<form
-				onSubmit={form.onSubmit(handleSubmitForm)}
+				onSubmit={handleSubmit(handleSubmitForm)}
 				className='lg:w-4/12 p-3 rounded-md bg-[#212231] drop-shadow-2xl lg:mx-2'
 			>
 				<Title order={3} my={10}>
 					Login Now
 				</Title>
-				<TextInput
+				<Input.Wrapper
 					size='md'
-					icon={<FiAtSign />}
-					variant='filled'
-					my={5}
-					withAsterisk
 					label='Email'
-					placeholder='your@email.com'
-					{...form.getInputProps('email')}
-				/>
+					error={<ErrorMessage errors={errors} name='email' />}
+				>
+					<TextInput
+						size='md'
+						icon={<FiAtSign />}
+						variant='filled'
+						my={5}
+						withAsterisk
+						placeholder='your@email.com'
+						{...register('email')}
+					/>
+				</Input.Wrapper>
 
-				<PasswordInput
-					icon={<FiLock />}
+				<Input.Wrapper
 					size='md'
-					variant='filled'
-					mt={5}
-					my={10}
-					placeholder='Password'
 					label='Password'
-					withAsterisk
-					{...form.getInputProps('password')}
-				/>
+					error={<ErrorMessage errors={errors} name='password' />}
+				>
+					<PasswordInput
+						icon={<FiLock />}
+						size='md'
+						variant='filled'
+						mt={5}
+						my={10}
+						placeholder='Password'
+						withAsterisk
+						{...register('password')}
+					/>
+				</Input.Wrapper>
 
-				<Button size='md' type='submit' color='violet' fullWidth my={10}>
+				<Button
+					size='md'
+					type='submit'
+					color='violet'
+					fullWidth
+					my={15}
+					loading={authenticating}
+				>
 					Login
 				</Button>
 			</form>
@@ -59,4 +123,4 @@ const LoginPage: NextPage = () => {
 	);
 };
 
-export default LoginPage;
+export default protectWithoutSession(LoginPage);

@@ -16,7 +16,7 @@ export const Notify = ({
 }: INotification) => {
 	return {
 		onCompleted: (res: any) => {
-			action(res?.createService?._id);
+			action(res);
 			showNotification({
 				title: sucTitle,
 				color: 'teal',

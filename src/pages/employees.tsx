@@ -1,3 +1,4 @@
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import EmployeesTable from '@/components/custom/Employees/EmployeesTable';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { NextPage } from 'next';
@@ -10,4 +11,4 @@ const Employees: NextPage = () => {
 	);
 };
 
-export default Employees;
+export default protectWithSession(Employees);

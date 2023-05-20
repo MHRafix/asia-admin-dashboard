@@ -1,3 +1,4 @@
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import BookingTable from '@/components/custom/Booking/BookingTable';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { NextPage } from 'next';
@@ -10,4 +11,4 @@ const BookingPage: NextPage = () => {
 	);
 };
 
-export default BookingPage;
+export default protectWithSession(BookingPage);

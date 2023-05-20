@@ -80,7 +80,6 @@ const AppointmentsTable: React.FC<{}> = () => {
 		})
 	);
 
-	console.log(limit);
 	return (
 		<>
 			<PageTitleArea

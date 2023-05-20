@@ -40,9 +40,8 @@ const LoginPage: NextPage = () => {
 		resolver: yupResolver(loginSchema),
 	});
 
-	const callAfterSuccess = (response: { signIn: IAuthResponse }) => {
-		console.log(response);
-		Cookies.set('user', JSON.stringify(response?.signIn), {
+	const callAfterSuccess = (response: { adminSignIn: IAuthResponse }) => {
+		Cookies.set('user', JSON.stringify(response?.adminSignIn), {
 			expires: 30,
 			secure: true,
 			domain: '',

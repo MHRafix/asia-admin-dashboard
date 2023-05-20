@@ -30,15 +30,15 @@ const AdminLayout: React.FC<PropsWithChildren<Props>> = ({
 				}}
 				navbarOffsetBreakpoint='sm'
 				asideOffsetBreakpoint='sm'
-				navbar={
-					<AdminMenu
-						width={{ base: 300 }}
-						height={500}
-						style={'dark:bg-black'}
-						opened={opened}
-						setOpened={setOpened}
-					/>
-				}
+				// navbar={
+				// 	<AdminMenu
+				// 		width={{ base: 300 }}
+				// 		height={500}
+				// 		style={'dark:bg-black'}
+				// 		opened={opened}
+				// 		setOpened={setOpened}
+				// 	/>
+				// }
 				header={
 					<AdminNavbar
 						title={title}
@@ -48,7 +48,7 @@ const AdminLayout: React.FC<PropsWithChildren<Props>> = ({
 					/>
 				}
 			>
-				<div className='bg-[#1D1E2B] lg:pr-5 mt-5'>{children}</div>
+				<div className='bg-[#1D1E2B] sm:px-6 px-0 mt-5'>{children}</div>
 			</AppShell>
 		</div>
 	);

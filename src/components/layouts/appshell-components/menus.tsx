@@ -9,42 +9,42 @@ import { TiPlaneOutline } from 'react-icons/ti';
 export const menus = [
 	{
 		label: 'Dashboard',
-		icon: <FaRegChartBar size={20} />,
-		href: '/',
+		icon: <FaRegChartBar size={25} />,
+		href: '/dashboard',
 	},
 	{
 		label: 'Bookings',
-		icon: <BsBookmarkCheck size={20} />,
+		icon: <BsBookmarkCheck size={25} />,
 		href: '/bookings',
 	},
 	{
 		label: 'Customers',
-		icon: <TbUsers size={20} />,
+		icon: <TbUsers size={25} />,
 		href: '/customers',
 	},
 	{
 		label: 'Services',
-		icon: <HiOutlineViewGrid size={20} />,
+		icon: <HiOutlineViewGrid size={25} />,
 		href: '/services',
 	},
 	{
 		label: 'Tour Packages',
-		icon: <TiPlaneOutline size={20} />,
+		icon: <TiPlaneOutline size={25} />,
 		href: '/tour_packages',
 	},
 	{
 		label: 'Appointments',
-		icon: <SiGotomeeting size={20} />,
+		icon: <SiGotomeeting size={25} />,
 		href: '/appointments',
 	},
 	{
 		label: 'Employees',
-		icon: <RiTeamLine size={20} />,
+		icon: <RiTeamLine size={25} />,
 		href: '/employees',
 	},
 	{
 		label: 'Settings',
-		icon: <TbSettings size={20} />,
+		icon: <TbSettings size={25} />,
 		href: '/settings',
 	},
 ];

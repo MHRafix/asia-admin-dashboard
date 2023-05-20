@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const LOGIN_QUERY = gql`
 	mutation SIGNIN($email: String!, $password: String!) {
-		signIn(input: { email: $email, password: $password }) {
+		adminSignIn(input: { email: $email, password: $password }) {
 			_id
 			accessToken
 		}

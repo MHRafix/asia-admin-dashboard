@@ -1,6 +1,8 @@
-import { Burger, MediaQuery } from '@mantine/core';
+import { ActionIcon, Burger, MediaQuery } from '@mantine/core';
 import React from 'react';
 import HeaderUserMenu from './HeaderUserMenu';
+import { MdArrowBackIosNew } from 'react-icons/md';
+import Router, { useRouter } from 'next/router';
 
 interface Props {
 	title?: string;
@@ -15,19 +17,23 @@ const AdminNavbar: React.FC<Props> = ({
 	mobileMenuOpen,
 	setMobileMenuOpen,
 }) => {
+	const router = useRouter();
 	return (
-		<div className='bg-[#212231] flex items-center justify-between w-full gap-4 px-4  rounded-sm h-14 drop-shadow-2xl'>
+		<div className='bg-[#212231] flex items-center justify-between w-full sm:px-10 px-3 rounded-sm h-16 drop-shadow-2xl'>
 			<div className='flex items-center justify-between w-full'>
-				<MediaQuery largerThan='sm' styles={{ display: 'none' }}>
-					<Burger
-						opened={mobileMenuOpen}
-						onClick={setMobileMenuOpen}
-						className='mr-2'
-						size='sm'
-						mr='xl'
-					/>
-				</MediaQuery>
 				<div className='flex items-center justify-between w-full'>
+					<div>
+						{router.pathname !== '/' && (
+							<ActionIcon
+								size={'xl'}
+								radius={100}
+								color='violet'
+								onClick={() => Router.back()}
+							>
+								<MdArrowBackIosNew size={18} />
+							</ActionIcon>
+						)}
+					</div>
 					{/* <Image src={Logo} alt='Logo' width={100} height={100} /> */}
 					<div>{Actions}</div>
 				</div>

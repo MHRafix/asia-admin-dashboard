@@ -42,10 +42,8 @@ const LoginPage: NextPage = () => {
 
 	const callAfterSuccess = (response: { adminSignIn: IAuthResponse }) => {
 		Cookies.set('user', JSON.stringify(response?.adminSignIn), {
-			expires: 30,
-			secure: true,
-			domain: '',
-			path: '',
+			expires: 5,
+			sameSite: 'strict',
 		});
 		Router?.push('/');
 	};

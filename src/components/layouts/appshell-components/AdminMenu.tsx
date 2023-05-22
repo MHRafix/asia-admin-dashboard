@@ -24,6 +24,7 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 		const item = pathArray[pathArray.length - 1];
 		return item;
 	};
+
 	return (
 		<div className=''>
 			<Navbar

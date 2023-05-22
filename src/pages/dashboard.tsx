@@ -5,18 +5,20 @@ import React, { useState } from 'react';
 import { BsBookmarkCheck, BsCheckCircleFill } from 'react-icons/bs';
 import { SiGotomeeting } from 'react-icons/si';
 import { BiHotel } from 'react-icons/bi';
-import { TbPlaneInflight } from 'react-icons/tb';
-import { Calendar, DatePicker } from '@mantine/dates';
-import dayjs from 'dayjs';
+import { TbPlaneInflight, TbTransform } from 'react-icons/tb';
+import { DatePicker } from '@mantine/dates';
+import { useMediaQuery } from '@mantine/hooks';
+import TravelPackages from '@/components/custom/TravelPackage/TravelPackages';
 
 const Dashboard = () => {
 	const [value, setValue] = useState<Date | null>(new Date());
+	const largeScreen = useMediaQuery('(min-width: 60em)');
 
 	return (
 		<AdminLayout title='Dashboard'>
 			<div className='grid gap-10'>
-				<div className='grid lg:grid-cols-4 sm:grid-cols-2 gap-10'>
-					<div className='lg:flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
+				<div className='grid lg:grid-cols-4 sm:grid-cols-2 gap-8'>
+					<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
 						<ThemeIcon color='violet' size={60} variant='light' radius={8}>
 							<SiGotomeeting size={30} />
 						</ThemeIcon>
@@ -30,7 +32,7 @@ const Dashboard = () => {
 							</Text>
 						</div>
 					</div>
-					<div className='lg:flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
+					<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
 						<ThemeIcon color='violet' size={60} variant='light' radius={8}>
 							<BsBookmarkCheck size={30} />
 						</ThemeIcon>
@@ -44,7 +46,7 @@ const Dashboard = () => {
 							</Text>
 						</div>
 					</div>
-					<div className='lg:flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
+					<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
 						<ThemeIcon color='violet' size={60} variant='light' radius={8}>
 							<TbPlaneInflight size={30} />
 						</ThemeIcon>
@@ -58,9 +60,9 @@ const Dashboard = () => {
 							</Text>
 						</div>
 					</div>
-					<div className='lg:flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
+					<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
 						<ThemeIcon color='violet' size={60} variant='light' radius={8}>
-							<BiHotel size={30} />
+							<TbTransform size={30} />
 						</ThemeIcon>
 						<div>
 							<Text fw={700} fz={25}>
@@ -68,18 +70,18 @@ const Dashboard = () => {
 							</Text>
 							<Space h={0} />
 							<Text fz={15} fw={400} color='#55587b'>
-								New Hotel Booking
+								Total Transaction
 							</Text>
 						</div>
 					</div>
 				</div>
 
-				<div className='lg:flex grid justify-between gap-10'>
+				<div className='lg:flex grid justify-between gap-8'>
 					<DatePicker
-						className=' bg-[#212231] px-10 py-10 shadow-xl w-12/12 rounded-sm'
+						className=' bg-[#212231] md:px-10 px-5 py-10 shadow-xl w-12/12 rounded-sm'
 						value={value}
 						onChange={setValue}
-						size='xl'
+						size={largeScreen ? 'xl' : 'xs'}
 						renderDay={(date) => {
 							const getDate = date.getDate();
 							const getDay = date.getDay();
@@ -88,7 +90,7 @@ const Dashboard = () => {
 									<div
 										className={
 											getDate === value?.getDate() && getDay === value.getDay()
-												? 'bg-red-500 text-xl p-2 w-[54px] h-[54px] flex items-center justify-center rounded-sm'
+												? 'bg-red-500 md:text-xl p-2 md:w-[54px] md:h-[54px] flex items-center justify-center rounded-sm'
 												: ''
 										}
 									>
@@ -128,6 +130,10 @@ const Dashboard = () => {
 						veritatis?
 					</div>
 				</div>
+
+				{/* <div className=''> */}
+				<TravelPackages />
+				{/* </div> */}
 			</div>
 		</AdminLayout>
 	);

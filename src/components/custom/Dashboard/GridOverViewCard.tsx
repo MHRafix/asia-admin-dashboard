@@ -6,7 +6,7 @@ import { TbPlaneInflight, TbTransform } from 'react-icons/tb';
 const GridOverViewCard: React.FC = () => {
 	return (
 		<div className='grid lg:grid-cols-4 sm:grid-cols-2 gap-8'>
-			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
+			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'>
 				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
 					<SiGotomeeting size={30} />
 				</ThemeIcon>
@@ -20,7 +20,7 @@ const GridOverViewCard: React.FC = () => {
 					</Text>
 				</div>
 			</div>
-			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
+			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'>
 				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
 					<BsBookmarkCheck size={30} />
 				</ThemeIcon>
@@ -34,7 +34,7 @@ const GridOverViewCard: React.FC = () => {
 					</Text>
 				</div>
 			</div>
-			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
+			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'>
 				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
 					<TbPlaneInflight size={30} />
 				</ThemeIcon>
@@ -48,7 +48,7 @@ const GridOverViewCard: React.FC = () => {
 					</Text>
 				</div>
 			</div>
-			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-md'>
+			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'>
 				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
 					<TbTransform size={30} />
 				</ThemeIcon>

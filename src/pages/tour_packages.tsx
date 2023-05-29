@@ -1,5 +1,6 @@
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import PageTitleArea from '@/components/common/PageTitleArea';
+import TravelPackages from '@/components/custom/TravelPackage/TravelPackages';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { Button } from '@mantine/core';
 import { NextPage } from 'next';
@@ -35,6 +36,7 @@ const TourPackages: NextPage = () => {
 					</div>
 				}
 			/>
+			<TravelPackages skeletonCount={20} />
 		</AdminLayout>
 	);
 };

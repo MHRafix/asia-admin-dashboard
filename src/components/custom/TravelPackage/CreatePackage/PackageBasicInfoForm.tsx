@@ -1,12 +1,19 @@
 import NotepadEditor from '@/components/common/NotepadEditor';
-import { Input, Textarea } from '@mantine/core';
+import { activeStep } from '@/store/createPackgage.store';
+import { Button, Group, Input, Textarea } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
+import { useAtom } from 'jotai';
 import React, { useState } from 'react';
 import { FiCalendar } from 'react-icons/fi';
 
 const PackageBasicInfoForm: React.FC = () => {
 	const [value, setValue] = useState<Date | null>(new Date());
 	const [desc, setDesc] = useState<string>();
+	const [step, onChangeStep] = useAtom(activeStep);
+	const nextStep = () =>
+		onChangeStep((currentStep) =>
+			currentStep < 3 ? currentStep + 1 : currentStep
+		);
 	return (
 		<div>
 			<form>
@@ -123,6 +130,13 @@ const PackageBasicInfoForm: React.FC = () => {
 						<NotepadEditor setValue={setDesc} value={desc!} />
 					</Input.Wrapper>
 				</div>
+				{step !== 1 && (
+					<Group position='right' mt={65}>
+						<Button color='violet' type='submit' onClick={nextStep}>
+							Next step
+						</Button>
+					</Group>
+				)}
 			</form>
 		</div>
 	);

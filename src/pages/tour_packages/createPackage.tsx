@@ -1,16 +1,19 @@
 import PageTitleArea from '@/components/common/PageTitleArea';
 import PackageBasicInfoForm from '@/components/custom/TravelPackage/CreatePackage/PackageBasicInfoForm';
+import UploadThumbnails from '@/components/custom/TravelPackage/CreatePackage/UploadThumbnails';
 import AdminLayout from '@/components/layouts/AdminLayout';
+import { activeStep } from '@/store/createPackgage.store';
 import { Button, Group, Stepper } from '@mantine/core';
+import { useAtom } from 'jotai';
 import { NextPage } from 'next';
-import { useState } from 'react';
 
 const CreatePackage: NextPage = () => {
-	const [active, setActive] = useState(1);
-	const nextStep = () =>
-		setActive((current) => (current < 3 ? current + 1 : current));
+	const [step, onChangeStep] = useAtom(activeStep);
+
 	const prevStep = () =>
-		setActive((current) => (current > 0 ? current - 1 : current));
+		onChangeStep((currentStep) =>
+			currentStep > 0 ? currentStep - 1 : currentStep
+		);
 
 	return (
 		<AdminLayout title='Create package'>
@@ -18,14 +21,24 @@ const CreatePackage: NextPage = () => {
 				title='New tour package'
 				tagline='Create a package'
 				currentPathName='Create package'
+				othersPath={[
+					{
+						pathName: 'Home',
+						href: '/',
+					},
+					{
+						pathName: 'Tour packages',
+						href: '/tour_packages',
+					},
+				]}
 			/>
 			<>
-				<Stepper color='teal' active={active}>
+				<Stepper color='violet' active={step}>
 					<Stepper.Step label='Basic details'>
 						<PackageBasicInfoForm />
 					</Stepper.Step>
 					<Stepper.Step label='Thumbnails & photos'>
-						Step 2 content: Verify email
+						<UploadThumbnails />
 					</Stepper.Step>
 					<Stepper.Step label='Transportation'>
 						Step 3 content: Get full access
@@ -35,12 +48,13 @@ const CreatePackage: NextPage = () => {
 					</Stepper.Completed>
 				</Stepper>
 
-				<Group position='center' mt='xl'>
-					<Button variant='default' onClick={prevStep}>
-						Back
-					</Button>
-					<Button onClick={nextStep}>Next step</Button>
-				</Group>
+				{step !== 0 && step !== 3 && (
+					<Group position='left' mt='xl'>
+						<Button variant='default' onClick={prevStep}>
+							Back
+						</Button>
+					</Group>
+				)}
 			</>
 		</AdminLayout>
 	);

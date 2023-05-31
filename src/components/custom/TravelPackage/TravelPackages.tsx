@@ -11,12 +11,12 @@ const TravelPackages: React.FC<{ skeletonCount: number }> = ({
 	// const largeScreen = useMediaQuery('(min-width: 60em)');
 	return (
 		<div className='grid lg:grid-cols-4 lg:gap-3 gap-8'>
-			{new Array(skeletonCount).fill(skeletonCount).map(() => (
-				<TourCardSkeleton show={!packages?.length} />
+			{new Array(skeletonCount).fill(skeletonCount).map((_, idx: number) => (
+				<TourCardSkeleton key={idx} show={!packages?.length} />
 			))}
 
 			{packages?.map((TPackage: ITravelPackage, idx: number) => (
-				<TourCard TPackage={TPackage} />
+				<TourCard key={idx} TPackage={TPackage} />
 			))}
 		</div>
 	);

@@ -1,19 +1,18 @@
 import { DatePickerInput } from '@mantine/dates';
-import React, { useState } from 'react';
+import React from 'react';
 import { FiCalendar } from 'react-icons/fi';
 
-const DateRangePicker: React.FC<{}> = () => {
-	const [value, setValue] = useState<[Date | null, Date | null]>([
-		new Date('05-01-2023'),
-		new Date('05-31-2023'),
-	]);
+const DateRangePicker: React.FC<{
+	dateRange: [Date, Date];
+	onChangeDate: (range: [Date, Date]) => void;
+}> = ({ dateRange, onChangeDate }) => {
 	return (
 		<>
 			<DatePickerInput
 				valueFormat='DD MMM YYYY'
 				type='range'
-				value={value}
-				onChange={setValue}
+				value={dateRange}
+				onChange={onChangeDate}
 				mx='auto'
 				dropdownType='modal'
 				icon={<FiCalendar size='1.1rem' />}
@@ -27,10 +26,10 @@ const DateRangePicker: React.FC<{}> = () => {
 						<div className='!mx-10'>
 							<div
 								className={
-									(getDate === value[0]?.getDate()! &&
-										getDay === value[0]?.getDay()!) ||
-									(getDate === value[1]?.getDate()! &&
-										getDay === value[1]?.getDay()!)
+									(getDate === dateRange[0]?.getDate()! &&
+										getDay === dateRange[0]?.getDay()!) ||
+									(getDate === dateRange[1]?.getDate()! &&
+										getDay === dateRange[1]?.getDay()!)
 										? 'bg-[#7048E8]  md:w-[36px] md:h-[36px] flex items-center justify-center rounded-sm'
 										: ''
 								}

@@ -8,6 +8,7 @@ interface IPageTitleProps {
 	tagline?: string;
 	actionComponent?: JSX.Element;
 	currentPathName?: string;
+	othersPath?: IOthersPath[];
 }
 
 const PageTitleArea: React.FC<IPageTitleProps> = ({
@@ -15,6 +16,7 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 	tagline,
 	actionComponent,
 	currentPathName,
+	othersPath,
 }) => {
 	return (
 		<Box className='lg:flex justify-between items-center xs:grid gap-10 lg:mb-5'>
@@ -28,9 +30,15 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 					</Text>
 				</Indicator>{' '}
 				<div className='gap-1 mt-2 py-[6px] px-3 shadow-sm rounded-md flex items-center'>
-					<Link href={'/'} className='no-underline flex items-center gap-1'>
-						Home <IoIosArrowForward size='16' />
-					</Link>
+					{othersPath?.map((path: IOthersPath, idx: number) => (
+						<Link
+							key={idx}
+							href={path?.href}
+							className='no-underline flex items-center gap-1'
+						>
+							{path?.pathName} <IoIosArrowForward size='16' />
+						</Link>
+					))}
 					<Text>{currentPathName}</Text>
 				</div>
 			</div>
@@ -40,3 +48,8 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 };
 
 export default PageTitleArea;
+
+interface IOthersPath {
+	pathName: string;
+	href: string;
+}

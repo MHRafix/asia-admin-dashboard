@@ -13,6 +13,13 @@ const TourPackages: NextPage = () => {
 			<PageTitleArea
 				title='Tour packages'
 				tagline='Our arranged packages'
+				currentPathName='Tour packages'
+				othersPath={[
+					{
+						pathName: 'Home',
+						href: '/',
+					},
+				]}
 				actionComponent={
 					<div className='flex items-center gap-2 my-5'>
 						<Link href='/tour_packages/createPackage'>

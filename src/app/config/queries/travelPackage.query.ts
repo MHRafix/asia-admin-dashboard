@@ -27,19 +27,7 @@ export const GET_TRAVEL_PACKAGES = gql`
 					bookingStart
 					bookingEnd
 				}
-				travelOutline {
-					departureFrom
-					destinationTo
-					startAt
-					endAt
-					packageIn
-					description
-					breakfast
-					lunch
-					normalSnacks
-					dinner
-					otherFeatures
-				}
+
 				ratingsAndReviews {
 					rating
 					email

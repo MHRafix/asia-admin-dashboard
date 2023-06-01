@@ -1,5 +1,4 @@
 import { IAuthPayload } from '@/app/api/models/auth.model';
-import { loginSchema } from '@/app/config/validationSchema/Schema';
 import {
 	Box,
 	Button,
@@ -20,6 +19,7 @@ import { useMutation } from '@apollo/client';
 import { Notify } from '@/app/config/alertNotification/Notification';
 import { LOGIN_QUERY } from '@/app/config/queries/auth.query';
 import protectWithoutSession from '@/app/config/authProtection/potectWithoutSession';
+import { loginSchema } from '@/app/config/form.validation/serviceForm/service.form.validation';
 
 export interface IAuthResponse {
 	_id: string;

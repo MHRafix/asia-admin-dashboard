@@ -2,15 +2,15 @@ import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IAppointment } from '@/app/api/models/appointment.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
 import {
+	APPOINTMENTS_QUERY,
+	BULK_REMOVE_APPOINTMENT,
+} from '@/app/config/queries/appointments.query';
+import {
 	APPOINTMENTS_TABLE_DATA_SORTBY,
 	APPOINTMENTS_TABLE_DEFAULT_SORTBY,
 	TABLE_DATA_LIMITS,
 	TABLE_DEFAULT_LIMIT,
-} from '@/app/config/configuration';
-import {
-	APPOINTMENTS_QUERY,
-	BULK_REMOVE_APPOINTMENT,
-} from '@/app/config/queries/appointments.query';
+} from '@/app/config/table_configuration';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';

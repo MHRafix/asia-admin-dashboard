@@ -1,22 +1,22 @@
 import {
+	BULK_REMOVE_BOOKING,
+	PACAKGE_BOOKINGS_QUERY,
+} from '@/app/config/queries/bookings.query';
+import {
 	BOOKING_TABLE_DATA_SORTBY,
 	BOOKING_TABLE_DEFAULT_SORTBY,
 	TABLE_DATA_LIMITS,
 	TABLE_DEFAULT_LIMIT,
-} from '@/app/config/configuration';
-import {
-	BULK_REMOVE_BOOKING,
-	PACAKGE_BOOKINGS_QUERY,
-} from '@/app/config/queries/bookings.query';
+} from '@/app/config/table_configuration';
 
-import { IBooking } from '@/app/api/models/bookings.model';
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
+import { IBooking } from '@/app/api/models/bookings.model';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import Pagination from '@/components/common/Pagination';
-import TableHead from '@/components/common/TableHead';
 import { BOOKING_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
+import TableHead from '@/components/common/TableHead';
 import { Query_Variable } from '@/logic/queryVariables';
 import { useMutation, useQuery } from '@apollo/client';
 import { Button, Select, Space, Table } from '@mantine/core';

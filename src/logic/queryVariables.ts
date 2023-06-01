@@ -1,4 +1,4 @@
-import { BOOKING_TABLE_DEFAULT_SORTBY } from '@/app/config/configuration';
+import { BOOKING_TABLE_DEFAULT_SORTBY } from '@/app/config/table_configuration';
 
 export const Query_Variable = (
 	queryPage: string,

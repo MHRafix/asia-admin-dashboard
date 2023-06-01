@@ -1,21 +1,21 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IUser } from '@/app/api/models/users.model';
 import {
+	BULK_REMOVE_USER,
+	USERS_QUERY,
+} from '@/app/config/queries/users.query';
+import {
 	CUSTOMERS_TABLE_DATA_SORTBY,
 	CUSTOMERS_TABLE_DEFAULT_SORTBY,
 	TABLE_DATA_LIMITS,
 	TABLE_DEFAULT_LIMIT,
-} from '@/app/config/configuration';
-import {
-	BULK_REMOVE_USER,
-	USERS_QUERY,
-} from '@/app/config/queries/users.query';
+} from '@/app/config/table_configuration';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import Pagination from '@/components/common/Pagination';
-import TableHead from '@/components/common/TableHead';
 import { CUSTOMER_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
+import TableHead from '@/components/common/TableHead';
 import { Query_Variable } from '@/logic/queryVariables';
 import { useMutation, useQuery } from '@apollo/client';
 import { Button, Select, Space, Table } from '@mantine/core';

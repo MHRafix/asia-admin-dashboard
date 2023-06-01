@@ -1,18 +1,18 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IEmployees } from '@/app/api/models/employees.model';
+import { EMPLOYEES_QUERY } from '@/app/config/queries/employees.query';
 import {
 	EMPLOYEE_TABLE_DATA_SORTBY,
 	EMPLOYEE_TABLE_DEFAULT_SORTBY,
 	TABLE_DATA_LIMITS,
 	TABLE_DEFAULT_LIMIT,
-} from '@/app/config/configuration';
-import { EMPLOYEES_QUERY } from '@/app/config/queries/employees.query';
+} from '@/app/config/table_configuration';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import Pagination from '@/components/common/Pagination';
-import TableHead from '@/components/common/TableHead';
 import { EMPLOYEES_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
+import TableHead from '@/components/common/TableHead';
 import { Query_Variable } from '@/logic/queryVariables';
 import { useQuery } from '@apollo/client';
 import { Button, Select, Space, Table } from '@mantine/core';

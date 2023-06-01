@@ -2,8 +2,10 @@ import {
 	useGetService,
 	useUpdateService,
 } from '@/app/api/api-hooks/service.api';
-import { UPDATE_SERVICE_DEFAULT_VALUES } from '@/app/config/formDefaultsValue/formDefaultValues';
-import { updateServiceSchema } from '@/app/config/validationSchema/Schema';
+import {
+	UPDATE_SERVICE_DEFAULT_VALUES,
+	updateServiceSchema,
+} from '@/app/config/form.validation/serviceForm/service.form.validation';
 import CircularLoader from '@/components/common/Loader';
 import NotepadEditor from '@/components/common/NotepadEditor';
 import PageTitleArea from '@/components/common/PageTitleArea';

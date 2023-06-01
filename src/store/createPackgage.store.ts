@@ -1,4 +1,7 @@
+import { getDateRange } from '@/app/config/logic/getDateRanges';
 import { atom } from 'jotai';
+
+const dateRange = getDateRange();
 
 export interface IPackageBasicInfo {
 	packageTitle?: string;
@@ -10,7 +13,12 @@ export interface IPackageBasicInfo {
 	description?: string;
 }
 export const activeStep = atom<number>(0);
-export const packageInfoInfoAtom = atom<IPackageBasicInfo | null>(null);
+export const packageBasicInfoAtom = atom<IPackageBasicInfo | null>({
+	countDown: {
+		bookingStart: dateRange[0],
+		bookingEnd: dateRange[1],
+	},
+});
 
 // export enum PAYMENT_STATUS {
 //   DUE = "DUE",

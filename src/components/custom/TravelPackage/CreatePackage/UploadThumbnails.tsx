@@ -113,7 +113,7 @@ const UploadThumbnails: React.FC = () => {
 			variables: {
 				...packageBasicInfo,
 				thumbnail: thumbnail,
-				carouselThumbnails: carouselImg,
+				carouselThumbnails: carouselThumbnails,
 				saleStatus:
 					packageBasicInfo?.salePrice === 0
 						? SALE_STATUS.SALE

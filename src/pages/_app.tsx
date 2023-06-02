@@ -5,19 +5,14 @@ import {
 	InMemoryCache,
 	createHttpLink,
 } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
-import type { AppProps } from 'next/app';
-import { setContext } from '@apollo/client/link/context';
 import Cookies from 'js-cookie';
+import type { AppProps } from 'next/app';
 
 export default function App({ Component, pageProps }: AppProps) {
-	// const myCache = createEmotionCache({
-	// 	key: "mantine",
-	// 	prepend: false,
-	//   });
-
 	const httpLink = createHttpLink({
 		uri: process.env.NEXT_PUBLIC_API_URL,
 	});

@@ -11,8 +11,14 @@ export interface IPackageBasicInfo {
 	countDown?: { bookingStart: Date; bookingEnd: Date };
 	shortDescription?: string;
 	description?: string;
+	thumbnail?: string;
 }
-export const activeStep = atom<number>(0);
+
+export interface ICarouselThumbnail {
+	thumbnail: string;
+}
+
+export const activeStep = atom<number>(1);
 export const packageBasicInfoAtom = atom<IPackageBasicInfo | null>({
 	countDown: {
 		bookingStart: dateRange[0],

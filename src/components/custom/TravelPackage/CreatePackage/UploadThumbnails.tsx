@@ -1,44 +1,181 @@
-import { Input } from '@mantine/core';
-import { Dropzone } from '@mantine/dropzone';
+import { fileUploader } from '@/app/config/logic/fileUploader';
+import { Button, FileButton, Flex, Input, Title } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
+import Image from 'next/image';
 import React, { useState } from 'react';
+import { FaPlus } from 'react-icons/fa';
 import { FiUpload } from 'react-icons/fi';
+import { HiOutlinePhotograph } from 'react-icons/hi';
 
 const UploadThumbnails: React.FC = () => {
-	const [carouselThumbnails, setCarouselThumbnails] = useState([1, 5, 4, 5]);
+	const [carouselThumbnails, setCarouselThumbnails] = useState<any>(['', '']);
+	const [uploading, setUploading] = useState<string>('');
+	const [thumbnail, setThumbnail] = useState<string>('');
+
+	const handleUploadPackageThumbnail = async (
+		file: File,
+		actionName: string,
+		onChangeThumbnail: any,
+		idx?: number
+	) => {
+		try {
+			setUploading(actionName);
+			const { file_upload_cloudinary } = fileUploader(
+				file,
+				'travel_package_thumbnails'
+			);
+
+			const uploaded = await file_upload_cloudinary();
+			if (uploaded) {
+				showNotification({
+					title: 'File uploaded successfully!',
+					message: 'Save file to database.',
+					color: 'teal',
+				});
+				if (idx === 0 || idx! > 0) {
+					if (idx !== 0) {
+						onChangeThumbnail((prev: any) => {
+							prev.splice(idx, 1);
+							return [...prev, uploaded];
+						});
+					} else {
+						onChangeThumbnail((prev: any) => {
+							prev[idx] = uploaded;
+							return [...prev];
+						});
+					}
+				} else {
+					onChangeThumbnail(() => uploaded);
+				}
+				setUploading('');
+			} else {
+				setUploading('');
+			}
+		} catch (err: any) {
+			setUploading('');
+			showNotification({
+				title: 'Failed to upload file!',
+				message: err.message,
+				color: 'red',
+			});
+		}
+	};
 	return (
 		<div>
 			<div className='flex justify-center items-center gap-8 mt-5'>
-				<Input.Wrapper label='Upload thumbnail' size='md' className='w-4/12'>
-					<Dropzone
-						h={200}
-						bg={'#212231'}
-						className='flex items-center justify-center'
-						loading={false}
-						onDrop={() => console.log('first')}
-					>
-						<FiUpload size={50} />
-					</Dropzone>
+				<Input.Wrapper
+					label='Upload thumbnail'
+					size='md'
+					className='w-4/12 relative'
+				>
+					<div className='h-[200px] bg-[#212231] flex items-center justify-center'>
+						{thumbnail ? (
+							<Image
+								src={thumbnail}
+								alt='Thumbnail'
+								width={200}
+								className='!w-full'
+								height={200}
+							/>
+						) : (
+							<HiOutlinePhotograph size={50} />
+						)}
+					</div>
+					<div className='absolute bottom-3 right-3'>
+						<FileButton
+							onChange={(file: File) =>
+								handleUploadPackageThumbnail(
+									file,
+									'PACKAGE_THUMBNAIL',
+									setThumbnail
+								)
+							}
+							accept='image/png,image/jpeg'
+						>
+							{(props) => (
+								<Button
+									loading={uploading === 'PACKAGE_THUMBNAIL'}
+									color='violet'
+									{...props}
+								>
+									<FiUpload color='#d0d1db' size={16} />
+								</Button>
+							)}
+						</FileButton>
+					</div>
 				</Input.Wrapper>
 			</div>
 
-			<div className='grid lg:grid-cols-2 gap-5 mt-8'>
-				{carouselThumbnails?.map((thumbnail, idx: number) => (
-					<Input.Wrapper
-						key={idx}
-						label={`Upload carousel thumbnail ${idx + 1}`}
+			<div className='mt-16'>
+				<Flex justify={'space-between'} align={'center'}>
+					<Title order={3} ff={'Nunito sans, sans-serif'} mb={0}>
+						Package carousel thumbnails
+					</Title>
+					<Button
+						leftIcon={<FaPlus size={16} />}
+						color='violet'
 						size='md'
+						ff={'Nunito sans, sans-serif'}
+						variant='light'
+						onClick={() =>
+							setCarouselThumbnails((thumbnails: string[]) => [
+								...thumbnails,
+								'',
+							])
+						}
 					>
-						<Dropzone
-							h={200}
-							bg={'#212231'}
-							className='flex items-center justify-center'
-							loading={false}
-							onDrop={() => console.log('first')}
+						Add new file
+					</Button>
+				</Flex>
+				<div className='grid lg:grid-cols-2 gap-5 mt-10'>
+					{carouselThumbnails?.map((thumbnail: string, idx: number) => (
+						<Input.Wrapper
+							key={idx}
+							label={`Upload carousel thumbnail ${idx + 1}`}
+							size='md'
+							className='relative'
 						>
-							<FiUpload size={50} />
-						</Dropzone>
-					</Input.Wrapper>
-				))}
+							<div className='h-[250px] bg-[#212231] flex items-center justify-center'>
+								{thumbnail ? (
+									<Image
+										src={thumbnail}
+										alt='Thumbnail'
+										width={200}
+										className='!w-full'
+										height={250}
+									/>
+								) : (
+									<HiOutlinePhotograph color='#d0d1db' size={50} />
+								)}
+							</div>
+							<div className='absolute bottom-3 right-3'>
+								<FileButton
+									onChange={(file: File) =>
+										handleUploadPackageThumbnail(
+											file,
+											`PACKAGE_CAROUSEL_THUMBNAILS_${idx}`,
+											setCarouselThumbnails,
+											idx
+										)
+									}
+									accept='image/png,image/jpeg'
+								>
+									{(props) => (
+										<Button
+											loading={
+												uploading === `PACKAGE_CAROUSEL_THUMBNAILS_${idx}`
+											}
+											color='violet'
+											{...props}
+										>
+											<FiUpload size={16} />
+										</Button>
+									)}
+								</FileButton>
+							</div>
+						</Input.Wrapper>
+					))}
+				</div>
 			</div>
 		</div>
 	);

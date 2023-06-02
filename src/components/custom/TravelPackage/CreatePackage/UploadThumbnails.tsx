@@ -1,16 +1,42 @@
+import { Notify } from '@/app/config/alertNotification/Notification';
 import { fileUploader } from '@/app/config/logic/fileUploader';
-import { Button, FileButton, Flex, Input, Title } from '@mantine/core';
+import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
+import {
+	PACKAGE_STATUS,
+	SALE_STATUS,
+	activeStep,
+	carouselThumbnailsAtom,
+	packageBasicInfoAtom,
+} from '@/store/createPackgage.store';
+import { useMutation } from '@apollo/client';
+import { Button, FileButton, Flex, Group, Input, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
+import { useAtom } from 'jotai';
 import Image from 'next/image';
+import Router from 'next/router';
 import React, { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { FiUpload } from 'react-icons/fi';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 
 const UploadThumbnails: React.FC = () => {
-	const [carouselThumbnails, setCarouselThumbnails] = useState<any>(['', '']);
 	const [uploading, setUploading] = useState<string>('');
-	const [thumbnail, setThumbnail] = useState<string>('');
+	const [step, onChangeStep] = useAtom(activeStep);
+	const [packageBasicInfo, onChangePackageBasicInfo] =
+		useAtom(packageBasicInfoAtom);
+	const [thumbnail, setThumbnail] = useState<string>(
+		packageBasicInfo?.thumbnail!
+	);
+	const [carouselImg, onChangeCarouselThumbnails] = useAtom(
+		carouselThumbnailsAtom
+	);
+	const [carouselThumbnails, setCarouselThumbnails] = useState<any>(
+		carouselImg?.thumbnail || ['']
+	);
+	const nextStep = () =>
+		onChangeStep((currentStep) =>
+			currentStep < 3 ? currentStep + 1 : currentStep
+		);
 
 	const handleUploadPackageThumbnail = async (
 		file: File,
@@ -59,6 +85,43 @@ const UploadThumbnails: React.FC = () => {
 				color: 'red',
 			});
 		}
+	};
+
+	const [createPackage, { loading: creatingPackage }] = useMutation(
+		CREATE_TRAVEL_PACKAGE,
+		Notify({
+			sucTitle: 'Package created successfully!',
+			sucMessage: 'Please refetch package list.',
+			errMessage: 'Failed to create package.',
+			action: () => Router.push(`/tour_packages`),
+		})
+	);
+
+	console.log(thumbnail);
+
+	//submit create package function
+	const onSubmit = () => {
+		onChangePackageBasicInfo({
+			...packageBasicInfo,
+			thumbnail: thumbnail,
+		});
+		onChangeCarouselThumbnails({
+			thumbnail: carouselThumbnails,
+		});
+		// nextStep();
+		createPackage({
+			variables: {
+				...packageBasicInfo,
+				thumbnail: thumbnail,
+				carouselThumbnails: carouselImg,
+				saleStatus:
+					packageBasicInfo?.salePrice === 0
+						? SALE_STATUS.SALE
+						: SALE_STATUS.FIXED,
+				packageStatus: PACKAGE_STATUS.UPCOMING,
+				isPublished: true,
+			},
+		});
 	};
 	return (
 		<div>
@@ -177,6 +240,17 @@ const UploadThumbnails: React.FC = () => {
 					))}
 				</div>
 			</div>
+			{step === 1 && (
+				<Group position='right' mt={65}>
+					<Button
+						color='violet'
+						loading={creatingPackage}
+						onClick={() => onSubmit()}
+					>
+						Next step
+					</Button>
+				</Group>
+			)}
 		</div>
 	);
 };

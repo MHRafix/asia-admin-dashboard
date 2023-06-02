@@ -1,5 +1,41 @@
 import { gql } from '@apollo/client';
 
+export const CREATE_TRAVEL_PACKAGE = gql`
+	mutation CREATE_TRAVEL_PACKAGE(
+		$packageTitle: String!
+		$regularPrice: Float!
+		$salePrice: Float
+		$countDown: CountDownTimerInput
+		$thumbnail: String
+		$description: String
+		#$destination: String
+		$shortDescription: String
+		$carouselThumbnails: [CarouselThumbnailsInput!]
+		$saleStatus: SALE_STATUS
+		$packageStatus: String
+		$isPublished: Boolean!
+	) {
+		createTravelPackage(
+			input: {
+				packageTitle: $packageTitle
+				regularPrice: $regularPrice
+				salePrice: $salePrice
+				countDown: $countDown
+				thumbnail: $thumbnail
+				description: $description
+				#destination: $destination
+				shortDescription: $shortDescription
+				carouselThumbnails: $carouselThumbnails
+				saleStatus: $saleStatus
+				isPublished: $isPublished
+				packageStatus: $packageStatus
+			}
+		) {
+			_id
+		}
+	}
+`;
+
 export const GET_TRAVEL_PACKAGES = gql`
 	query TRAVEL_PACKAGES($page: Int!, $limit: Int) {
 		travelPackages(
@@ -62,24 +98,9 @@ export const GET_SINGLE_TRAVEL_PACKAGES = gql`
 			isPublished
 			packageStatus
 			thumbnail
-			bookingStart
-			bookingEnd
 			description
 			shortDescription
 			destination
-			travelOutline {
-				departureFrom
-				destinationTo
-				startAt
-				endAt
-				packageIn
-				description
-				breakfast
-				lunch
-				normalSnacks
-				dinner
-				otherFeatures
-			}
 			ratingsAndReviews {
 				rating
 				email

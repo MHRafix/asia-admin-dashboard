@@ -9,12 +9,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Group, Input, Textarea } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useAtom } from 'jotai';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiCalendar } from 'react-icons/fi';
 
 const PackageBasicInfoForm: React.FC = () => {
-	const [date, onChangeDate] = useState<Date | null>(new Date());
 	const [desc, setDesc] = useState<string>();
 	const [packageBasicInfo, onChangePackageInfo] = useAtom(packageBasicInfoAtom);
 	const [step, onChangeStep] = useAtom(activeStep);
@@ -35,8 +34,21 @@ const PackageBasicInfoForm: React.FC = () => {
 		mode: 'onChange',
 	});
 
+	useEffect(() => {
+		if (packageBasicInfo) {
+			setValue('packageTitle', packageBasicInfo?.packageTitle!);
+			setValue('regularPrice', packageBasicInfo?.regularPrice!);
+			setValue('salePrice', packageBasicInfo?.salePrice!);
+			setValue('destination', packageBasicInfo?.destination!);
+			setValue('shortDescription', packageBasicInfo?.shortDescription!);
+			setValue('bookingStart', packageBasicInfo?.countDown?.bookingStart!);
+			setValue('bookingEnd', packageBasicInfo?.countDown?.bookingEnd!);
+		}
+	}, [packageBasicInfo]);
+
 	const onSubmit = (value: IPackageBasicInfoFormState) => {
 		onChangePackageInfo({
+			...packageBasicInfo,
 			...value,
 			countDown: {
 				bookingStart: value.bookingStart,
@@ -167,7 +179,14 @@ const PackageBasicInfoForm: React.FC = () => {
 						/>
 					</Input.Wrapper>
 					<Input.Wrapper label='Description' size='md'>
-						<NotepadEditor setValue={setDesc} value={desc!} />
+						<NotepadEditor
+							setValue={setDesc}
+							value={
+								packageBasicInfo?.description
+									? packageBasicInfo?.description
+									: desc!
+							}
+						/>
 					</Input.Wrapper>
 				</div>
 				{step !== 1 && (

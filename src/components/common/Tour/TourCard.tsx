@@ -1,27 +1,16 @@
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
-import {
-	Badge,
-	Box,
-	Button,
-	Flex,
-	Rating,
-	Space,
-	Text,
-	Title,
-} from '@mantine/core';
+import { Box, Flex, Rating, Text, Title } from '@mantine/core';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { FiArrowUpRight } from 'react-icons/fi';
 import { MdLocationPin } from 'react-icons/md';
-import { TbBed, TbBus } from 'react-icons/tb';
-import { TiPlaneOutline } from 'react-icons/ti';
 
 interface ITourCardProp {
 	TPackage: ITravelPackage;
 }
 
 const TourCard: React.FC<ITourCardProp> = ({ TPackage }) => {
+	console.log(TPackage);
 	return (
 		<Link
 			href={`/tour-packages/${TPackage?._id}`}
@@ -29,13 +18,15 @@ const TourCard: React.FC<ITourCardProp> = ({ TPackage }) => {
 		>
 			<Box className=' bg-[#212231] hover:bg-[#212237] relative rounded-lg grid shadow-xl pb-3'>
 				<div className='mx-auto mt-2'>
-					<Image
-						src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPalFmzItiv41uwG0LGteZ-243tFftPPUb1xfU8MQNo-iEOpBBT_Kflw56iuun22IgT-M&usqp=CAU'
-						alt='card image'
-						className='rounded-lg mx-auto text-center'
-						width={270}
-						height={180}
-					/>
+					{TPackage?.thumbnail && (
+						<Image
+							src={TPackage?.thumbnail}
+							alt='card image'
+							className='rounded-lg mx-auto text-center'
+							width={270}
+							height={180}
+						/>
+					)}
 				</div>
 
 				<div className='p-3'>
@@ -55,7 +46,7 @@ const TourCard: React.FC<ITourCardProp> = ({ TPackage }) => {
 								ff='Nunito Sans, sans-serif'
 								className='text-sm text-slate-400'
 							>
-								Canada
+								{TPackage?.destination}
 							</Text>
 						</Flex>
 						<Flex>

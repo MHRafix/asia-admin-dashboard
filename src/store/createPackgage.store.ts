@@ -14,11 +14,12 @@ export interface IPackageBasicInfo {
 	thumbnail?: string;
 }
 
-export interface ICarouselThumbnail {
-	thumbnail: string;
+export interface ICarouselThumbnails {
+	thumbnail: string[];
 }
 
-export const activeStep = atom<number>(1);
+export const activeStep = atom<number>(0);
+export const carouselThumbnailsAtom = atom<ICarouselThumbnails | null>(null);
 export const packageBasicInfoAtom = atom<IPackageBasicInfo | null>({
 	countDown: {
 		bookingStart: dateRange[0],
@@ -31,3 +32,14 @@ export const packageBasicInfoAtom = atom<IPackageBasicInfo | null>({
 //   IN_REVIEW_PAID = "IN_REVIEW_PAID",
 //   PAID = "PAID",
 // }
+
+export enum SALE_STATUS {
+	FIXED = 'FIXED',
+	SALE = 'SALE',
+}
+
+export enum PACKAGE_STATUS {
+	UPCOMING = 'UPCOMING',
+	FINISHED = 'FINISHED',
+	ALWAYS = 'ALWAYS',
+}

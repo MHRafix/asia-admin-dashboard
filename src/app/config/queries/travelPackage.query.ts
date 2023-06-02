@@ -8,9 +8,8 @@ export const CREATE_TRAVEL_PACKAGE = gql`
 		$countDown: CountDownTimerInput
 		$thumbnail: String
 		$description: String
-		#$destination: String
 		$shortDescription: String
-		$carouselThumbnails: [CarouselThumbnailsInput!]
+		$carouselThumbnails: CarouselThumbnailsInput
 		$saleStatus: SALE_STATUS
 		$packageStatus: String
 		$isPublished: Boolean!
@@ -23,7 +22,6 @@ export const CREATE_TRAVEL_PACKAGE = gql`
 				countDown: $countDown
 				thumbnail: $thumbnail
 				description: $description
-				#destination: $destination
 				shortDescription: $shortDescription
 				carouselThumbnails: $carouselThumbnails
 				saleStatus: $saleStatus

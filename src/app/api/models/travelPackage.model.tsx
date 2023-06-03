@@ -76,38 +76,21 @@ export interface ITransportation {
 
 export interface ITravelPackage {
 	_id: string;
-
 	packageTitle: string;
-
 	regularPrice: number;
-
 	salePrice: number;
-
 	saleStatus: ISALE_STATUS;
-
 	isPublished: boolean;
-
 	packageStatus: IPACKAGE_STATUS;
-
 	bookingStart: Date;
-
 	bookingEnd: Date;
-
 	thumbnail: string;
-
 	description: string;
-
 	shortDescription: string;
-
 	destination: string;
-
 	carouselThumbnails: string[];
-
 	travelOutline: ITravelOutline[];
-
 	ratingsAndReviews: IRatingsAndReviews[];
-
 	travelers: ITravelers[];
-
 	transportation: ITransportation[];
 }

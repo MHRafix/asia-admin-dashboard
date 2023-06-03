@@ -31,7 +31,7 @@ const UploadThumbnails: React.FC = () => {
 		carouselThumbnailsAtom
 	);
 	const [carouselThumbnails, setCarouselThumbnails] = useState<any>(
-		carouselImg?.thumbnail || ['']
+		carouselImg || ['']
 	);
 	const nextStep = () =>
 		onChangeStep((currentStep) =>
@@ -105,15 +105,13 @@ const UploadThumbnails: React.FC = () => {
 			...packageBasicInfo,
 			thumbnail: thumbnail,
 		});
-		onChangeCarouselThumbnails({
-			thumbnail: carouselThumbnails,
-		});
+		onChangeCarouselThumbnails(carouselThumbnails);
 		// nextStep();
 		createPackage({
 			variables: {
 				...packageBasicInfo,
 				thumbnail: thumbnail,
-				carouselThumbnails: carouselImg,
+				carouselThumbnails,
 				saleStatus:
 					packageBasicInfo?.salePrice === 0
 						? SALE_STATUS.SALE
@@ -121,6 +119,19 @@ const UploadThumbnails: React.FC = () => {
 				packageStatus: PACKAGE_STATUS.UPCOMING,
 				isPublished: true,
 			},
+		});
+		console.log({
+			...packageBasicInfo,
+			thumbnail: thumbnail,
+			carouselThumbnails: {
+				thumbnail: carouselThumbnails,
+			},
+			saleStatus:
+				packageBasicInfo?.salePrice === 0
+					? SALE_STATUS.SALE
+					: SALE_STATUS.FIXED,
+			packageStatus: PACKAGE_STATUS.UPCOMING,
+			isPublished: true,
 		});
 	};
 	return (

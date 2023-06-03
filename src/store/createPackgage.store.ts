@@ -14,12 +14,12 @@ export interface IPackageBasicInfo {
 	thumbnail?: string;
 }
 
-export interface ICarouselThumbnails {
-	thumbnail: string[];
-}
+// export interface ICarouselThumbnails {
+// 	thumbnail: string[];
+// }
 
 export const activeStep = atom<number>(0);
-export const carouselThumbnailsAtom = atom<ICarouselThumbnails | null>(null);
+export const carouselThumbnailsAtom = atom<string[] | null>(null);
 export const packageBasicInfoAtom = atom<IPackageBasicInfo | null>({
 	countDown: {
 		bookingStart: dateRange[0],

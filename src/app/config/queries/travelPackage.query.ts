@@ -9,7 +9,7 @@ export const CREATE_TRAVEL_PACKAGE = gql`
 		$thumbnail: String
 		$description: String
 		$shortDescription: String
-		$carouselThumbnails: CarouselThumbnailsInput
+		$carouselThumbnails: [String!]
 		$saleStatus: SALE_STATUS
 		$packageStatus: String
 		$isPublished: Boolean!

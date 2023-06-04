@@ -10,7 +10,7 @@ const TravelPackages: React.FC<{ skeletonCount: number }> = ({
 	const { packages } = useGetTravelPackages();
 	// const largeScreen = useMediaQuery('(min-width: 60em)');
 	return (
-		<div className='grid lg:grid-cols-4 lg:gap-3 gap-8'>
+		<div className='grid lg:grid-cols-3 lg:gap-3 gap-8'>
 			{new Array(skeletonCount).fill(skeletonCount).map((_, idx: number) => (
 				<TourCardSkeleton key={idx} show={!packages?.length} />
 			))}

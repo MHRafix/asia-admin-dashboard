@@ -1,61 +1,72 @@
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
-import AdminLayout from '@/components/layouts/AdminLayout';
-import { menus } from '@/components/layouts/appshell-components/menus';
 import {
-	Container,
-	Space,
-	Text,
-	ThemeIcon,
-	UnstyledButton,
-} from '@mantine/core';
-import { NextPage } from 'next';
-import { Inter } from 'next/font/google';
-import Router from 'next/router';
+	getBookingsDateRange,
+	getTransactionDateRange,
+} from '@/app/config/logic/getDateRanges';
+import DateRangePicker from '@/components/common/DateRangePicker';
+import PageTitleArea from '@/components/common/PageTitleArea';
+import {
+	ChartBookingAnalytics,
+	ChartTransactionAnalytics,
+} from '@/components/custom/Dashboard/ChartAnalytics';
+import GridOverViewCard from '@/components/custom/Dashboard/GridOverViewCard';
+import TravelPackages from '@/components/custom/TravelPackage/TravelPackages';
+import AdminLayout from '@/components/layouts/AdminLayout';
+import { useMediaQuery } from '@mantine/hooks';
+import { useState } from 'react';
 
-const inter = Inter({ subsets: ['latin'] });
+const Dashboard = () => {
+	const [transactionDate, onChangeTransactionDate] = useState<[Date, Date]>(
+		getTransactionDateRange()
+	);
+	const [bookingsFilterDate, onChangeBookingsFilterDate] = useState<
+		[Date, Date]
+	>(getBookingsDateRange());
+	const largeScreen = useMediaQuery('(min-width: 60em)');
 
-const HomePage: NextPage = () => {
 	return (
-		<>
-			<AdminLayout title='Home'>
-				{/* <Container size={'lg'}> */}
-				<div className='grid gap-5 xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2'>
-					{menus.map((menu, idx: number) => (
-						<UnstyledButton
-							key={idx}
-							onClick={() => Router.push(`/${menu?.href}`)}
-							// disabled={menu?.disabled}
-							className='no-underline relative bg-[#212231] hover:bg-[#262736] disabled:bg-slate-800 disabled:cursor-not-allowed rounded-md'
-						>
-							<div className='p-5 text-center rounded-md shadow-2xl '>
-								<ThemeIcon
-									variant='outline'
-									radius='md'
-									size={70}
-									color='gray'
-									className='border-[1px] border-[#333]'
-								>
-									{menu?.icon}
-								</ThemeIcon>
-								<Text size='md' mt={20} color='#fff' className='capitalize'>
-									{menu?.label}
-								</Text>
-							</div>
-							<Text
-								size='md'
-								mt={20}
-								color='#fff'
-								className='absolute top-0 left-2 z-50 px-1 py-[7px] text-xs font-semibold capitalize transform bg-red-500 rounded-full'
-							>
-								{90 + idx}+
-							</Text>
-						</UnstyledButton>
-					))}
+		<AdminLayout title='Dashboard'>
+			<PageTitleArea
+				title='Dashboard'
+				tagline='Business growth overview'
+				currentPathName='Dashboard'
+				othersPath={[
+					{
+						pathName: 'Home',
+						href: '/',
+					},
+				]}
+			/>
+			<div className='grid gap-10'>
+				<GridOverViewCard />
+
+				<div className='lg:flex grid justify-between gap-8'>
+					<div className=' bg-[#212231] md:px-0 shadow-2xl lg:w-5/12 rounded-sm'>
+						<div className='mt-2'>
+							<DateRangePicker
+								dateRange={transactionDate}
+								onChangeDate={onChangeTransactionDate}
+							/>
+						</div>
+						<ChartTransactionAnalytics />
+					</div>
+
+					<div className='lg:w-7/12 bg-[#212231] px-2 shadow-2xl rounded-sm'>
+						{' '}
+						<div className='mt-2'>
+							<DateRangePicker
+								dateRange={bookingsFilterDate}
+								onChangeDate={onChangeBookingsFilterDate}
+							/>
+						</div>
+						<ChartBookingAnalytics />
+					</div>
 				</div>
-				{/* </Container> */}
-			</AdminLayout>
-		</>
+
+				<TravelPackages skeletonCount={4} />
+			</div>
+		</AdminLayout>
 	);
 };
 
-export default protectWithSession(HomePage);
+export default protectWithSession(Dashboard);

@@ -10,7 +10,6 @@ interface ITourCardProp {
 }
 
 const TourCard: React.FC<ITourCardProp> = ({ TPackage }) => {
-	console.log(TPackage?.carouselThumbnails.thumbnail);
 	return (
 		<Link
 			href={`/tour-packages/${TPackage?._id}`}

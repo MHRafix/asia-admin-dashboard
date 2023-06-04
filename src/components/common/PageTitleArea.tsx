@@ -20,7 +20,7 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 }) => {
 	return (
 		<Box className='lg:flex justify-between items-center xs:grid gap-10 lg:mb-5'>
-			<div className='mb-5'>
+			<div>
 				<Title order={3} fw={500} my={5}>
 					{title}
 				</Title>
@@ -28,21 +28,27 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 					<Text size='sm' className='text-dimmed ml-2'>
 						{tagline}
 					</Text>
-				</Indicator>{' '}
-				<div className='gap-1 mt-2 py-[6px] px-3 shadow-sm rounded-md flex items-center'>
-					{othersPath?.map((path: IOthersPath, idx: number) => (
-						<Link
-							key={idx}
-							href={path?.href}
-							className='no-underline flex items-center gap-1'
-						>
-							{path?.pathName} <IoIosArrowForward size='16' />
-						</Link>
-					))}
-					<Text>{currentPathName}</Text>
-				</div>
+				</Indicator>
 			</div>
-			<div className='text-right'>{actionComponent}</div>
+			<div className='text-right'>
+				{actionComponent}
+				<>
+					{currentPathName && (
+						<div className='-mt-2 gap-3 shadow-sm rounded-md flex items-center'>
+							{othersPath?.map((path: IOthersPath, idx: number) => (
+								<Link
+									key={idx}
+									href={path?.href}
+									className='no-underline flex items-center gap-1'
+								>
+									{path?.pathName} <IoIosArrowForward size='16' />
+								</Link>
+							))}
+							<Text>{currentPathName}</Text>
+						</div>
+					)}
+				</>
+			</div>
 		</Box>
 	);
 };

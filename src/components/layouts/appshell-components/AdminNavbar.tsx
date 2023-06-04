@@ -1,6 +1,5 @@
 import { ActionIcon, Burger, MediaQuery } from '@mantine/core';
 import React from 'react';
-import HeaderUserMenu from './HeaderUserMenu';
 import { MdArrowBackIosNew } from 'react-icons/md';
 import Router, { useRouter } from 'next/router';
 
@@ -38,7 +37,7 @@ const AdminNavbar: React.FC<Props> = ({
 					<div>{Actions}</div>
 				</div>
 			</div>
-			<HeaderUserMenu />
+			{/* <HeaderUserMenu /> */}
 		</div>
 	);
 };

@@ -1,9 +1,18 @@
-import { ActionIcon, Navbar, NavLink, ScrollArea, Space } from '@mantine/core';
+import {
+	ActionIcon,
+	Navbar,
+	NavLink,
+	ScrollArea,
+	Space,
+	Text,
+} from '@mantine/core';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { MenuButton } from './MenuButton';
 import { menus } from './menus';
+import { NotificationButton } from './NotificationButton';
 import { UserButton } from './UserButton';
 
 interface Props {
@@ -12,7 +21,7 @@ interface Props {
 }
 
 const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
-	const { query, asPath, pathname } = useRouter();
+	const { pathname } = useRouter();
 
 	return (
 		<Navbar
@@ -20,7 +29,6 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 			hidden={!opened}
 			width={{ sm: 200, lg: 250 }}
 			style={{ background: '#212231', zIndex: 100000000 }}
-			pb={20}
 		>
 			{' '}
 			<Navbar.Section>
@@ -39,8 +47,21 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 			<Navbar.Section grow component={ScrollArea}>
 				{menus.map((item) => (
 					<NavLink
+						style={{
+							fontFamily: 'Nunito sans, sans-serif',
+							borderLeft:
+								pathname.includes(item.href) && pathname === item.href
+									? '4px solid #5d34d8'
+									: 0,
+						}}
+						fz={20}
 						key={item.label}
-						label={item.label}
+						icon={item.icon}
+						label={
+							<Text size='md' weight={500} ff={'Nunito sans, sans-serif'}>
+								{item.label}
+							</Text>
+						}
 						component={Link}
 						href={item.href}
 						active={pathname === item.href}
@@ -49,10 +70,14 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 							root: {
 								fontWeight: pathname.includes(item.href) ? 600 : 400,
 								fontFamily: 'Nunito sans, sans-serif',
+								fontSize: 20,
 							},
 						})}
 					/>
 				))}
+
+				<MenuButton />
+				<NotificationButton />
 			</Navbar.Section>
 			<Space h={20} />
 			<Navbar.Section>

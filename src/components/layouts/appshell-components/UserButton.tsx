@@ -27,10 +27,7 @@ export const UserButton: React.FC = () => {
 									: theme.black,
 
 							'&:hover': {
-								backgroundColor:
-									theme.colorScheme === 'dark'
-										? theme.colors.dark[8]
-										: theme.colors.gray[0],
+								backgroundColor: '#25262B',
 							},
 						})}
 						// {...others}
@@ -59,7 +56,7 @@ export const UserButton: React.FC = () => {
 					<Link href={'/settings'} className='!no-underline'>
 						<Menu.Item
 							icon={<BsGear size={18} />}
-							color='violet'
+							// color='violet'
 							fz={16}
 							ff={'Nunito sans, sans-serif'}
 						>
@@ -70,7 +67,7 @@ export const UserButton: React.FC = () => {
 						icon={<FiLogOut size={16} />}
 						ff={'Nunito sans, sans-serif'}
 						fz={16}
-						color='violet'
+						// color='violet'
 						onClick={() =>
 							openConfirmModal({
 								title: 'Confirm your logout action',

@@ -1,50 +1,50 @@
-import { BsBookmarkCheck } from 'react-icons/bs';
+import { BsBookmarkCheck, BsUiChecksGrid } from 'react-icons/bs';
 import { FaRegChartBar } from 'react-icons/fa';
-import { HiOutlineViewGrid } from 'react-icons/hi';
-import { RiTeamLine } from 'react-icons/ri';
+// import { LuListChecks } from 'react-icons/';
+import { MdOutlineRateReview, MdWorkspacesOutline } from 'react-icons/md';
 import { SiGotomeeting } from 'react-icons/si';
-import { TbSettings, TbUsers } from 'react-icons/tb';
-import { TiPlaneOutline } from 'react-icons/ti';
+import { TbListCheck, TbListDetails, TbUsers } from 'react-icons/tb';
 
 export const menus = [
 	{
 		label: 'Dashboard',
-		icon: <FaRegChartBar size={25} />,
-		href: '/dashboard',
+		icon: <FaRegChartBar size={20} />,
+		href: '/',
+		// href: 'https://asia-admin.vercel.app',
 	},
 	{
 		label: 'Bookings',
-		icon: <BsBookmarkCheck size={25} />,
+		icon: <BsBookmarkCheck size={20} />,
 		href: '/bookings',
 	},
 	{
 		label: 'Customers',
-		icon: <TbUsers size={25} />,
+		icon: <TbUsers size={20} />,
 		href: '/customers',
 	},
 	{
 		label: 'Services',
-		icon: <HiOutlineViewGrid size={25} />,
+		icon: <TbListCheck size={20} />,
 		href: '/services',
 	},
 	{
 		label: 'Tour Packages',
-		icon: <TiPlaneOutline size={25} />,
+		icon: <BsUiChecksGrid size={20} />,
 		href: '/tour_packages',
 	},
 	{
 		label: 'Appointments',
-		icon: <SiGotomeeting size={25} />,
+		icon: <SiGotomeeting size={20} />,
 		href: '/appointments',
 	},
 	{
 		label: 'Employees',
-		icon: <RiTeamLine size={25} />,
+		icon: <MdWorkspacesOutline size={20} />,
 		href: '/employees',
 	},
 	{
-		label: 'Settings',
-		icon: <TbSettings size={25} />,
-		href: '/settings',
+		label: 'Rating &  Reviews',
+		icon: <MdOutlineRateReview size={20} />,
+		href: '/rating_&&_reviews',
 	},
 ];

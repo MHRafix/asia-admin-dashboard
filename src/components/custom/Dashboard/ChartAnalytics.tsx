@@ -119,7 +119,7 @@ export const ChartTransactionAnalytics = () => {
 			},
 			type: 'radialBar',
 			height: 300,
-			width: 320,
+			// width: 320,
 		},
 		colors: ['#7048E8', '#00E396', '#FEB019'],
 		title: {

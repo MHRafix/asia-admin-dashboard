@@ -24,17 +24,19 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 				<Title order={3} fw={500} my={5}>
 					{title}
 				</Title>
-				<Indicator color='red' position='middle-start' size={8}>
-					<Text size='sm' className='text-dimmed ml-2'>
-						{tagline}
-					</Text>
-				</Indicator>
+				{tagline && (
+					<Indicator color='red' position='middle-start' size={8}>
+						<Text size='sm' className='text-dimmed ml-2'>
+							{tagline}
+						</Text>
+					</Indicator>
+				)}
 			</div>
-			<div className='text-right'>
+			<div className='text-right mb-8 mt-3'>
 				{actionComponent}
 				<>
 					{currentPathName && (
-						<div className='-mt-2 gap-3 shadow-sm rounded-md flex items-center'>
+						<div className='lg:-mt-2 mt-3 gap-3 shadow-sm rounded-md flex items-center'>
 							{othersPath?.map((path: IOthersPath, idx: number) => (
 								<Link
 									key={idx}

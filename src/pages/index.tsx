@@ -12,6 +12,7 @@ import {
 import GridOverViewCard from '@/components/custom/Dashboard/GridOverViewCard';
 import TravelPackages from '@/components/custom/TravelPackage/TravelPackages';
 import AdminLayout from '@/components/layouts/AdminLayout';
+import { Title } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
 
@@ -40,8 +41,8 @@ const Dashboard = () => {
 			<div className='grid gap-10'>
 				<GridOverViewCard />
 
-				<div className='lg:flex grid justify-between gap-8'>
-					<div className=' bg-[#212231] md:px-0 shadow-2xl lg:w-5/12 rounded-sm'>
+				<div className='grid lg:grid-cols-2 justify-between gap-5'>
+					<div className=' bg-[#212231] shadow-2xl rounded-sm w-[12/12]'>
 						<div className='mt-2'>
 							<DateRangePicker
 								dateRange={transactionDate}
@@ -51,7 +52,7 @@ const Dashboard = () => {
 						<ChartTransactionAnalytics />
 					</div>
 
-					<div className='lg:w-7/12 bg-[#212231] px-2 shadow-2xl rounded-sm'>
+					<div className='w-12/12 bg-[#212231] px-2 shadow-2xl rounded-sm'>
 						{' '}
 						<div className='mt-2'>
 							<DateRangePicker
@@ -63,7 +64,13 @@ const Dashboard = () => {
 					</div>
 				</div>
 
-				<TravelPackages skeletonCount={4} />
+				{/* popular travel packages */}
+				<div>
+					<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
+						Popular packages
+					</Title>
+					<TravelPackages skeletonCount={3} />
+				</div>
 			</div>
 		</AdminLayout>
 	);

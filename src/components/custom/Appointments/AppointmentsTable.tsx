@@ -122,6 +122,13 @@ const AppointmentsTable: React.FC<{}> = () => {
 						/>
 					</div>
 				}
+				currentPathName='Appointments'
+				othersPath={[
+					{
+						pathName: 'Home',
+						href: '/',
+					},
+				]}
 			/>
 
 			<div className='bg-[#212231] shadow-lg rounded-md'>

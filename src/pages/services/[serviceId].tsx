@@ -1,7 +1,7 @@
 import {
 	useGetService,
 	useUpdateService,
-} from '@/app/api/api-hooks/service.api';
+} from '@/app/api/gql-api-hooks/service.api';
 import {
 	UPDATE_SERVICE_DEFAULT_VALUES,
 	updateServiceSchema,

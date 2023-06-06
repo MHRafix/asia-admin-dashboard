@@ -1,3 +1,4 @@
+import { useGetDashboardOverviewData } from '@/app/api/rest-api-hooks/rest.api';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import {
 	getBookingsDateRange,
@@ -10,6 +11,7 @@ import {
 	ChartTransactionAnalytics,
 } from '@/components/custom/Dashboard/ChartAnalytics';
 import GridOverViewCard from '@/components/custom/Dashboard/GridOverViewCard';
+import OverViewCardSkeleton from '@/components/custom/Dashboard/OverViewCardSkeleton';
 import TravelPackages from '@/components/custom/TravelPackage/TravelPackages';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { Title } from '@mantine/core';
@@ -24,7 +26,7 @@ const Dashboard = () => {
 		[Date, Date]
 	>(getBookingsDateRange());
 	const largeScreen = useMediaQuery('(min-width: 60em)');
-
+	const { isLoading, data } = useGetDashboardOverviewData();
 	return (
 		<AdminLayout title='Dashboard'>
 			<PageTitleArea
@@ -39,7 +41,10 @@ const Dashboard = () => {
 				]}
 			/>
 			<div className='grid gap-10'>
-				<GridOverViewCard />
+				{isLoading && <OverViewCardSkeleton />}
+				{!isLoading && (
+					<GridOverViewCard overViewCardData={data?.overViewCardData!} />
+				)}
 
 				<div className='grid lg:grid-cols-2 justify-between gap-5'>
 					<div className=' bg-[#212231] shadow-2xl rounded-sm w-[12/12]'>

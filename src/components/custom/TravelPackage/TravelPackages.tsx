@@ -1,4 +1,4 @@
-import { useGetTravelPackages } from '@/app/api/api-hooks/travelPackage.api';
+import { useGetTravelPackages } from '@/app/api/gql-api-hooks/travelPackage.api';
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
 import TourCard from '@/components/common/Tour/TourCard';
 import TourCardSkeleton from '@/components/common/Tour/TourCardSkeleton';

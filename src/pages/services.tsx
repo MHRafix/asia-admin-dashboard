@@ -1,4 +1,4 @@
-import { useGetServices } from '@/app/api/api-hooks/service.api';
+import { useGetServices } from '@/app/api/gql-api-hooks/service.api';
 import { IService } from '@/app/api/models/service.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';

@@ -5,10 +5,10 @@ import {
 } from '@/app/config/queries/service.query';
 import { useMutation, useQuery } from '@apollo/client';
 import { IService } from '../models/service.model';
-import { UPDATE_SERVICE } from './../../config/queries/service.query';
+import { UPDATE_SERVICE } from '../../config/queries/service.query';
 
 export const useGetServices = () => {
-	const { 
+	const {
 		data,
 		loading: getingServices,
 		refetch: refetchServices,

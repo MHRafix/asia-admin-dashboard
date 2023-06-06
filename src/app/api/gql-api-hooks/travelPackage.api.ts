@@ -1,8 +1,8 @@
-import { useQuery } from '@apollo/client';
 import {
 	GET_SINGLE_TRAVEL_PACKAGES,
 	GET_TRAVEL_PACKAGES,
 } from '@/app/config/queries/travelPackage.query';
+import { useQuery } from '@apollo/client';
 import { ITravelPackage } from '../models/travelPackage.model';
 export const useGetTravelPackages = () => {
 	const {

@@ -1,9 +1,12 @@
+import { IOverViewCardData } from '@/app/api/models/dashboard.model';
 import { Space, Text, ThemeIcon } from '@mantine/core';
 import { BsBookmarkCheck } from 'react-icons/bs';
 import { SiGotomeeting } from 'react-icons/si';
 import { TbPlaneInflight, TbTransform } from 'react-icons/tb';
 
-const GridOverViewCard: React.FC = () => {
+const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
+	overViewCardData,
+}) => {
 	return (
 		<div className='grid lg:grid-cols-4 sm:grid-cols-2 gap-5'>
 			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'>
@@ -12,7 +15,7 @@ const GridOverViewCard: React.FC = () => {
 				</ThemeIcon>
 				<div>
 					<Text fw={700} fz={25}>
-						5353
+						{overViewCardData?.newAppointments}
 					</Text>
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>
@@ -26,7 +29,7 @@ const GridOverViewCard: React.FC = () => {
 				</ThemeIcon>
 				<div>
 					<Text fw={700} fz={25}>
-						5353
+						{overViewCardData?.newBookings}
 					</Text>
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>
@@ -40,7 +43,7 @@ const GridOverViewCard: React.FC = () => {
 				</ThemeIcon>
 				<div>
 					<Text fw={700} fz={25}>
-						5353
+						{overViewCardData?.newFlights}
 					</Text>
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>
@@ -54,7 +57,7 @@ const GridOverViewCard: React.FC = () => {
 				</ThemeIcon>
 				<div>
 					<Text fw={700} fz={25}>
-						5353
+						{overViewCardData?.totalTransactions}
 					</Text>
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>

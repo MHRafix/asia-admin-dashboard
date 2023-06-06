@@ -1,5 +1,6 @@
 import { useGetDashboardOverviewData } from '@/app/api/rest-api-hooks/rest.api';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
+import { useGetDateFilteredBookings } from '@/app/config/logic/getDateFromRange';
 import {
 	getBookingsDateRange,
 	getTransactionDateRange,
@@ -15,7 +16,6 @@ import OverViewCardSkeleton from '@/components/custom/Dashboard/OverViewCardSkel
 import TravelPackages from '@/components/custom/TravelPackage/TravelPackages';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { Title } from '@mantine/core';
-import { useMediaQuery } from '@mantine/hooks';
 import { useState } from 'react';
 
 const Dashboard = () => {
@@ -25,8 +25,14 @@ const Dashboard = () => {
 	const [bookingsFilterDate, onChangeBookingsFilterDate] = useState<
 		[Date, Date]
 	>(getBookingsDateRange());
-	const largeScreen = useMediaQuery('(min-width: 60em)');
 	const { isLoading, data } = useGetDashboardOverviewData();
+
+	const { getDaysArray } = useGetDateFilteredBookings(bookingsFilterDate);
+
+	const date = getDaysArray(
+		bookingsFilterDate[0]?.toISOString(),
+		bookingsFilterDate[1]?.toISOString()
+	);
 	return (
 		<AdminLayout title='Dashboard'>
 			<PageTitleArea
@@ -46,7 +52,7 @@ const Dashboard = () => {
 					<GridOverViewCard overViewCardData={data?.overViewCardData!} />
 				)}
 
-				<div className='grid lg:grid-cols-2 justify-between gap-5'>
+				<div className='grid lg:grid-cols-2 gap-5'>
 					<div className=' bg-[#212231] shadow-2xl rounded-sm w-[12/12]'>
 						<div className='mt-2'>
 							<DateRangePicker
@@ -65,7 +71,10 @@ const Dashboard = () => {
 								onChangeDate={onChangeBookingsFilterDate}
 							/>
 						</div>
-						<ChartBookingAnalytics />
+						<ChartBookingAnalytics
+							date={date}
+							chartData={data?.bookingsChartAnalytics!}
+						/>
 					</div>
 				</div>
 

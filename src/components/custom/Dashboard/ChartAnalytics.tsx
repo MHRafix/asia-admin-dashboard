@@ -1,8 +1,15 @@
+import {
+	IBookingsChartChartAnalytics,
+	IOverViewCardData,
+} from '@/app/api/models/dashboard.model';
 import dynamic from 'next/dynamic';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-export const ChartBookingAnalytics: React.FC = () => {
+export const ChartBookingAnalytics: React.FC<{
+	date: string[];
+	chartData: IBookingsChartChartAnalytics;
+}> = ({ date, chartData }) => {
 	const optionsArea = {
 		stroke: {
 			curve: 'smooth',
@@ -12,16 +19,16 @@ export const ChartBookingAnalytics: React.FC = () => {
 		series: [
 			{
 				name: 'New Appointments ',
-				data: [1, 60, 36, 30, 48, 50, 32],
+				data: chartData?.approved,
 			},
 			{
 				name: 'Flight Booking',
-				data: [3, 33, 21, 42, 19, 32, 42],
+				data: chartData?.pending,
 			},
 
 			{
 				name: 'Package Booking',
-				data: [0, 39, 52, 11, 29, 43, 45],
+				data: chartData?.completed,
 			},
 		],
 		title: {
@@ -50,15 +57,7 @@ export const ChartBookingAnalytics: React.FC = () => {
 				},
 			},
 		},
-		labels: [
-			'01/15/2002',
-			'01/16/2002',
-			'01/17/2002',
-			'01/18/2002',
-			'01/19/2002',
-			'01/20/2002',
-			'01/21/2002',
-		],
+		labels: date,
 		xaxis: {
 			tooltip: {
 				enabled: false,
@@ -113,7 +112,7 @@ export const ChartTransactionAnalytics = () => {
 			dropShadow: {
 				enabled: true,
 				top: 2,
-				left: 1,
+				// left: 1,
 				blur: 4,
 				opacity: 1,
 			},

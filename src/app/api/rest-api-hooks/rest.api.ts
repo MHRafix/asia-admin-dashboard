@@ -18,7 +18,7 @@ export const getCities = async (placeName: string) => {
 
 export const useGetDashboardOverviewData = () => {
 	const userInfo = Cookies.get('user') && JSON.parse(Cookies.get('user')!);
-	const [isLoading, onChangeLoading] = useState(false);
+	const [isLoading, onChangeLoading] = useState(true);
 	const [data, onChangeData] = useState<IDashboardOverview>();
 	// if (userInfo?.accessToken) {
 

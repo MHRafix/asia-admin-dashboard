@@ -9,6 +9,7 @@ import { setContext } from '@apollo/client/link/context';
 import { MantineProvider } from '@mantine/core';
 import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 import type { AppProps } from 'next/app';
 
@@ -34,21 +35,25 @@ export default function App({ Component, pageProps }: AppProps) {
 		cache: new InMemoryCache(),
 	});
 
+	const reactQueryClient = new QueryClient();
+
 	return (
 		<>
 			<ApolloProvider client={client}>
-				<MantineProvider
-					withGlobalStyles
-					withNormalizeCSS
-					theme={{
-						colorScheme: 'dark',
-					}}
-				>
-					<ModalsProvider>
-						<Notifications position='top-right' zIndex={2077} />
-						<Component {...pageProps} />
-					</ModalsProvider>
-				</MantineProvider>
+				<QueryClientProvider client={reactQueryClient}>
+					<MantineProvider
+						withGlobalStyles
+						withNormalizeCSS
+						theme={{
+							colorScheme: 'dark',
+						}}
+					>
+						<ModalsProvider>
+							<Notifications position='top-right' zIndex={2077} />
+							<Component {...pageProps} />
+						</ModalsProvider>
+					</MantineProvider>
+				</QueryClientProvider>
 			</ApolloProvider>
 		</>
 	);

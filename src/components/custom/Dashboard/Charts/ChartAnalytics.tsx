@@ -15,30 +15,35 @@ export const ChartBookingAnalytics: React.FC<{
 			curve: 'smooth',
 			width: 2,
 		},
-		colors: ['#7048E8', '#00E396', '#FEB019'],
+		colors: ['#FEB019', '#7048E8', '#00E396', 'red'],
 		series: [
 			{
-				name: 'New Appointments ',
-				data: chartData?.approved,
+				name: 'Pending',
+				data: chartData?.pending,
 			},
 			{
-				name: 'Flight Booking',
-				data: chartData?.pending,
+				name: 'Approved',
+				data: chartData?.approved,
 			},
 
 			{
-				name: 'Package Booking',
+				name: 'Completed',
 				data: chartData?.completed,
+			},
+			{
+				name: 'Canceled',
+				data: chartData?.canceled,
 			},
 		],
 		title: {
-			text: 'Bookings',
+			text: 'Package bookings analytics',
+
 			align: 'left',
 			offsetY: 25,
 			offsetX: 20,
 		},
 		subtitle: {
-			text: 'Analytics',
+			text: '',
 			offsetY: 55,
 			offsetX: 20,
 		},
@@ -53,7 +58,12 @@ export const ChartBookingAnalytics: React.FC<{
 			borderColor: '#535A6C',
 			xaxis: {
 				lines: {
-					show: true,
+					show: false,
+				},
+			},
+			yaxis: {
+				lines: {
+					show: false,
 				},
 			},
 		},
@@ -102,7 +112,9 @@ export const ChartBookingAnalytics: React.FC<{
 
 import React from 'react';
 
-export const ChartTransactionAnalytics = () => {
+export const ChartTransactionAnalytics: React.FC<{
+	transactions: IOverViewCardData;
+}> = ({ transactions }) => {
 	const optionsCircle4 = {
 		chart: {
 			foreColor: '#ccc',
@@ -121,12 +133,6 @@ export const ChartTransactionAnalytics = () => {
 			// width: 320,
 		},
 		colors: ['#7048E8', '#00E396', '#FEB019'],
-		title: {
-			text: 'Transaction analytics',
-			align: 'left',
-			offsetY: 25,
-			offsetX: 20,
-		},
 
 		plotOptions: {
 			radialBar: {
@@ -147,14 +153,18 @@ export const ChartTransactionAnalytics = () => {
 		stroke: {
 			lineCap: 'round',
 		},
-		series: [71, 63, 77],
+		series: [
+			transactions?.newFlights,
+			transactions?.newBookings === 0 ? 10 : transactions?.newBookings,
+			transactions?.newAppointments,
+		],
 		labels: ['Hotel', 'Flight', 'Package'],
 		legend: {
 			show: true,
 			floating: true,
-			position: 'right',
-			offsetX: 70,
-			offsetY: 240,
+			position: 'top',
+			// offsetX: 70,
+			offsetY: 200,
 		},
 	};
 

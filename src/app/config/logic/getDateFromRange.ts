@@ -11,7 +11,7 @@ export const useGetDateFilteredBookings = (filter: any) => {
 			d <= new Date(e);
 			d.setDate(d.getDate() + 1)
 		) {
-			a.push(new Date(d).toDateString().split('2023')[0]);
+			a.push(new Date(d).toDateString());
 		}
 		return a;
 	};

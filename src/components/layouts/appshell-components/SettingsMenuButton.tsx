@@ -2,12 +2,11 @@ import { useGetSession } from '@/app/config/logic/getSession';
 import { Group, Menu, Text, UnstyledButton } from '@mantine/core';
 import Link from 'next/link';
 import React, { useRef } from 'react';
-import { BsGear } from 'react-icons/bs';
 import { MdChevronRight, MdOutlineLockClock } from 'react-icons/md';
 import { TbListDetails } from 'react-icons/tb';
 import { VscSettings } from 'react-icons/vsc';
 
-export const MenuButton: React.FC = () => {
+export const SettingsMenuButton: React.FC = () => {
 	const { loading, user } = useGetSession();
 	const ref = useRef();
 	return (
@@ -66,6 +65,7 @@ export const MenuButton: React.FC = () => {
 							icon={<MdOutlineLockClock size={18} />}
 							// color='violet'
 							fz={16}
+							disabled
 							ff={'Nunito sans, sans-serif'}
 						>
 							Opening hours

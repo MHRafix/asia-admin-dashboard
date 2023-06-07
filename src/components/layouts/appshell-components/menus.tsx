@@ -1,9 +1,13 @@
 import { BsBookmarkCheck, BsUiChecksGrid } from 'react-icons/bs';
 import { FaRegChartBar } from 'react-icons/fa';
 // import { LuListChecks } from 'react-icons/';
-import { MdOutlineRateReview, MdWorkspacesOutline } from 'react-icons/md';
+import {
+	MdOutlineCalculate,
+	MdOutlineRateReview,
+	MdWorkspacesOutline,
+} from 'react-icons/md';
 import { SiGotomeeting } from 'react-icons/si';
-import { TbListCheck, TbListDetails, TbUsers } from 'react-icons/tb';
+import { TbListCheck, TbUsers } from 'react-icons/tb';
 
 export const menus = [
 	{
@@ -43,8 +47,13 @@ export const menus = [
 		href: '/employees',
 	},
 	{
-		label: 'Rating &  Reviews',
+		label: 'Rating & Reviews',
 		icon: <MdOutlineRateReview size={20} />,
 		href: '/rating_&&_reviews',
+	},
+	{
+		label: 'Expenses Calculation',
+		icon: <MdOutlineCalculate size={20} />,
+		href: '/expenses_calculation',
 	},
 ];

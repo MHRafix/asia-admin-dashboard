@@ -54,6 +54,7 @@ export const NotificationButton: React.FC = () => {
 						<Menu.Item
 							icon={<BiNotification size={18} />}
 							// color='violet'
+							disabled
 							fz={16}
 							ff={'Nunito sans, sans-serif'}
 						>
@@ -66,6 +67,7 @@ export const NotificationButton: React.FC = () => {
 					>
 						<Menu.Item
 							icon={<MdOutlineNotificationsActive size={18} />}
+							disabled
 							// color='violet'
 							fz={16}
 							ff={'Nunito sans, sans-serif'}

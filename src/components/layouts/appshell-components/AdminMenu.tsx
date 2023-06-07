@@ -10,9 +10,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { MenuButton } from './MenuButton';
 import { menus } from './menus';
 import { NotificationButton } from './NotificationButton';
+import { SettingsMenuButton } from './SettingsMenuButton';
 import { UserButton } from './UserButton';
 
 interface Props {
@@ -64,6 +64,10 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 						}
 						component={Link}
 						href={item.href}
+						disabled={
+							item?.href === '/rating_&&_reviews' ||
+							item?.href === '/expenses_calculation'
+						}
 						active={pathname === item.href}
 						styles={(theme) => ({
 							// theme.colors.brand[9]
@@ -76,8 +80,8 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 					/>
 				))}
 
-				<MenuButton />
 				<NotificationButton />
+				<SettingsMenuButton />
 			</Navbar.Section>
 			<Space h={20} />
 			<Navbar.Section>

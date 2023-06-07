@@ -10,13 +10,16 @@ import PageTitleArea from '@/components/common/PageTitleArea';
 import {
 	ChartBookingAnalytics,
 	ChartTransactionAnalytics,
-} from '@/components/custom/Dashboard/ChartAnalytics';
-import GridOverViewCard from '@/components/custom/Dashboard/GridOverViewCard';
-import OverViewCardSkeleton from '@/components/custom/Dashboard/OverViewCardSkeleton';
-import TravelPackages from '@/components/custom/TravelPackage/TravelPackages';
+} from '@/components/custom/Dashboard/Charts/ChartAnalytics';
+import DashboardSkeleton from '@/components/custom/Dashboard/DashboardSkeleton';
+import GridOverViewCard from '@/components/custom/Dashboard/OverViewCard.tsx/GridOverViewCard';
+import PopularPackagesCarousel from '@/components/custom/Dashboard/PackagesSlider/PopularPackagesCarousel';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { Title } from '@mantine/core';
-import { useState } from 'react';
+import { showNotification } from '@mantine/notifications';
+import { useQuery } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { useEffect, useState } from 'react';
 
 const Dashboard = () => {
 	const [transactionDate, onChangeTransactionDate] = useState<[Date, Date]>(
@@ -25,11 +28,46 @@ const Dashboard = () => {
 	const [bookingsFilterDate, onChangeBookingsFilterDate] = useState<
 		[Date, Date]
 	>(getBookingsDateRange());
-	const { isLoading, data } = useGetDashboardOverviewData();
 
+	// dashboard overview api
+	const { triggerApi } = useGetDashboardOverviewData();
+	const {
+		data: dashboardOverviewData,
+		refetch,
+		isLoading,
+	} = useQuery(
+		['dashboardOverviewData'],
+		async () => {
+			const res = await triggerApi({
+				firstDate: bookingsFilterDate[0]?.toISOString(),
+				lastDate: bookingsFilterDate[1]?.toISOString(),
+			});
+			return res?.data;
+		},
+		{
+			enabled: Boolean(bookingsFilterDate[1]),
+			onError: async (err: AxiosError) => {
+				showNotification({
+					title: err.message,
+					message: 'Error fetching chart data.',
+					color: err.message,
+				});
+			},
+		}
+	);
+
+	useEffect(() => {
+		Boolean(bookingsFilterDate[1])
+			? refetch()
+			: showNotification({
+					title: "Last date can't be empty!",
+					message: 'Please select last date.',
+					color: 'red',
+			  });
+	}, [bookingsFilterDate]);
 	const { getDaysArray } = useGetDateFilteredBookings(bookingsFilterDate);
 
-	const date = getDaysArray(
+	const dates = getDaysArray(
 		bookingsFilterDate[0]?.toISOString(),
 		bookingsFilterDate[1]?.toISOString()
 	);
@@ -46,46 +84,57 @@ const Dashboard = () => {
 					},
 				]}
 			/>
-			<div className='grid gap-10'>
-				{isLoading && <OverViewCardSkeleton />}
-				{!isLoading && (
-					<GridOverViewCard overViewCardData={data?.overViewCardData!} />
-				)}
+			{isLoading && <DashboardSkeleton />}
+			{!isLoading && (
+				<div className='grid gap-10'>
+					<GridOverViewCard
+						overViewCardData={dashboardOverviewData?.overViewCardData!}
+					/>
 
-				<div className='grid lg:grid-cols-2 gap-5'>
-					<div className=' bg-[#212231] shadow-2xl rounded-sm w-[12/12]'>
-						<div className='mt-2'>
-							<DateRangePicker
+					<div className='grid'>
+						<div className='w-12/12 bg-[#212231] px-2 shadow-2xl rounded-sm'>
+							{' '}
+							<div className='mt-2'>
+								<DateRangePicker
+									dateRange={bookingsFilterDate}
+									onChangeDate={onChangeBookingsFilterDate}
+								/>
+							</div>
+							<ChartBookingAnalytics
+								date={dates}
+								chartData={dashboardOverviewData?.bookingsChartAnalytics!}
+							/>
+						</div>
+					</div>
+
+					{/* popular travel packages */}
+					<div className='lg:flex gap-5'>
+						<div className='lg:w-7/12 '>
+							<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
+								Transaction analytics
+							</Title>
+							<div className=' bg-[#212231] shadow-2xl rounded-sm'>
+								{/* <div className='mt-2'>
+								<DateRangePicker
 								dateRange={transactionDate}
 								onChangeDate={onChangeTransactionDate}
-							/>
+								/>
+							</div> */}
+								<ChartTransactionAnalytics
+									transactions={dashboardOverviewData?.overViewCardData!}
+								/>
+							</div>
 						</div>
-						<ChartTransactionAnalytics />
-					</div>
 
-					<div className='w-12/12 bg-[#212231] px-2 shadow-2xl rounded-sm'>
-						{' '}
-						<div className='mt-2'>
-							<DateRangePicker
-								dateRange={bookingsFilterDate}
-								onChangeDate={onChangeBookingsFilterDate}
-							/>
+						<div className='lg:w-5/12'>
+							<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
+								Popular packages
+							</Title>
+							<PopularPackagesCarousel skeletonCount={1} />
 						</div>
-						<ChartBookingAnalytics
-							date={date}
-							chartData={data?.bookingsChartAnalytics!}
-						/>
 					</div>
 				</div>
-
-				{/* popular travel packages */}
-				<div>
-					<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
-						Popular packages
-					</Title>
-					<TravelPackages skeletonCount={3} />
-				</div>
-			</div>
+			)}
 		</AdminLayout>
 	);
 };

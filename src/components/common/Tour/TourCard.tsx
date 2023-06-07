@@ -16,13 +16,13 @@ const TourCard: React.FC<ITourCardProp> = ({ TPackage }) => {
 			className='no-underline text-white'
 		>
 			<Box className=' bg-[#212231] hover:bg-[#212237] relative rounded-lg grid shadow-xl pb-3'>
-				<div className='mx-auto mt-2'>
+				<div className='mx-3 mt-3'>
 					{TPackage?.thumbnail && (
-						<Image
+						<img
 							src={TPackage?.thumbnail}
 							alt='card image'
-							className='rounded-lg mx-auto text-center'
-							width={270}
+							className='w-full rounded-lg mx-auto text-center'
+							// width={100}
 							height={180}
 						/>
 					)}

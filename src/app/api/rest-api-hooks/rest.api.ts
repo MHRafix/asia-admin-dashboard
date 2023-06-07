@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { useEffect, useState } from 'react';
 import { IDashboardOverview } from '../models/dashboard.model';
 
 export const getCities = async (placeName: string) => {
@@ -18,32 +17,21 @@ export const getCities = async (placeName: string) => {
 
 export const useGetDashboardOverviewData = () => {
 	const userInfo = Cookies.get('user') && JSON.parse(Cookies.get('user')!);
-	const [isLoading, onChangeLoading] = useState(true);
-	const [data, onChangeData] = useState<IDashboardOverview>();
-	// if (userInfo?.accessToken) {
+	const triggerApi = (query: IDashboardOverviewQueryParams) =>
+		axios.get<IDashboardOverview>(
+			`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/overview`,
+			{
+				params: query,
+				headers: {
+					Authorization: `Bearer ${userInfo?.accessToken}`,
+				},
+			}
+		);
 
-	useEffect(() => {
-		onChangeLoading(true);
-		if (userInfo?.accessToken) {
-			axios
-				.get(`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/overview`, {
-					params: {
-						firstDate: '2023-05-20',
-						lastDate: '2023-06-20',
-					},
-					headers: {
-						Authorization: `Bearer ${userInfo?.accessToken}`,
-					},
-				})
-				.then((response) => {
-					onChangeData(response.data);
-					onChangeLoading(false);
-				});
-		}
-	}, [userInfo.accessToken]);
-
-	return {
-		isLoading,
-		data,
-	};
+	return { triggerApi };
 };
+
+export interface IDashboardOverviewQueryParams {
+	firstDate: string;
+	lastDate: string;
+}

@@ -7,10 +7,9 @@ import { useMediaQuery } from '@mantine/hooks';
 import React from 'react';
 import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 
-const PopularPackagesCarousel: React.FC<{ skeletonCount: number }> = ({
-	skeletonCount,
+const PopularPackagesCarousel: React.FC<{ packages: ITravelPackage[] }> = ({
+	packages,
 }) => {
-	const { packages } = useGetTravelPackages();
 	const largeScreen = useMediaQuery('(min-width: 60em)');
 	return (
 		<div>
@@ -20,9 +19,8 @@ const PopularPackagesCarousel: React.FC<{ skeletonCount: number }> = ({
 				}}
 				height={290}
 				slideSize={'100%'}
-				slideGap='md'
-				loop
-				align='start'
+				// loop
+				align='center'
 				nextControlIcon={
 					<div className='p-2'>
 						<BiRightArrowAlt size={18} />
@@ -33,10 +31,8 @@ const PopularPackagesCarousel: React.FC<{ skeletonCount: number }> = ({
 						<BiLeftArrowAlt size={18} />
 					</div>
 				}
-				slidesToScroll={1}
+				// slidesToScroll={1}
 			>
-				<TourCardSkeleton show={!packages?.length} />
-
 				{packages?.map((TPackage: ITravelPackage, idx: number) => (
 					<Carousel.Slide key={idx}>
 						<TourCard TPackage={TPackage} />

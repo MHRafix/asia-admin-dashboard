@@ -1,3 +1,4 @@
+import { useGetTravelPackages } from '@/app/api/gql-api-hooks/travelPackage.api';
 import { useGetDashboardOverviewData } from '@/app/api/rest-api-hooks/rest.api';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import { useGetDateFilteredBookings } from '@/app/config/logic/getDateFromRange';
@@ -7,6 +8,7 @@ import {
 } from '@/app/config/logic/getDateRanges';
 import DateRangePicker from '@/components/common/DateRangePicker';
 import PageTitleArea from '@/components/common/PageTitleArea';
+import TourCardSkeleton from '@/components/common/Tour/TourCardSkeleton';
 import {
 	ChartBookingAnalytics,
 	ChartTransactionAnalytics,
@@ -28,6 +30,8 @@ const Dashboard = () => {
 	const [bookingsFilterDate, onChangeBookingsFilterDate] = useState<
 		[Date, Date]
 	>(getBookingsDateRange());
+
+	const { packages } = useGetTravelPackages();
 
 	// dashboard overview api
 	const { triggerApi } = useGetDashboardOverviewData();
@@ -130,7 +134,9 @@ const Dashboard = () => {
 							<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
 								Popular packages
 							</Title>
-							<PopularPackagesCarousel skeletonCount={1} />
+							<TourCardSkeleton show={!packages?.length} />
+
+							<PopularPackagesCarousel packages={packages!} />
 						</div>
 					</div>
 				</div>

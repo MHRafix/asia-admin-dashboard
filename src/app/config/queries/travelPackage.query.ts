@@ -56,12 +56,20 @@ export const GET_TRAVEL_PACKAGES = gql`
 				thumbnail
 				description
 				shortDescription
-				destination
 				countDown {
 					bookingStart
 					bookingEnd
 				}
-
+				destination {
+					destination
+					lat
+					lng
+				}
+				departureFrom {
+					departureFrom
+					lat
+					lng
+				}
 				ratingsAndReviews {
 					rating
 					email
@@ -98,25 +106,6 @@ export const GET_SINGLE_TRAVEL_PACKAGES = gql`
 			thumbnail
 			description
 			shortDescription
-			destination
-			ratingsAndReviews {
-				rating
-				email
-				message
-			}
-			travelers {
-				travelerEmail
-			}
-			transportation {
-				tourBy
-				departureFrom
-				destination
-				startAt
-				transportName
-				stops
-				journeyBreak
-				endAt
-			}
 		}
 	}
 `;

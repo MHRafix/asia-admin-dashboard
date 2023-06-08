@@ -4,7 +4,7 @@ import { PropsWithChildren, useState } from 'react';
 import AdminMenu from './appshell-components/AdminMenu';
 
 interface Props {
-	title: string;
+	title?: string;
 	Actions?: React.ReactNode;
 }
 

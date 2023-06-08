@@ -18,7 +18,7 @@ export interface IPackageBasicInfo {
 // 	thumbnail: string[];
 // }
 
-export const activeStep = atom<number>(0);
+export const activeStep = atom<number>(2);
 export const carouselThumbnailsAtom = atom<string[] | null>(null);
 export const packageBasicInfoAtom = atom<IPackageBasicInfo | null>({
 	countDown: {

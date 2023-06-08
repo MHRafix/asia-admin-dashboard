@@ -1,6 +1,6 @@
 import {
-	CREATE_PACKAGE_FORM_DEFAULT_VALUE,
-	CREATE_PACKAGE_FORM_SCHEMA,
+	CREATE_PACKAGE_FORM_BASIC_INFO_DEFAULT_VALUE,
+	CREATE_PACKAGE_FORM_BASIC_INFO_SCHEMA,
 } from '@/app/config/form.validation/packageForm/package.form.validation';
 import NotepadEditor from '@/components/common/NotepadEditor';
 import { activeStep, packageBasicInfoAtom } from '@/store/createPackgage.store';
@@ -29,8 +29,8 @@ const PackageBasicInfoForm: React.FC = () => {
 		getValues,
 		formState: { errors },
 	} = useForm<IPackageBasicInfoFormState>({
-		defaultValues: CREATE_PACKAGE_FORM_DEFAULT_VALUE,
-		resolver: yupResolver(CREATE_PACKAGE_FORM_SCHEMA),
+		defaultValues: CREATE_PACKAGE_FORM_BASIC_INFO_DEFAULT_VALUE,
+		resolver: yupResolver(CREATE_PACKAGE_FORM_BASIC_INFO_SCHEMA),
 		mode: 'onChange',
 	});
 
@@ -70,8 +70,8 @@ const PackageBasicInfoForm: React.FC = () => {
 						error={<ErrorMessage errors={errors} name='packageTitle' />}
 					>
 						<Input
-							variant='unstyled'
 							placeholder='@Kashmir trip'
+							variant='unstyled'
 							size={'md'}
 							className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
 							{...register('packageTitle')}

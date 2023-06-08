@@ -90,7 +90,7 @@ const Dashboard = () => {
 			/>
 			{isLoading && <DashboardSkeleton />}
 			{!isLoading && (
-				<div className='grid gap-10'>
+				<div className='grid gap-8'>
 					<GridOverViewCard
 						overViewCardData={dashboardOverviewData?.overViewCardData!}
 					/>

@@ -7,18 +7,34 @@ export interface IPackageBasicInfo {
 	packageTitle?: string;
 	regularPrice?: number;
 	salePrice?: number;
-	destination?: string;
 	countDown?: { bookingStart: Date; bookingEnd: Date };
 	shortDescription?: string;
 	description?: string;
 	thumbnail?: string;
+	departureFrom?: ILocation;
+	destination?: ILocation;
+	transportation?: ITransportation;
 }
 
-// export interface ICarouselThumbnails {
-// 	thumbnail: string[];
-// }
+export interface ILocation {
+	name: string;
+	lat: string;
+	lng: string;
+}
 
-export const activeStep = atom<number>(2);
+export interface ITransportation {
+	departureStation: string;
+	destinationStation: string;
+	tourBy: string;
+	departureDate: Date;
+	departureTime: string;
+	arrivalDate: Date;
+	arrivalTime: string;
+	transportName: string;
+	journeyBreak: string;
+	stops: string;
+}
+export const activeStep = atom<number>(3);
 export const carouselThumbnailsAtom = atom<string[] | null>(null);
 export const packageBasicInfoAtom = atom<IPackageBasicInfo | null>({
 	countDown: {
@@ -26,12 +42,6 @@ export const packageBasicInfoAtom = atom<IPackageBasicInfo | null>({
 		bookingEnd: dateRange[1],
 	},
 });
-
-// export enum PAYMENT_STATUS {
-//   DUE = "DUE",
-//   IN_REVIEW_PAID = "IN_REVIEW_PAID",
-//   PAID = "PAID",
-// }
 
 export enum SALE_STATUS {
 	FIXED = 'FIXED',

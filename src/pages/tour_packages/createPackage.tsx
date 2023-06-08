@@ -1,6 +1,7 @@
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DepartureAndDestinationForm from '@/components/custom/TravelPackage/CreatePackage/DepartureAndDestinationForm';
 import PackageBasicInfoForm from '@/components/custom/TravelPackage/CreatePackage/PackageBasicInfoForm';
+import TransportationForm from '@/components/custom/TravelPackage/CreatePackage/TransportationForm';
 import UploadThumbnails from '@/components/custom/TravelPackage/CreatePackage/UploadThumbnails';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { activeStep } from '@/store/createPackgage.store';
@@ -50,7 +51,7 @@ const CreatePackage: NextPage = () => {
 					</Stepper.Step>
 					<Stepper.Step label='Transportation'>
 						<Space h={20} />
-						Step 3 content: Get full access
+						<TransportationForm />
 					</Stepper.Step>
 					<Stepper.Completed>
 						<Space h={20} />

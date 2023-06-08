@@ -3,27 +3,54 @@ import {
 	DEPARTURE_DESTINATION_FORM_SCHEMA,
 	IDepartureAndDestinationFormStates,
 } from '@/app/config/form.validation/packageForm/package.form.validation';
+import { activeStep, packageBasicInfoAtom } from '@/store/createPackgage.store';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Accordion, Button, Group, Input, Space } from '@mantine/core';
-import React from 'react';
+import { useAtom } from 'jotai';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { BiMapPin } from 'react-icons/bi';
 import { RiRoadMapLine } from 'react-icons/ri';
 
 const DepartureAndDestinationForm: React.FC = () => {
+	const [packageBasicInfo, onChangePackageInfo] = useAtom(packageBasicInfoAtom);
+	const [step, onChangeStep] = useAtom(activeStep);
+	const nextStep = () =>
+		onChangeStep((currentStep) =>
+			currentStep < 3 ? currentStep + 1 : currentStep
+		);
+
 	const {
 		register,
 		handleSubmit,
 		formState: { errors },
+		setValue,
 	} = useForm<IDepartureAndDestinationFormStates>({
 		defaultValues: DEPARTURE_DESTINATION_FORM_DEFAULT_VALUES,
 		resolver: yupResolver(DEPARTURE_DESTINATION_FORM_SCHEMA),
 	});
 
-	const onSubmit = (data: IDepartureAndDestinationFormStates) => {
-		console.log(data);
+	useEffect(() => {
+		if (packageBasicInfo) {
+			setValue('departureFrom.name', packageBasicInfo?.departureFrom?.name!);
+			setValue('departureFrom.lat', packageBasicInfo?.departureFrom?.lat!);
+			setValue('departureFrom.lng', packageBasicInfo?.departureFrom?.lng!);
+			setValue('destination.name', packageBasicInfo?.destination?.name!);
+			setValue('destination.lat', packageBasicInfo?.destination?.lat!);
+			setValue('destination.lng', packageBasicInfo?.destination?.lng!);
+		}
+	}, [packageBasicInfo]);
+
+	console.log(packageBasicInfo);
+	const onSubmit = (value: IDepartureAndDestinationFormStates) => {
+		onChangePackageInfo({
+			...packageBasicInfo,
+			...value,
+		});
+		nextStep();
 	};
+
 	return (
 		<div>
 			<form onSubmit={handleSubmit(onSubmit)}>
@@ -165,6 +192,9 @@ const DepartureAndDestinationForm: React.FC = () => {
 				<Group position='right'>
 					<Button type='submit' color='teal'>
 						Save
+					</Button>{' '}
+					<Button type='submit' color='teal' onClick={nextStep}>
+						Next{' '}
 					</Button>
 				</Group>
 			</form>

@@ -6,7 +6,7 @@ import NotepadEditor from '@/components/common/NotepadEditor';
 import { activeStep, packageBasicInfoAtom } from '@/store/createPackgage.store';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Group, Input, Textarea } from '@mantine/core';
+import { Button, Group, Input, Space, Textarea } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useAtom } from 'jotai';
 import React, { useEffect, useState } from 'react';
@@ -39,7 +39,6 @@ const PackageBasicInfoForm: React.FC = () => {
 			setValue('packageTitle', packageBasicInfo?.packageTitle!);
 			setValue('regularPrice', packageBasicInfo?.regularPrice!);
 			setValue('salePrice', packageBasicInfo?.salePrice!);
-			setValue('destination', packageBasicInfo?.destination!);
 			setValue('shortDescription', packageBasicInfo?.shortDescription!);
 			setValue('bookingStart', packageBasicInfo?.countDown?.bookingStart!);
 			setValue('bookingEnd', packageBasicInfo?.countDown?.bookingEnd!);
@@ -63,7 +62,7 @@ const PackageBasicInfoForm: React.FC = () => {
 		<div>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				{/* <pre>{JSON?.stringify(errors)}</pre> */}
-				<div className='grid lg:grid-cols-2 lg:gap-5  gap-2'>
+				<div className='grid lg:grid-cols-2 lg:gap-5 gap-2'>
 					<Input.Wrapper
 						label='Package Title'
 						size='md'
@@ -108,16 +107,16 @@ const PackageBasicInfoForm: React.FC = () => {
 						</Input.Wrapper>
 					</div>
 					<Input.Wrapper
-						label='Destination'
+						label='Short description'
 						size='md'
-						error={<ErrorMessage errors={errors} name='destination' />}
+						error={<ErrorMessage errors={errors} name='shortDescription' />}
 					>
-						<Input
+						<Textarea
 							variant='unstyled'
 							placeholder='Short description'
 							size={'md'}
 							className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
-							{...register('destination')}
+							{...register('shortDescription')}
 						/>
 					</Input.Wrapper>
 
@@ -164,31 +163,18 @@ const PackageBasicInfoForm: React.FC = () => {
 							/>
 						</Input.Wrapper>
 					</div>
-
-					<Input.Wrapper
-						label='Short description'
-						size='md'
-						error={<ErrorMessage errors={errors} name='shortDescription' />}
-					>
-						<Textarea
-							variant='unstyled'
-							placeholder='Short description'
-							size={'md'}
-							className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
-							{...register('shortDescription')}
-						/>
-					</Input.Wrapper>
-					<Input.Wrapper label='Description' size='md'>
-						<NotepadEditor
-							setValue={setDesc}
-							value={
-								packageBasicInfo?.description
-									? packageBasicInfo?.description
-									: desc!
-							}
-						/>
-					</Input.Wrapper>
 				</div>
+				<Space h={20} />
+				<Input.Wrapper label='Description' size='md'>
+					<NotepadEditor
+						setValue={setDesc}
+						value={
+							packageBasicInfo?.description
+								? packageBasicInfo?.description
+								: desc!
+						}
+					/>
+				</Input.Wrapper>
 				{step !== 1 && (
 					<Group position='right' mt={65}>
 						<Button color='violet' type='submit'>
@@ -207,7 +193,6 @@ export interface IPackageBasicInfoFormState {
 	packageTitle: string;
 	regularPrice: number;
 	salePrice: number;
-	destination: string;
 	bookingStart: Date;
 	bookingEnd: Date;
 	shortDescription: string;

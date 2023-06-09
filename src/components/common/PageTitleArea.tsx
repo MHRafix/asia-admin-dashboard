@@ -19,7 +19,7 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 	othersPath,
 }) => {
 	return (
-		<Box className='lg:flex justify-between items-center xs:grid gap-10 lg:mb-5'>
+		<Box className='lg:flex justify-between  xs:grid gap-10 lg:mb-5'>
 			<div>
 				<Title order={3} fw={500} my={5}>
 					{title}
@@ -36,14 +36,14 @@ const PageTitleArea: React.FC<IPageTitleProps> = ({
 				{actionComponent}
 				<>
 					{currentPathName && (
-						<div className='lg:-mt-2 mt-3 gap-3 shadow-sm rounded-md flex items-center'>
+						<div className='lg:-mt-2 mt-3 gap-3 shadow-sm rounded-md flex justify-end items-center'>
 							{othersPath?.map((path: IOthersPath, idx: number) => (
 								<Link
 									key={idx}
 									href={path?.href}
 									className='no-underline flex items-center gap-1'
 								>
-									{path?.pathName} <IoIosArrowForward size='16' />
+									{path?.pathName} &nbsp; <IoIosArrowForward size='16' />
 								</Link>
 							))}
 							<Text>{currentPathName}</Text>

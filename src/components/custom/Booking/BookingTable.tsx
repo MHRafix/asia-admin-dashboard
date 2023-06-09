@@ -3,8 +3,6 @@ import {
 	PACAKGE_BOOKINGS_QUERY,
 } from '@/app/config/queries/bookings.query';
 import {
-	BOOKING_TABLE_DATA_SORTBY,
-	BOOKING_TABLE_DEFAULT_SORTBY,
 	TABLE_DATA_LIMITS,
 	TABLE_DEFAULT_LIMIT,
 } from '@/app/config/table_configuration';
@@ -60,12 +58,6 @@ const BookingTable: React.FC<{}> = () => {
 		setLimit(parseInt(limit));
 	};
 
-	const handleSortChange = (sortBy: string) => {
-		Router.replace({
-			query: { ...Router.query, sort: sortBy },
-		});
-	};
-
 	// remove bulk bookings
 	const [bulkDeleteBooking, { loading: bulkDeleting }] = useMutation(
 		BULK_REMOVE_BOOKING,
@@ -76,6 +68,7 @@ const BookingTable: React.FC<{}> = () => {
 
 			onCompleted: () => {
 				refetch();
+				setBookingIds([]);
 				showNotification({
 					title: 'Bookings bulk delete successfull!',
 					color: 'red',
@@ -107,13 +100,6 @@ const BookingTable: React.FC<{}> = () => {
 							onChange={(value) => handleLimitChange(value!)}
 							data={TABLE_DATA_LIMITS}
 							defaultValue={TABLE_DEFAULT_LIMIT}
-						/>
-						<Select
-							w={120}
-							placeholder='Pick one'
-							onChange={(value) => handleSortChange(value!)}
-							data={BOOKING_TABLE_DATA_SORTBY}
-							defaultValue={BOOKING_TABLE_DEFAULT_SORTBY}
 						/>
 					</div>
 				}

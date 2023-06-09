@@ -6,7 +6,6 @@ import {
 	Space,
 	Text,
 } from '@mantine/core';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -21,7 +20,7 @@ interface Props {
 }
 
 const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
-	const { pathname } = useRouter();
+	const { pathname, asPath } = useRouter();
 
 	return (
 		<Navbar
@@ -32,8 +31,11 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 		>
 			{' '}
 			<Navbar.Section>
-				<div>
-					<Image src='/logo.png' alt='Logo' width={130} height={52} />
+				<div className='flex items-center justify-center'>
+					{/* <Image src='/logo.png' alt='Logo' width={130} height={52} /> */}
+					<Text fz={35} ff={'Nunito sans, sans-serif'} fw={700} color='violet'>
+						Asia tours
+					</Text>
 				</div>
 			</Navbar.Section>
 			<Space h={20} />
@@ -50,7 +52,7 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 						style={{
 							fontFamily: 'Nunito sans, sans-serif',
 							borderLeft:
-								pathname.includes(item.href) && pathname === item.href
+								asPath.includes(item.href) && asPath === item.href
 									? '4px solid #5d34d8'
 									: 0,
 						}}
@@ -68,11 +70,11 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 							item?.href === '/rating_&&_reviews' ||
 							item?.href === '/expenses_calculation'
 						}
-						active={pathname === item.href}
+						active={asPath === item.href}
 						styles={(theme) => ({
 							// theme.colors.brand[9]
 							root: {
-								fontWeight: pathname.includes(item.href) ? 600 : 400,
+								fontWeight: asPath.includes(item.href) ? 600 : 400,
 								fontFamily: 'Nunito sans, sans-serif',
 								fontSize: 20,
 							},

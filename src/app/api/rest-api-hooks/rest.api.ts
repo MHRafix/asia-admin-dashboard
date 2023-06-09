@@ -12,7 +12,6 @@ export const getCities = async (placeName: string) => {
 			},
 		}
 	);
-	console.log(data);
 };
 
 export const useGetDashboardOverviewData = () => {

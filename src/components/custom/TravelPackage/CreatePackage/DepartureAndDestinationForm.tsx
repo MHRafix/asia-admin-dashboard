@@ -1,26 +1,34 @@
+import { Notify } from '@/app/config/alertNotification/Notification';
 import {
 	DEPARTURE_DESTINATION_FORM_DEFAULT_VALUES,
 	DEPARTURE_DESTINATION_FORM_SCHEMA,
 	IDepartureAndDestinationFormStates,
 } from '@/app/config/form.validation/packageForm/package.form.validation';
-import { activeStep, packageBasicInfoAtom } from '@/store/createPackgage.store';
+import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
+import {
+	activeStep,
+	carouselThumbnailsAtom,
+	packageBasicInfoAtom,
+} from '@/store/createPackgage.store';
+import { useMutation } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Accordion, Button, Group, Input, Space } from '@mantine/core';
 import { useAtom } from 'jotai';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BiMapPin } from 'react-icons/bi';
 import { RiRoadMapLine } from 'react-icons/ri';
 
 const DepartureAndDestinationForm: React.FC = () => {
 	const [packageBasicInfo, onChangePackageInfo] = useAtom(packageBasicInfoAtom);
-	const [step, onChangeStep] = useAtom(activeStep);
+	const [, onChangeStep] = useAtom(activeStep);
+	const [carouselImg] = useAtom(carouselThumbnailsAtom);
 	const nextStep = () =>
 		onChangeStep((currentStep) =>
 			currentStep < 3 ? currentStep + 1 : currentStep
 		);
-
+	const [submitType, setSubmitType] = useState('');
 	const {
 		register,
 		handleSubmit,
@@ -42,13 +50,34 @@ const DepartureAndDestinationForm: React.FC = () => {
 		}
 	}, [packageBasicInfo]);
 
-	console.log(packageBasicInfo);
+	const [savePackage, { loading: savingPackage }] = useMutation(
+		CREATE_TRAVEL_PACKAGE,
+		Notify({
+			sucTitle: 'Package saved successfully!',
+			sucMessage: 'Please refetch package list.',
+			errMessage: 'Failed to save package.',
+		})
+	);
+
 	const onSubmit = (value: IDepartureAndDestinationFormStates) => {
 		onChangePackageInfo({
 			...packageBasicInfo,
-			...value,
+			destination: value.destination,
+			departureFrom: value.departureFrom,
 		});
-		nextStep();
+
+		if (submitType === 'save') {
+			savePackage({
+				variables: {
+					...packageBasicInfo,
+					carouselThumbnails: carouselImg,
+					...value,
+					isPublished: false,
+				},
+			});
+		} else {
+			nextStep();
+		}
 	};
 
 	return (
@@ -190,10 +219,23 @@ const DepartureAndDestinationForm: React.FC = () => {
 				<Space h={20} />
 
 				<Group position='right'>
-					<Button type='submit' color='teal'>
+					<Button
+						type='submit'
+						onClick={() => {
+							setSubmitType('save');
+						}}
+						color='teal'
+						loading={savingPackage}
+					>
 						Save
 					</Button>{' '}
-					<Button type='submit' color='teal' onClick={nextStep}>
+					<Button
+						type='submit'
+						color='violet'
+						onClick={() => {
+							setSubmitType('next');
+						}}
+					>
 						Next{' '}
 					</Button>
 				</Group>

@@ -27,6 +27,7 @@ const UploadThumbnails: React.FC = () => {
 	const [thumbnail, setThumbnail] = useState<string>(
 		packageBasicInfo?.thumbnail!
 	);
+	const [submitType, setSubmitType] = useState('');
 	const [carouselImg, onChangeCarouselThumbnails] = useAtom(
 		carouselThumbnailsAtom
 	);
@@ -97,8 +98,6 @@ const UploadThumbnails: React.FC = () => {
 		})
 	);
 
-	console.log(thumbnail);
-
 	//submit create package function
 	const onSubmit = () => {
 		onChangePackageBasicInfo({
@@ -106,19 +105,24 @@ const UploadThumbnails: React.FC = () => {
 			thumbnail: thumbnail,
 		});
 		onChangeCarouselThumbnails(carouselThumbnails);
-		createPackage({
-			variables: {
-				...packageBasicInfo,
-				thumbnail: thumbnail,
-				carouselThumbnails,
-				saleStatus:
-					packageBasicInfo?.salePrice === 0
-						? SALE_STATUS.SALE
-						: SALE_STATUS.FIXED,
-				packageStatus: PACKAGE_STATUS.UPCOMING,
-				isPublished: false,
-			},
-		});
+
+		if (submitType === 'save') {
+			createPackage({
+				variables: {
+					...packageBasicInfo,
+					thumbnail: thumbnail,
+					carouselThumbnails,
+					saleStatus:
+						packageBasicInfo?.salePrice === 0
+							? SALE_STATUS.SALE
+							: SALE_STATUS.FIXED,
+					packageStatus: PACKAGE_STATUS.UPCOMING,
+					isPublished: false,
+				},
+			});
+		} else {
+			nextStep();
+		}
 	};
 	return (
 		<div>
@@ -196,7 +200,7 @@ const UploadThumbnails: React.FC = () => {
 					{carouselThumbnails?.map((thumbnail: string, idx: number) => (
 						<Input.Wrapper
 							key={idx}
-							label={`Upload carousel thumbnail ${idx + 1}`}
+							label={`Upload carousel thumbnail ${idx + 1} (size 770/300 px)`}
 							size='md'
 							className='relative'
 						>
@@ -247,14 +251,16 @@ const UploadThumbnails: React.FC = () => {
 				<Button
 					color='teal'
 					loading={creatingPackage}
-					onClick={() => nextStep()}
+					onClick={() => setSubmitType('save')}
 				>
 					Save
 				</Button>
 				<Button
 					color='violet'
-					loading={creatingPackage}
-					onClick={() => onSubmit()}
+					onClick={() => {
+						setSubmitType('next');
+						onSubmit();
+					}}
 				>
 					Next step
 				</Button>

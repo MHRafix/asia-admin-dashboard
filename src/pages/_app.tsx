@@ -13,28 +13,27 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Cookies from 'js-cookie';
 import type { AppProps } from 'next/app';
 
+const httpLink = createHttpLink({
+	uri: process.env.NEXT_PUBLIC_API_URL,
+});
+
+const authLink = setContext((_, { headers }) => {
+	const userInfo = Cookies.get('user') && JSON.parse(Cookies.get('user')!);
+	return {
+		headers: {
+			...headers,
+			Authorization: userInfo?.accessToken
+				? `Bearer ${userInfo?.accessToken}`
+				: '',
+		},
+	};
+});
+
+const client = new ApolloClient({
+	link: authLink.concat(httpLink),
+	cache: new InMemoryCache(),
+});
 export default function App({ Component, pageProps }: AppProps) {
-	const httpLink = createHttpLink({
-		uri: process.env.NEXT_PUBLIC_API_URL,
-	});
-
-	const authLink = setContext((_, { headers }) => {
-		const userInfo = Cookies.get('user') && JSON.parse(Cookies.get('user')!);
-		return {
-			headers: {
-				...headers,
-				Authorization: userInfo?.accessToken
-					? `Bearer ${userInfo?.accessToken}`
-					: '',
-			},
-		};
-	});
-
-	const client = new ApolloClient({
-		link: authLink.concat(httpLink),
-		cache: new InMemoryCache(),
-	});
-
 	const reactQueryClient = new QueryClient();
 
 	return (

@@ -1,9 +1,11 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IEmployees } from '@/app/api/models/employees.model';
-import { EMPLOYEES_QUERY } from '@/app/config/queries/employees.query';
+import { Notify } from '@/app/config/alertNotification/Notification';
 import {
-	EMPLOYEE_TABLE_DATA_SORTBY,
-	EMPLOYEE_TABLE_DEFAULT_SORTBY,
+	BULK_REMOVE_EMPLOYEE,
+	EMPLOYEES_QUERY,
+} from '@/app/config/queries/employees.query';
+import {
 	TABLE_DATA_LIMITS,
 	TABLE_DEFAULT_LIMIT,
 } from '@/app/config/table_configuration';
@@ -14,13 +16,12 @@ import Pagination from '@/components/common/Pagination';
 import { EMPLOYEES_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
 import TableHead from '@/components/common/TableHead';
 import { Query_Variable } from '@/logic/queryVariables';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Button, Select, Space, Table } from '@mantine/core';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FiTrash } from 'react-icons/fi';
 import { RiTeamLine } from 'react-icons/ri';
-import { TbCalendarTime } from 'react-icons/tb';
 import EmployeesTableBody from './EmployeesTableBody';
 
 const EmployeesTable: React.FC<{}> = () => {
@@ -56,44 +57,45 @@ const EmployeesTable: React.FC<{}> = () => {
 		setLimit(parseInt(limit));
 	};
 
-	const handleSortChange = (sortBy: string) => {
-		Router.replace({
-			query: { ...Router.query, sort: sortBy },
-		});
+	const onSuccess = () => {
+		refetch();
+		setEmployeesIds([]);
 	};
 
-	// remove bulk bookings
-	// const [bulkDeleteBooking, { loading: bulkDeleting }] = useMutation(
-	// 	BULK_REMOVE_BOOKING,
-	// 	{
-	// 		variables: {
-	// 			uIds: bookingIds,
-	// 		},
-
-	// 		onCompleted: () => {
-	// 			refetch();
-	// 			showNotification({
-	// 				title: 'Bookings bulk delete successfull!',
-	// 				color: 'red',
-	// 				icon: <FiTrash size={20} />,
-	// 				message: '',
-	// 			});
-	// 		},
-	// 	}
-	// );
+	// remove bulk employee
+	const [bulkDeleteEmployee, { loading: bulkDeleting }] = useMutation(
+		BULK_REMOVE_EMPLOYEE,
+		Notify({
+			sucTitle: 'Employee bulk delete successfully!',
+			sucMessage: 'Please refetch employees.',
+			errMessage: 'Please try again.',
+			action: onSuccess,
+		})
+	);
 	return (
 		<>
 			<PageTitleArea
 				title='Employees'
 				tagline='Our employees'
+				currentPathName='Employee'
+				othersPath={[
+					{
+						href: '/',
+						pathName: 'Home',
+					},
+				]}
 				actionComponent={
-					<div className='flex items-center gap-2'>
+					<div className='flex items-center gap-2 mb-5'>
 						<Button
-							// loading={bulkDeleting}
+							loading={bulkDeleting}
 							disabled={!employeesIds?.length}
 							color='red'
 							leftIcon={<FiTrash size={16} />}
-							// onClick={() => bulkDeleteBooking()}
+							onClick={() =>
+								bulkDeleteEmployee({
+									variables: { uIds: employeesIds },
+								})
+							}
 						>
 							Bulk Remove
 						</Button>
@@ -104,15 +106,6 @@ const EmployeesTable: React.FC<{}> = () => {
 							data={TABLE_DATA_LIMITS}
 							defaultValue={TABLE_DEFAULT_LIMIT}
 						/>
-						<Select
-							w={120}
-							placeholder='Pick one'
-							onChange={(value) => handleSortChange(value!)}
-							data={EMPLOYEE_TABLE_DATA_SORTBY}
-							defaultValue={EMPLOYEE_TABLE_DEFAULT_SORTBY}
-						/>
-						<TbCalendarTime size={20} />
-						<span className='text-dimmed'>{new Date().toDateString()}</span>
 					</div>
 				}
 			/>

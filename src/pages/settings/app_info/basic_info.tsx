@@ -1,0 +1,19 @@
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
+import PageTitleArea from '@/components/common/PageTitleArea';
+import AppSettingsForm from '@/components/custom/Settings/AppAccount/AppSettingsForm';
+import AdminLayout from '@/components/layouts/AdminLayout';
+
+const Settings = () => {
+	return (
+		<AdminLayout title='Settings'>
+			<PageTitleArea
+				title='Company web settings'
+				tagline='Our company profile information'
+			/>
+
+			<AppSettingsForm />
+		</AdminLayout>
+	);
+};
+
+export default protectWithSession(Settings);

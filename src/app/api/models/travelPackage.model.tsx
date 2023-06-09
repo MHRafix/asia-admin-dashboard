@@ -71,11 +71,18 @@ export interface ITravelPackage {
 	thumbnail: string;
 	description: string;
 	shortDescription: string;
-	destination: string;
 	carouselThumbnails: string[];
 	travelOutline: ITravelOutline[];
 	ratingsAndReviews: IRatingsAndReviews[];
 	travelers: ITravelers[];
 	transportation: ITransportation[];
 	countDown: { bookingStart: Date; bookingEnd: Date };
+	destination: ILocation;
+	departureFrom: ILocation;
+}
+
+export interface ILocation {
+	name: string;
+	lat: string;
+	lng: string;
 }

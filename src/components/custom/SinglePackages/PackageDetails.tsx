@@ -1,3 +1,4 @@
+import { ILocation } from '@/store/createPackgage.store';
 import {
 	ActionIcon,
 	Box,
@@ -14,7 +15,11 @@ import { TbMapSearch } from 'react-icons/tb';
 import ImageSlider from './ImageSlider';
 
 interface IPackageDetailsProps {
-	details: { sliderImages: string[]; packageTitle: string };
+	details: {
+		sliderImages: string[];
+		packageTitle: string;
+		destination: ILocation;
+	};
 }
 const PackageDetails: React.FC<IPackageDetailsProps> = ({ details }) => {
 	const [opened, { open, close }] = useDisclosure(false);
@@ -44,7 +49,9 @@ const PackageDetails: React.FC<IPackageDetailsProps> = ({ details }) => {
 					<Flex gap={5} align='center' mt={3}>
 						<>
 							<MdLocationPin size={16} color='#FF597B' />
-							<span className='text-xs text-slate-400'>Canada.</span>
+							<span className='text-xs text-slate-400'>
+								{details?.destination?.name}
+							</span>
 						</>
 						<Text color='cyan' size='xs' my={5}>
 							<Rating

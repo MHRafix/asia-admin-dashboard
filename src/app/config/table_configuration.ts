@@ -35,16 +35,16 @@ export const CUSTOMERS_TABLE_DATA_SORTBY: SelectItem[] = [
 
 export const CUSTOMERS_TABLE_DEFAULT_SORTBY = '_id';
 
-// appointments table data sort keywords
-export const APPOINTMENTS_TABLE_DATA_SORTBY: SelectItem[] = [
-	{ value: '_id', label: 'ID' },
-	{ value: 'name', label: 'Name' },
-	{ value: 'email', label: 'Email' },
-	{ value: 'phone', label: 'Phone' },
-	{ value: 'subject', label: 'Subject' },
-];
+// // appointments table data sort keywords
+// export const APPOINTMENTS_TABLE_DATA_SORTBY: SelectItem[] = [
+// 	{ value: '_id', label: 'ID' },
+// 	{ value: 'name', label: 'Name' },
+// 	{ value: 'email', label: 'Email' },
+// 	{ value: 'phone', label: 'Phone' },
+// 	{ value: 'subject', label: 'Subject' },
+// ];
 
-export const APPOINTMENTS_TABLE_DEFAULT_SORTBY = '_id';
+// export const APPOINTMENTS_TABLE_DEFAULT_SORTBY = '_id';
 
 // employee table data sort keywords
 export const EMPLOYEE_TABLE_DATA_SORTBY: SelectItem[] = [

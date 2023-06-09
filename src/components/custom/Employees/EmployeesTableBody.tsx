@@ -55,9 +55,9 @@ const EmployeesTableBody: React.FC<IEmployeeTableBodyProps> = ({
 			</td>
 
 			<td className='flex gap-2 items-center'>
-				<Button variant='filled' color='teal' size='xs' compact>
+				{/* <Button variant='filled' color='teal' size='xs' compact>
 					<FiEdit size={16} />
-				</Button>
+				</Button> */}
 				<Button
 					loading={deletingEmployee}
 					variant='filled'

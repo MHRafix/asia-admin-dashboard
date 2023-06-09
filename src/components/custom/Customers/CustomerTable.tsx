@@ -5,8 +5,6 @@ import {
 	USERS_QUERY,
 } from '@/app/config/queries/users.query';
 import {
-	CUSTOMERS_TABLE_DATA_SORTBY,
-	CUSTOMERS_TABLE_DEFAULT_SORTBY,
 	TABLE_DATA_LIMITS,
 	TABLE_DEFAULT_LIMIT,
 } from '@/app/config/table_configuration';
@@ -57,20 +55,13 @@ const CustomerTable: React.FC<{}> = () => {
 		setLimit(parseInt(limit));
 	};
 
-	const handleSortChange = (sortBy: string) => {
-		// Router.replace({
-		// 	query: { ...Router.query, limit, page: 1 },
-		// });
-		// setLimit(parseInt(limit));
-		console.log(sortBy);
-	};
-
 	// remove bulk bookings
 	const [bulkDeleteCustomer, { loading: bulkDeleting }] = useMutation(
 		BULK_REMOVE_USER,
 		{
 			onCompleted: () => {
 				refetch();
+				setCustomerIds([]);
 				showNotification({
 					title: 'Customers bulk delete successfull!',
 					color: 'red',
@@ -93,7 +84,13 @@ const CustomerTable: React.FC<{}> = () => {
 							disabled={!customerIds?.length}
 							color='red'
 							leftIcon={<FiTrash size={16} />}
-							onClick={() => bulkDeleteCustomer()}
+							onClick={() =>
+								bulkDeleteCustomer({
+									variables: {
+										uIds: customerIds,
+									},
+								})
+							}
 						>
 							Bulk Remove
 						</Button>
@@ -103,14 +100,6 @@ const CustomerTable: React.FC<{}> = () => {
 							onChange={(value) => handleLimitChange(value!)}
 							data={TABLE_DATA_LIMITS}
 							defaultValue={TABLE_DEFAULT_LIMIT}
-						/>
-						<Select
-							w={120}
-							placeholder='Pick one'
-							onChange={(value) => handleSortChange(value!)}
-							nothingFound='No options'
-							data={CUSTOMERS_TABLE_DATA_SORTBY}
-							defaultValue={CUSTOMERS_TABLE_DEFAULT_SORTBY}
 						/>
 					</div>
 				}

@@ -53,14 +53,17 @@ export const UserButton: React.FC = () => {
 					<Menu.Label fz={19} ff={'Nunito sans, sans-serif'}>
 						{user?.name}
 					</Menu.Label>
-					<Link href={'/settings'} className='!no-underline'>
+					<Link
+						href={'/settings/my-profile/update-profile'}
+						className='!no-underline'
+					>
 						<Menu.Item
 							icon={<BsGear size={18} />}
 							// color='violet'
 							fz={16}
 							ff={'Nunito sans, sans-serif'}
 						>
-							Settings
+							Profile settings
 						</Menu.Item>
 					</Link>
 					<Menu.Item

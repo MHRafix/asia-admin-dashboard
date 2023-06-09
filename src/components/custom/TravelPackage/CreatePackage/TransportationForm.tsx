@@ -1,18 +1,22 @@
+import { Notify } from '@/app/config/alertNotification/Notification';
 import {
 	TOURBY,
 	TRANSPORTATION_FORM_DEFAULT_VALUES,
 	TRANSPORTATION_FORM_SCHEMA,
 } from '@/app/config/form.validation/packageForm/package.form.validation';
+import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
 import {
 	ITransportation,
-	activeStep,
+	carouselThumbnailsAtom,
 	packageBasicInfoAtom,
 } from '@/store/createPackgage.store';
+import { useMutation } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Accordion, Button, Group, Input, Select, Space } from '@mantine/core';
 import { DateInput, TimeInput } from '@mantine/dates';
 import { useAtom } from 'jotai';
+import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { RiRoadMapLine } from 'react-icons/ri';
@@ -20,12 +24,7 @@ import { TbMap2 } from 'react-icons/tb';
 
 const TransportationForm: React.FC = () => {
 	const [packageBasicInfo, onChangePackageInfo] = useAtom(packageBasicInfoAtom);
-	const [step, onChangeStep] = useAtom(activeStep);
-	const nextStep = () =>
-		onChangeStep((currentStep) =>
-			currentStep < 3 ? currentStep + 1 : currentStep
-		);
-
+	const [carouselImg] = useAtom(carouselThumbnailsAtom);
 	const {
 		register,
 		handleSubmit,
@@ -44,7 +43,7 @@ const TransportationForm: React.FC = () => {
 	});
 
 	useEffect(() => {
-		fields?.map((field, idx: number) => {
+		fields?.filter((field, idx: number) => {
 			if (packageBasicInfo?.transportation) {
 				setValue(
 					`transportation.${idx}.transportName`,
@@ -90,19 +89,35 @@ const TransportationForm: React.FC = () => {
 		});
 	}, [packageBasicInfo?.transportation]);
 
+	const [savePackage, { loading: savingPackage }] = useMutation(
+		CREATE_TRAVEL_PACKAGE,
+		Notify({
+			sucTitle: 'Package saved successfully!',
+			sucMessage: 'Please refetch package list.',
+			errMessage: 'Failed to save package.',
+			action: () => Router.push('/tour_packages'),
+		})
+	);
+
 	const onSubmit = (value: { transportation: ITransportation[] }) => {
 		onChangePackageInfo({
 			...packageBasicInfo,
 			transportation: value.transportation,
 		});
-		// nextStep();
-		console.log(packageBasicInfo);
+		savePackage({
+			variables: {
+				...packageBasicInfo,
+				carouselThumbnails: carouselImg,
+				...value,
+				isPublished: true,
+			},
+		});
 	};
 	return (
 		<div>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				{fields?.map((field, idx: number) => (
-					<>
+					<div key={idx}>
 						<Accordion variant='separated' multiple>
 							<Accordion.Item value='transportation'>
 								<Accordion.Control
@@ -138,6 +153,7 @@ const TransportationForm: React.FC = () => {
 											}
 										>
 											<Select
+												defaultValue={watch(`transportation.${idx}.tourBy`)}
 												width={400}
 												data={[
 													{
@@ -352,15 +368,12 @@ const TransportationForm: React.FC = () => {
 							</Accordion.Item>
 						</Accordion>
 						<Space h={20} />
-					</>
+					</div>
 				))}
 
 				<Group position='right'>
-					<Button type='submit' color='teal'>
+					<Button type='submit' color='teal' loading={savingPackage}>
 						Save
-					</Button>{' '}
-					<Button type='submit' color='teal' onClick={nextStep}>
-						Next{' '}
 					</Button>
 				</Group>
 			</form>

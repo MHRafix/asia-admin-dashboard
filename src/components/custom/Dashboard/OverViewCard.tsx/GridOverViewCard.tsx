@@ -3,6 +3,7 @@ import { Space, Text, ThemeIcon } from '@mantine/core';
 import { BsBookmarkCheck } from 'react-icons/bs';
 import { SiGotomeeting } from 'react-icons/si';
 import { TbPlaneInflight, TbTransform } from 'react-icons/tb';
+import { CountUp } from 'use-count-up';
 
 const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 	overViewCardData,
@@ -15,8 +16,13 @@ const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 				</ThemeIcon>
 				<div>
 					<Text fw={700} fz={25}>
-						{overViewCardData?.newAppointments}
+						<CountUp
+							isCounting
+							end={overViewCardData?.newAppointments}
+							duration={3}
+						/>
 					</Text>
+
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>
 						New Appointments
@@ -29,7 +35,11 @@ const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 				</ThemeIcon>
 				<div>
 					<Text fw={700} fz={25}>
-						{overViewCardData?.newBookings}
+						<CountUp
+							isCounting
+							end={overViewCardData?.newBookings}
+							duration={3}
+						/>
 					</Text>
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>
@@ -43,7 +53,11 @@ const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 				</ThemeIcon>
 				<div>
 					<Text fw={700} fz={25}>
-						{overViewCardData?.newFlights}
+						<CountUp
+							isCounting
+							end={overViewCardData?.newFlights}
+							duration={3}
+						/>
 					</Text>
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>
@@ -57,7 +71,11 @@ const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 				</ThemeIcon>
 				<div>
 					<Text fw={700} fz={25}>
-						{overViewCardData?.totalTransactions}
+						<CountUp
+							isCounting
+							end={overViewCardData?.totalTransactions}
+							duration={3}
+						/>
 					</Text>
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>

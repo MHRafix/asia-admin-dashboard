@@ -6,7 +6,7 @@ import TravelOutline from '@/components/custom/SinglePackages/TravelOutline';
 import TravelTransportItem from '@/components/custom/SinglePackages/TravelTransportItem';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { ITransportation } from '@/store/createPackgage.store';
-import { Container, Divider, Title } from '@mantine/core';
+import { Divider, Title } from '@mantine/core';
 import { NextPage } from 'next';
 const SingleTourPage: NextPage<{ packId: string }> = ({ packId }) => {
 	const { singlePackage, loading } = useGetSinglePackage(packId);
@@ -24,6 +24,7 @@ const SingleTourPage: NextPage<{ packId: string }> = ({ packId }) => {
 									details={{
 										sliderImages: singlePackage?.carouselThumbnails!,
 										packageTitle: singlePackage?.packageTitle!,
+										destination: singlePackage?.destination,
 									}}
 								/>
 								<Divider my='md' color='#e1e1e1' />

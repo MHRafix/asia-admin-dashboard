@@ -12,7 +12,7 @@ export const APPOINTMENT_TABLE_HEAD = [
 	'Name',
 	'Mail',
 	'Call',
-	'Subject',
+	'Profession',
 	'Track',
 	'Action',
 ];

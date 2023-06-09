@@ -71,8 +71,24 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 					<PageTitleArea
 						title='Edit service details'
 						tagline='Update service details'
+						currentPathName='Create services'
+						othersPath={[
+							{
+								pathName: 'Home',
+								href: '/',
+							},
+							{
+								pathName: 'Services',
+								href: '/services',
+							},
+						]}
 						actionComponent={
-							<Button color='teal' type='submit' loading={updatingService}>
+							<Button
+								color='teal'
+								type='submit'
+								loading={updatingService}
+								mb={20}
+							>
 								Save Details
 							</Button>
 						}

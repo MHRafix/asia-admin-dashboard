@@ -35,6 +35,6 @@ export const REMOVE_USER = gql`
 // remove bulk customers
 export const BULK_REMOVE_USER = gql`
 	mutation REMOVE_BULK_CUSTOMERS($uIds: [String!]!) {
-		removeBulkUser(uIds: $uIds)
+		bulkRemoveUser(uIds: $uIds)
 	}
 `;

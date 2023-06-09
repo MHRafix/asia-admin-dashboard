@@ -47,7 +47,7 @@ const AppointmentsTableBody: React.FC<IAppointmentTableBodyProps> = ({
 			</td>
 			<td className='text-dimmed'>{appointment.email}</td>
 			<td className='text-dimmed'>{appointment.phone}</td>
-			<td className='text-dimmed'>{appointment?.subject}</td>
+			<td className='text-dimmed'>{appointment?.serviceId}</td>
 
 			<td className='text-dimmed'>
 				<Button size='xs' color='violet' variant='filled' compact>
@@ -56,9 +56,9 @@ const AppointmentsTableBody: React.FC<IAppointmentTableBodyProps> = ({
 			</td>
 
 			<td className='flex gap-2 items-center'>
-				<Button variant='filled' color='teal' size='xs' compact>
+				{/* <Button variant='filled' color='teal' size='xs' compact>
 					<FiEdit size={16} />
-				</Button>
+				</Button> */}
 				<Button
 					loading={deletingAppointment}
 					variant='filled'

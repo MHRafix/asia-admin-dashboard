@@ -6,8 +6,6 @@ import {
 	BULK_REMOVE_APPOINTMENT,
 } from '@/app/config/queries/appointments.query';
 import {
-	APPOINTMENTS_TABLE_DATA_SORTBY,
-	APPOINTMENTS_TABLE_DEFAULT_SORTBY,
 	TABLE_DATA_LIMITS,
 	TABLE_DEFAULT_LIMIT,
 } from '@/app/config/table_configuration';
@@ -59,18 +57,13 @@ const AppointmentsTable: React.FC<{}> = () => {
 		setLimit(parseInt(limit));
 	};
 
-	const handleSortChange = (sortBy: string) => {
-		Router.replace({
-			query: { ...Router.query, sort: sortBy },
-		});
-	};
-
 	const onSuccess = () => {
 		refetch();
+		setAppointmentIds([]);
 	};
 
 	// remove bulk bookings
-	const [bulkDeleteBooking, { loading: bulkDeleting }] = useMutation(
+	const [bulkDeleteAppointments, { loading: bulkDeleting }] = useMutation(
 		BULK_REMOVE_APPOINTMENT,
 		Notify({
 			sucTitle: 'Appointments bulk delete successfull!',
@@ -86,14 +79,14 @@ const AppointmentsTable: React.FC<{}> = () => {
 				title='Appointments'
 				tagline='Booked appointments'
 				actionComponent={
-					<div className='flex items-center gap-2'>
+					<div className='flex gap-2 mb-5'>
 						<Button
 							loading={bulkDeleting}
 							disabled={!appointmentIds?.length}
 							color='red'
 							leftIcon={<FiTrash size={16} />}
 							onClick={() =>
-								bulkDeleteBooking({
+								bulkDeleteAppointments({
 									variables: {
 										uIds: appointmentIds,
 									},
@@ -112,13 +105,6 @@ const AppointmentsTable: React.FC<{}> = () => {
 									? (query.limit as string)
 									: TABLE_DEFAULT_LIMIT
 							}
-						/>
-						<Select
-							w={120}
-							placeholder='Pick one'
-							onChange={(value) => handleSortChange(value!)}
-							data={APPOINTMENTS_TABLE_DATA_SORTBY}
-							defaultValue={APPOINTMENTS_TABLE_DEFAULT_SORTBY}
 						/>
 					</div>
 				}

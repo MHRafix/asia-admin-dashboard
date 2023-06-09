@@ -44,7 +44,7 @@ const TourCard: React.FC<ITourCardProp> = ({ TPackage }) => {
 								ff='Nunito Sans, sans-serif'
 								className='text-sm text-slate-400'
 							>
-								{TPackage?.destination}
+								{TPackage?.destination?.name}
 							</Text>
 						</Flex>
 						<Flex>

@@ -7,7 +7,7 @@ import { Badge, Button, Checkbox, Flex } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import Image from 'next/image';
 import React from 'react';
-import { FiEdit, FiTrash } from 'react-icons/fi';
+import { FiTrash } from 'react-icons/fi';
 
 interface ICustomerTableProps {
 	customer: IUser;
@@ -61,9 +61,9 @@ const CustomersTableBody: React.FC<ICustomerTableProps> = ({
 				/>
 			</td>
 			<td className='flex gap-2 items-center'>
-				<Button variant='filled' color='teal' size='xs' compact mt={5}>
+				{/* <Button variant='filled' color='teal' size='xs' compact mt={5}>
 					<FiEdit size={16} />
-				</Button>
+				</Button> */}
 				<Button
 					loading={deletingCustomer}
 					variant='filled'

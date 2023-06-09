@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 import { Badge, Button, Checkbox, Flex } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import React from 'react';
-import { FiEdit, FiTrash } from 'react-icons/fi';
+import { FiTrash } from 'react-icons/fi';
 
 interface IBookingTableBodyProps {
 	booking: IBooking;
@@ -60,9 +60,9 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 			</td>
 
 			<td className='flex gap-2 items-center'>
-				<Button variant='filled' color='teal' size='xs' compact>
+				{/* <Button variant='filled' color='teal' size='xs' compact>
 					<FiEdit size={16} />
-				</Button>
+				</Button> */}
 				<Button
 					loading={deletingBooking}
 					variant='filled'

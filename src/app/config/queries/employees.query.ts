@@ -33,6 +33,6 @@ export const REMOVE_EMPLOYEE = gql`
 // remove bulk employee
 export const BULK_REMOVE_EMPLOYEE = gql`
 	mutation BULK_REMOVE_EMPLOYEE($uIds: [String!]!) {
-		removeBulkTeam(uIds: $uIds)
+		bulkRemoveTeam(uIds: $uIds)
 	}
 `;

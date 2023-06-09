@@ -9,18 +9,14 @@ const TravelTransportItem: React.FC<{
 }> = ({ transportation, serialNumber }) => {
 	return (
 		<div className='my-4'>
-			<Card px={{ xs: 'sm', sm: 'lg' }} radius='md' shadow='lg'>
+			<Card px={{ xs: 'sm', sm: 'lg' }} radius='md' shadow='2xl' bg={'#212231'}>
 				<Box className='sm:flex justify-between items-center gap-5 '>
 					<Text fz={{ xs: 16, sm: 18 }} fw={500} ff='Nunito Sans, sans-serif'>
 						{serialNumber < 1 ? 'Go from' : 'Return from'} -{' '}
 						{transportation?.departureStation}
 					</Text>
 					<Button variant='light' color='gray'>
-						<Text
-							fz={{ xs: 14, sm: 16 }}
-							ff='Nunito Sans, sans-serif'
-							color='#444'
-						>
+						<Text fz={{ xs: 14, sm: 16 }} ff='Nunito Sans, sans-serif'>
 							{
 								new Date(transportation?.departureDate)
 									.toDateString()
@@ -56,7 +52,7 @@ const TravelTransportItem: React.FC<{
 						<Text
 							ff='Nunito Sans, sans-serif'
 							fz={16}
-							bg={'#FA3B62'}
+							bg={'#FE3F52'}
 							px={15}
 							py={3}
 							color='#fff'
@@ -70,8 +66,8 @@ const TravelTransportItem: React.FC<{
 							{transportation?.departureStation} -{' '}
 							{transportation?.destinationStation}
 						</Text>
-						<Text ff='Nunito Sans, sans-serif' fz={13} color='#555'>
-							Dep : {transportation?.departureTime} - Arr :{' '}
+						<Text ff='Nunito Sans, sans-serif' fz={13}>
+							Departure : {transportation?.departureTime} - Arrival :{' '}
 							{transportation?.arrivalTime}
 						</Text>
 					</div>
@@ -79,9 +75,7 @@ const TravelTransportItem: React.FC<{
 						<Text fz={15} fw={500}>
 							{`${transportation?.stops} stops`}
 						</Text>
-						<Text size='sm' color='#555'>
-							Break : {transportation?.journeyBreak}
-						</Text>
+						<Text size='sm'>Break : {transportation?.journeyBreak}</Text>
 					</div>
 				</div>
 			</Card>

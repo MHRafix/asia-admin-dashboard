@@ -16,7 +16,7 @@ import { AiOutlinePlus } from 'react-icons/ai';
 const Services: NextPage = () => {
 	const { getingServices, services, refetchServices } = useGetServices();
 
-	const callAfterSuccess = (res: { createService: IService }) => {
+	const onSuccess = (res: { createService: IService }) => {
 		refetchServices();
 		Router?.push(`/services/${res?.createService?._id}`);
 	};
@@ -26,7 +26,7 @@ const Services: NextPage = () => {
 			sucTitle: 'Service created successfully!',
 			sucMessage: 'Edit service details.',
 			errMessage: 'Try again to create service.',
-			action: callAfterSuccess,
+			action: onSuccess,
 		})
 	);
 
@@ -35,8 +35,15 @@ const Services: NextPage = () => {
 			<PageTitleArea
 				title='Services'
 				tagline='Our provided services'
+				currentPathName='Services'
+				othersPath={[
+					{
+						pathName: 'Home',
+						href: '/',
+					},
+				]}
 				actionComponent={
-					<div className='flex items-center gap-2 my-5'>
+					<div className='flex items-center gap-2 mb-5'>
 						<Button
 							loading={creatingService}
 							leftIcon={<AiOutlinePlus size={25} />}

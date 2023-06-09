@@ -21,3 +21,34 @@ body {
 .ql-container.ql-snow {
 	border: 1px solid #32344b !important;
 }
+.PhoneInput .PhoneInputCountry {
+	border: 1px solid #32344b;
+	background-color: transparent;
+	padding: 5px;
+	border-radius: 4px;
+}
+
+.PhoneInput input.PhoneInputInput {
+	font-family: Poppins, sans-serif;
+	height: 42px;
+	-webkit-tap-highlight-color: transparent;
+	line-height: 34px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	resize: none;
+	box-sizing: border-box;
+	font-size: 14px;
+	width: 100%;
+	color: #fff;
+	display: block;
+	text-align: left;
+	min-height: 36px;
+	padding-left: 12px;
+	padding-right: 12px;
+	border-radius: 4px;
+	outline: none;
+	border: 1px solid #32344b;
+	background-color: transparent;
+}

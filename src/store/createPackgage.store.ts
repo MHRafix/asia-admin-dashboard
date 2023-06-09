@@ -36,7 +36,7 @@ export interface ITransportation {
 	journeyBreak: string;
 	stops: string;
 }
-export const activeStep = atom<number>(3);
+export const activeStep = atom<number>(0);
 export const carouselThumbnailsAtom = atom<string[] | null>(null);
 export const packageBasicInfoAtom = atom<IPackageBasicInfo | null>({
 	countDown: {

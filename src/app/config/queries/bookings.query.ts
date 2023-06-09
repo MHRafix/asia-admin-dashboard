@@ -11,9 +11,11 @@ export const PACAKGE_BOOKINGS_QUERY = gql`
 		) {
 			nodes {
 				_id
-				name
-				email
-				phone
+				customerDetails {
+					name
+					email
+					phone
+				}
 				packageId
 				status
 			}

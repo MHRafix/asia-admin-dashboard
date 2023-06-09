@@ -41,15 +41,21 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 						color='red'
 						onClick={() => handleSetUid(onStoreId, booking?._id!)}
 					/>
-					{booking.name}
+					{booking?.customerDetails?.name}
 				</Flex>
 			</td>
-			<td className='text-dimmed'>{booking.email}</td>
-			<td className='text-dimmed'>{booking.phone}</td>
+			<td className='text-dimmed'>{booking?.customerDetails?.email}</td>
+			<td className='text-dimmed'>{booking?.customerDetails?.phone}</td>
 			<td className='text-dimmed'>{new Date().toDateString()}</td>
 
 			<td className='text-dimmed'>
-				<Badge color='yellow' size='md' variant='filled' radius='sm'>
+				<Badge
+					color={getColors(booking?.status!)}
+					size='lg'
+					fw={500}
+					variant='light'
+					radius='sm'
+				>
 					{booking?.status}
 				</Badge>
 			</td>
@@ -79,3 +85,17 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 };
 
 export default BookingTableBody;
+
+const getColors = (status: string) => {
+	switch (status) {
+		case 'PENDING':
+			return 'yellow';
+		case 'APPROVED':
+			return 'violet';
+		case 'COMPLETED':
+			return 'teal';
+
+		default:
+			return 'red';
+	}
+};

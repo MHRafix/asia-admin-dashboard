@@ -1,8 +1,6 @@
 export interface IBooking {
 	_id?: string;
-	name?: string;
-	email?: string;
-	phone?: string;
+	customerDetails: { name?: string; email?: string; phone?: string };
 	street?: string;
 	city?: string;
 	country?: string;

@@ -95,6 +95,24 @@ export const UserButton: React.FC = () => {
 						fz={16}
 						color='red'
 						icon={<FiTrash size={16} />}
+						onClick={() =>
+							openConfirmModal({
+								title: 'Confirm your delete account action',
+								// centered: true,
+								children: (
+									<Text size='sm'>
+										Are you sure you want to delete account ?
+									</Text>
+								),
+								labels: {
+									confirm: 'Delete Account',
+									cancel: 'No',
+								},
+								confirmProps: { color: 'red' },
+								onCancel: () => {},
+								onConfirm: () => console.log('deleted'),
+							})
+						}
 					>
 						Delete my account
 					</Menu.Item>

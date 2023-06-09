@@ -36,7 +36,7 @@ const CreatePackage: NextPage = () => {
 				]}
 			/>
 			<>
-				<Stepper color='violet' active={step} mt={30}>
+				<Stepper color='violet' active={step} mt={30} breakpoint={'md'}>
 					<Stepper.Step label='Basic details'>
 						<Space h={20} />
 						<PackageBasicInfoForm />
@@ -59,7 +59,7 @@ const CreatePackage: NextPage = () => {
 					</Stepper.Completed>
 				</Stepper>
 
-				{step !== 0 && step !== 3 && (
+				{step !== 0 && step !== 4 && (
 					<Group position='left' mt='xl'>
 						<Button
 							variant='light'

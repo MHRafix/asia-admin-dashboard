@@ -1,9 +1,12 @@
+import { Notify } from '@/app/config/alertNotification/Notification';
 import {
 	CREATE_PACKAGE_FORM_BASIC_INFO_DEFAULT_VALUE,
 	CREATE_PACKAGE_FORM_BASIC_INFO_SCHEMA,
 } from '@/app/config/form.validation/packageForm/package.form.validation';
+import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
 import NotepadEditor from '@/components/common/NotepadEditor';
 import { activeStep, packageBasicInfoAtom } from '@/store/createPackgage.store';
+import { useMutation } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Group, Input, Space, Textarea } from '@mantine/core';
@@ -21,6 +24,7 @@ const PackageBasicInfoForm: React.FC = () => {
 		onChangeStep((currentStep) =>
 			currentStep < 3 ? currentStep + 1 : currentStep
 		);
+	const [submitType, setSubmitType] = useState('');
 
 	const {
 		register,
@@ -45,6 +49,15 @@ const PackageBasicInfoForm: React.FC = () => {
 		}
 	}, [packageBasicInfo]);
 
+	const [savePackage, { loading: savingPackage }] = useMutation(
+		CREATE_TRAVEL_PACKAGE,
+		Notify({
+			sucTitle: 'Package saved successfully!',
+			sucMessage: 'Please refetch package list.',
+			errMessage: 'Failed to save package.',
+		})
+	);
+
 	const onSubmit = (value: IPackageBasicInfoFormState) => {
 		onChangePackageInfo({
 			...packageBasicInfo,
@@ -55,7 +68,23 @@ const PackageBasicInfoForm: React.FC = () => {
 			},
 			description: desc,
 		});
-		nextStep();
+
+		if (submitType === 'save') {
+			savePackage({
+				variables: {
+					...packageBasicInfo,
+					...value,
+					countDown: {
+						bookingStart: value.bookingStart,
+						bookingEnd: value.bookingEnd,
+					},
+					description: desc,
+					isPublished: false,
+				},
+			});
+		} else {
+			nextStep();
+		}
 	};
 
 	return (
@@ -175,13 +204,23 @@ const PackageBasicInfoForm: React.FC = () => {
 						}
 					/>
 				</Input.Wrapper>
-				{step !== 1 && (
-					<Group position='right' mt={65}>
-						<Button color='violet' type='submit'>
-							Next step
-						</Button>
-					</Group>
-				)}
+				<Group position='right' mt={65}>
+					<Button
+						type='submit'
+						color='teal'
+						loading={savingPackage}
+						onClick={() => setSubmitType('save')}
+					>
+						Save
+					</Button>
+					<Button
+						type='submit'
+						color='violet'
+						onClick={() => setSubmitType('next')}
+					>
+						Next step
+					</Button>
+				</Group>
 			</form>
 		</div>
 	);

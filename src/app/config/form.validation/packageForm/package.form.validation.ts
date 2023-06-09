@@ -66,31 +66,70 @@ export interface IDepartureAndDestinationFormStates {
 
 // transportation form cofig
 
-export const TRANSPORTATION_FORM_DEFAULT_VALUES = {
-	departureStation: '',
-	destinationStation: '',
-	tourBy: 'BY_AIR',
-	departureDate: new Date(),
-	departureTime: '08:30',
-	arrivalDate: new Date(),
-	arrivalTime: '09:50',
-	transportName: '',
-	journeyBreak: '',
-	stops: '',
-};
+// export const TRANSPORTATION_FORM_DEFAULT_VALUES = {
+// 	departureStation: '',
+// 	transportation: [
+// 		{
+// 			destinationStation: '',
+// 			tourBy: 'BY_AIR',
+// 			departureDate: new Date(),
+// 			departureTime: '08:30',
+// 			arrivalDate: new Date(),
+// 			arrivalTime: '09:50',
+// 			transportName: '',
+// 			journeyBreak: '',
+// 			stops: '',
+// 		},
+// 	],
+// };
+
+// export const TRANSPORTATION_FORM_SCHEMA = Yup.object().shape({
+// 	departureStation: Yup.string().required().label('Departure station'),
+// });
 
 export const TRANSPORTATION_FORM_SCHEMA = Yup.object().shape({
-	departureStation: Yup.string().required().label('Departure station'),
-	destinationStation: Yup.string().required().label('Destination station'),
-	tourBy: Yup.string().required().label('Tour way'),
-	departureDate: Yup.date().required().label('Departure date'),
-	departureTime: Yup.string().required().label('Departure time'),
-	arrivalDate: Yup.date().required().label('Arrival date'),
-	arrivalTime: Yup.string().required().label('Arrival time'),
-	transportName: Yup.string().required().label('Transport name'),
-	journeyBreak: Yup.string().required().label('Journey break'),
-	stops: Yup.string().required().label('Stops'),
+	transportation: Yup.array().of(
+		Yup.object().shape({
+			departureStation: Yup.string().required().label('Departure station'),
+			destinationStation: Yup.string().required().label('Destination station'),
+			tourBy: Yup.string().required().label('Tour way'),
+			departureDate: Yup.date().required().label('Departure date'),
+			departureTime: Yup.string().required().label('Departure time'),
+			arrivalDate: Yup.date().required().label('Arrival date'),
+			arrivalTime: Yup.string().required().label('Arrival time'),
+			transportName: Yup.string().required().label('Transport name'),
+			journeyBreak: Yup.string().required().label('Journey break'),
+			stops: Yup.string().required().label('Stops'),
+		})
+	),
 });
+
+export const TRANSPORTATION_FORM_DEFAULT_VALUES = {
+	transportation: [
+		{
+			destinationStation: '',
+			tourBy: 'BY_AIR',
+			departureDate: new Date(),
+			departureTime: '08:30',
+			arrivalDate: new Date(),
+			arrivalTime: '09:50',
+			transportName: '',
+			journeyBreak: '',
+			stops: '',
+		},
+		{
+			destinationStation: '',
+			tourBy: 'BY_AIR',
+			departureDate: new Date(),
+			departureTime: '11:30',
+			arrivalDate: new Date(),
+			arrivalTime: '09:50',
+			transportName: '',
+			journeyBreak: '',
+			stops: '',
+		},
+	],
+};
 
 export enum TOURBY {
 	BY_AIR = 'BY_AIR',

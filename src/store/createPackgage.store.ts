@@ -13,7 +13,9 @@ export interface IPackageBasicInfo {
 	thumbnail?: string;
 	departureFrom?: ILocation;
 	destination?: ILocation;
-	transportation?: ITransportation;
+	transportation?: ITransportation[];
+	packageStatus?: PACKAGE_STATUS.UPCOMING;
+	isPublished?: boolean;
 }
 
 export interface ILocation {

@@ -9,7 +9,7 @@ import {
 	packageBasicInfoAtom,
 } from '@/store/createPackgage.store';
 import { useMutation } from '@apollo/client';
-import { Button, FileButton, Flex, Group, Input, Title } from '@mantine/core';
+import { Button, FileButton, Group, Input, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
@@ -106,7 +106,6 @@ const UploadThumbnails: React.FC = () => {
 			thumbnail: thumbnail,
 		});
 		onChangeCarouselThumbnails(carouselThumbnails);
-		// nextStep();
 		createPackage({
 			variables: {
 				...packageBasicInfo,
@@ -117,21 +116,8 @@ const UploadThumbnails: React.FC = () => {
 						? SALE_STATUS.SALE
 						: SALE_STATUS.FIXED,
 				packageStatus: PACKAGE_STATUS.UPCOMING,
-				isPublished: true,
+				isPublished: false,
 			},
-		});
-		console.log({
-			...packageBasicInfo,
-			thumbnail: thumbnail,
-			carouselThumbnails: {
-				thumbnail: carouselThumbnails,
-			},
-			saleStatus:
-				packageBasicInfo?.salePrice === 0
-					? SALE_STATUS.SALE
-					: SALE_STATUS.FIXED,
-			packageStatus: PACKAGE_STATUS.UPCOMING,
-			isPublished: true,
 		});
 	};
 	return (
@@ -140,14 +126,14 @@ const UploadThumbnails: React.FC = () => {
 				<Input.Wrapper
 					label='Upload thumbnail'
 					size='md'
-					className='w-4/12 relative'
+					className='lg:w-5/12 w-full relative'
 				>
 					<div className='h-[200px] bg-[#212231] flex items-center justify-center'>
 						{thumbnail ? (
 							<Image
 								src={thumbnail}
 								alt='Thumbnail'
-								width={200}
+								width={300}
 								className='!w-full'
 								height={200}
 							/>
@@ -181,8 +167,13 @@ const UploadThumbnails: React.FC = () => {
 			</div>
 
 			<div className='mt-16'>
-				<Flex justify={'space-between'} align={'center'}>
-					<Title order={3} ff={'Nunito sans, sans-serif'} mb={0}>
+				<div className='lg:flex items-center justify-between '>
+					<Title
+						order={3}
+						fz={{ lg: 22, sm: 18 }}
+						ff={'Nunito sans, sans-serif'}
+						className='lg:mb-0 mb-2'
+					>
 						Package carousel thumbnails
 					</Title>
 					<Button
@@ -200,7 +191,7 @@ const UploadThumbnails: React.FC = () => {
 					>
 						Add new file
 					</Button>
-				</Flex>
+				</div>
 				<div className='grid lg:grid-cols-2 gap-5 mt-10'>
 					{carouselThumbnails?.map((thumbnail: string, idx: number) => (
 						<Input.Wrapper
@@ -251,17 +242,23 @@ const UploadThumbnails: React.FC = () => {
 					))}
 				</div>
 			</div>
-			{step === 1 && (
-				<Group position='right' mt={65}>
-					<Button
-						color='violet'
-						loading={creatingPackage}
-						onClick={() => onSubmit()}
-					>
-						Next step
-					</Button>
-				</Group>
-			)}
+
+			<Group position='right' mt={65}>
+				<Button
+					color='teal'
+					loading={creatingPackage}
+					onClick={() => nextStep()}
+				>
+					Save
+				</Button>
+				<Button
+					color='violet'
+					loading={creatingPackage}
+					onClick={() => onSubmit()}
+				>
+					Next step
+				</Button>
+			</Group>
 		</div>
 	);
 };

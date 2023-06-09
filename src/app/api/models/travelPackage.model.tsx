@@ -1,3 +1,5 @@
+import { ITransportation } from '@/store/createPackgage.store';
+
 export enum IPACKAGE_IN {
 	DOMESTIC = 'DOMESTIC',
 	INTERNATIONAL = 'INTERNATIONAL',
@@ -56,24 +58,6 @@ export interface ITravelers {
 	travelerEmail: string;
 }
 
-export interface ITransportation {
-	tourBy: ITOURBY;
-
-	departureFrom: string;
-
-	destination: string;
-
-	startAt: Date;
-
-	transportName: string;
-
-	stops: number;
-
-	journeyBreak: string;
-
-	endAt: Date;
-}
-
 export interface ITravelPackage {
 	_id: string;
 	packageTitle: string;
@@ -93,4 +77,5 @@ export interface ITravelPackage {
 	ratingsAndReviews: IRatingsAndReviews[];
 	travelers: ITravelers[];
 	transportation: ITransportation[];
+	countDown: { bookingStart: Date; bookingEnd: Date };
 }

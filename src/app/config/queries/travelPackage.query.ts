@@ -11,8 +11,11 @@ export const CREATE_TRAVEL_PACKAGE = gql`
 		$shortDescription: String
 		$carouselThumbnails: [String!]
 		$saleStatus: SALE_STATUS
-		$packageStatus: String
+		$packageStatus: PACKAGE_STATUS
 		$isPublished: Boolean!
+		$departureFrom: PlaceInfoInput
+		$destination: PlaceInfoInput
+		$transportation: [TransportationInput!]
 	) {
 		createTravelPackage(
 			input: {
@@ -27,6 +30,9 @@ export const CREATE_TRAVEL_PACKAGE = gql`
 				saleStatus: $saleStatus
 				isPublished: $isPublished
 				packageStatus: $packageStatus
+				departureFrom: $departureFrom
+				destination: $destination
+				transportation: $transportation
 			}
 		) {
 			_id
@@ -37,13 +43,7 @@ export const CREATE_TRAVEL_PACKAGE = gql`
 export const GET_TRAVEL_PACKAGES = gql`
 	query TRAVEL_PACKAGES($page: Int!, $limit: Int) {
 		travelPackages(
-			input: {
-				page: $page
-				limit: $limit
-				sort: DESC
-				sortBy: "_id"
-				where: { key: "packageStatus", operator: eq, value: "UPCOMING" }
-			}
+			input: { page: $page, limit: $limit, sort: DESC, sortBy: "_id" }
 		) {
 			nodes {
 				_id
@@ -54,46 +54,21 @@ export const GET_TRAVEL_PACKAGES = gql`
 				isPublished
 				packageStatus
 				thumbnail
-				description
-				shortDescription
 				countDown {
 					bookingStart
 					bookingEnd
 				}
 				destination {
-					destination
+					name
 					lat
 					lng
-				}
-				departureFrom {
-					departureFrom
-					lat
-					lng
-				}
-				ratingsAndReviews {
-					rating
-					email
-					message
-				}
-				travelers {
-					travelerEmail
-				}
-				transportation {
-					tourBy
-					departureFrom
-					destination
-					startAt
-					transportName
-					stops
-					journeyBreak
-					endAt
 				}
 			}
 		}
 	}
 `;
 
-export const GET_SINGLE_TRAVEL_PACKAGES = gql`
+export const GET_SINGLE_TRAVEL_PACKAGE = gql`
 	query GET_SINGLE_PACKAGE($packageId: String) {
 		travelPackage(input: { key: "_id", operator: eq, value: $packageId }) {
 			_id
@@ -106,6 +81,41 @@ export const GET_SINGLE_TRAVEL_PACKAGES = gql`
 			thumbnail
 			description
 			shortDescription
+			countDown {
+				bookingStart
+				bookingEnd
+			}
+			destination {
+				name
+				lat
+				lng
+			}
+			departureFrom {
+				name
+				lat
+				lng
+			}
+			ratingsAndReviews {
+				rating
+				email
+				message
+			}
+			travelers {
+				travelerEmail
+			}
+			transportation {
+				tourBy
+				departureDate
+				departureTime
+				departureStation
+				destinationStation
+				arrivalTime
+				arrivalDate
+				transportName
+				stops
+				journeyBreak
+			}
+			carouselThumbnails
 		}
 	}
 `;

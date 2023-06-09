@@ -1,6 +1,5 @@
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
 import { Box, Flex, Rating, Text, Title } from '@mantine/core';
-import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { MdLocationPin } from 'react-icons/md';
@@ -12,7 +11,7 @@ interface ITourCardProp {
 const TourCard: React.FC<ITourCardProp> = ({ TPackage }) => {
 	return (
 		<Link
-			href={`/tour-packages/${TPackage?._id}`}
+			href={`/tour_packages/${TPackage?._id}`}
 			className='no-underline text-white'
 		>
 			<Box className=' bg-[#212231] hover:bg-[#212237] relative rounded-lg grid shadow-xl pb-3'>

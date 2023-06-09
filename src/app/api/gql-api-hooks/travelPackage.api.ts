@@ -1,5 +1,5 @@
 import {
-	GET_SINGLE_TRAVEL_PACKAGES,
+	GET_SINGLE_TRAVEL_PACKAGE,
 	GET_TRAVEL_PACKAGES,
 } from '@/app/config/queries/travelPackage.query';
 import { useQuery } from '@apollo/client';
@@ -26,7 +26,7 @@ export const useGetSinglePackage = (id: string) => {
 		data,
 		loading,
 		refetch: refetchPackage,
-	} = useQuery<{ travelPackage: ITravelPackage }>(GET_SINGLE_TRAVEL_PACKAGES, {
+	} = useQuery<{ travelPackage: ITravelPackage }>(GET_SINGLE_TRAVEL_PACKAGE, {
 		variables: {
 			packageId: id,
 		},

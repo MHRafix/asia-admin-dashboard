@@ -112,7 +112,7 @@ const Dashboard = () => {
 					</div>
 
 					{/* popular travel packages */}
-					<div className='lg:flex gap-5'>
+					<div className='lg:flex grid gap-8'>
 						<div className='lg:w-7/12 '>
 							<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
 								Transaction analytics

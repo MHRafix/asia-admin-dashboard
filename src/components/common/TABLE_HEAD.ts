@@ -11,7 +11,7 @@ export const BOOKING_TABLE_HEAD = [
 export const APPOINTMENT_TABLE_HEAD = [
 	'Name',
 	'Mail',
-	'Call',
+	'Status',
 	'Profession',
 	'Track',
 	'Action',
@@ -22,6 +22,6 @@ export const EMPLOYEES_TABLE_HEAD = [
 	'Mail',
 	'Call',
 	'Post',
-	'Comunication',
+	'Communication',
 	'Action',
 ];

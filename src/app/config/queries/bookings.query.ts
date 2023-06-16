@@ -16,21 +16,6 @@ export const PACKAGE_BOOKINGS_QUERY = gql`
 					email
 					phone
 				}
-				package {
-					packageTitle
-					regularPrice
-					salePrice
-					saleStatus
-					isPublished
-					packageStatus
-					countDown {
-						bookingStart
-						bookingEnd
-					}
-					thumbnail
-					description
-					carouselThumbnails
-				}
 				transactionId
 				bookingId
 				paymentDetails {

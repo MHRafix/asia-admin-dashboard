@@ -14,6 +14,7 @@ export const APPOINTMENTS_QUERY = gql`
 				email
 				phone
 				serviceId
+				status
 				subService
 				profession
 				clientQuestions {

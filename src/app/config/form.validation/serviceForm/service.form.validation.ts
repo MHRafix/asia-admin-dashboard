@@ -2,7 +2,6 @@ export const UPDATE_SERVICE_DEFAULT_VALUES = {
 	title: '',
 	shortDesc: '',
 	price: 100,
-	isCustomizable: false,
 };
 
 import * as Yup from 'yup';
@@ -16,5 +15,4 @@ export const updateServiceSchema = Yup.object().shape({
 	title: Yup.string().nullable().required().label('Service title'),
 	shortDesc: Yup.string().nullable().required().label('Short description'),
 	price: Yup.string().required().nullable().label('Service price'),
-	isCustomizable: Yup.boolean(),
 });

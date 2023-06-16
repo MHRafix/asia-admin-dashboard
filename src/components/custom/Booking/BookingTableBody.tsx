@@ -108,7 +108,7 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 					color={getPaymentBadgeColors(booking?.paymentDetails?.paymentStatus!)}
 					size='lg'
 					fw={500}
-					variant='light'
+					variant='dot'
 					radius='sm'
 				>
 					{booking?.paymentDetails?.paymentStatus}
@@ -128,7 +128,7 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 							color={getBadgeColors(booking?.status!)}
 							size='lg'
 							fw={500}
-							variant='light'
+							variant='filled'
 							radius='sm'
 						>
 							{booking?.status}

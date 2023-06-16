@@ -3,7 +3,7 @@ import { PAYMENT_STATUS } from '@/app/api/models/bookings.model';
 export const getBadgeColors = (status: string) => {
 	switch (status) {
 		case 'PENDING':
-			return 'yellow';
+			return 'orange';
 		case 'APPROVED':
 			return 'violet';
 		case 'COMPLETED':

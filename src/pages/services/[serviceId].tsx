@@ -10,14 +10,7 @@ import CircularLoader from '@/components/common/Loader';
 import NotepadEditor from '@/components/common/NotepadEditor';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import AdminLayout from '@/components/layouts/AdminLayout';
-import {
-	Button,
-	Input,
-	NumberInput,
-	Switch,
-	Text,
-	Textarea,
-} from '@mantine/core';
+import { Button, Input, NumberInput, Text, Textarea } from '@mantine/core';
 import { useForm, yupResolver } from '@mantine/form';
 import React, { useEffect, useState } from 'react';
 
@@ -41,7 +34,6 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 			title: service?.title,
 			shortDesc: service?.shortDesc,
 			price: service?.price,
-			isCustomizable: service?.isCustomizable,
 		});
 	}, [service]);
 
@@ -163,27 +155,12 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 						<Input.Wrapper
 							label={
 								<Text fz={18} my={5}>
-									Descrition
+									Description
 								</Text>
 							}
 						>
 							<NotepadEditor value={description!} setValue={setDescription} />
 						</Input.Wrapper>
-					</div>
-
-					<div className='grid lg:flex justify-between items-center gap-5 mt-5 lg:mt-0'>
-						<Switch
-							{...form.getInputProps('isCustomizable')}
-							size='lg'
-							labelPosition='left'
-							label={
-								<Text fz={18} fw={500}>
-									Is customizable ?
-								</Text>
-							}
-							color='red'
-							defaultChecked={service?.isCustomizable}
-						/>
 					</div>
 				</form>
 			)}

@@ -30,7 +30,7 @@ export const GET_SERVICE_QUERY = gql`
 				desc
 				preRequirements
 				price
-				isCustomizable
+				serviceId
 			}
 		}
 	}
@@ -45,7 +45,7 @@ export const GET_SINGLE_SERVICE = gql`
 			desc
 			preRequirements
 			price
-			isCustomizable
+			serviceId
 		}
 	}
 `;
@@ -58,7 +58,6 @@ export const UPDATE_SERVICE = gql`
 		$desc: String
 		$price: Float
 		$preRequirements: String
-		$isCustomizable: Boolean
 	) {
 		updateService(
 			input: {
@@ -68,7 +67,6 @@ export const UPDATE_SERVICE = gql`
 				desc: $desc
 				price: $price
 				preRequirements: $preRequirements
-				isCustomizable: $isCustomizable
 			}
 		) {
 			_id

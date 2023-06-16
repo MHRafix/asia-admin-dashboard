@@ -4,8 +4,8 @@ import { gql } from '@apollo/client';
  * Booking query
  */
 // bookings get query
-export const PACAKGE_BOOKINGS_QUERY = gql`
-	query PACAKGE_BOOKINGS_QUERY($page: Int, $limit: Int, $sortBy: String) {
+export const PACKAGE_BOOKINGS_QUERY = gql`
+	query PACKAGE_BOOKINGS_QUERY($page: Int, $limit: Int, $sortBy: String) {
 		bookings(
 			input: { page: $page, limit: $limit, sort: DESC, sortBy: $sortBy }
 		) {
@@ -16,7 +16,30 @@ export const PACAKGE_BOOKINGS_QUERY = gql`
 					email
 					phone
 				}
-				packageId
+				package {
+					packageTitle
+					regularPrice
+					salePrice
+					saleStatus
+					isPublished
+					packageStatus
+					countDown {
+						bookingStart
+						bookingEnd
+					}
+					thumbnail
+					description
+					carouselThumbnails
+				}
+				transactionId
+				bookingId
+				paymentDetails {
+					paymentStatus
+					totalAmount
+					paidFrom
+					paymentMethod
+					paymentDateTime
+				}
 				status
 			}
 			meta {
@@ -29,6 +52,20 @@ export const PACAKGE_BOOKINGS_QUERY = gql`
 	}
 `;
 
+// update booking status
+export const UPDATE_BOOKING_STATUS = gql`
+	mutation UPDATE_BOOKING_STATUS(
+		$id: ID
+		$status: BOOKING_STATUS
+		$paymentDetails: PaymentDetailsInput
+	) {
+		updateBooking(
+			input: { _id: $id, status: $status, paymentDetails: $paymentDetails }
+		) {
+			_id
+		}
+	}
+`;
 // booking delete query
 export const DELETE_BOOKING_MUTATION = gql`
 	mutation DELETE_BOOKING_MUTATION($id: String!) {

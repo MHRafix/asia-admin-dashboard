@@ -41,7 +41,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 			title: service?.title,
 			shortDesc: service?.shortDesc,
 			price: service?.price,
-			isCustomizeable: service?.isCustomizeable,
+			isCustomizable: service?.isCustomizable,
 		});
 	}, [service]);
 
@@ -173,16 +173,16 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 
 					<div className='grid lg:flex justify-between items-center gap-5 mt-5 lg:mt-0'>
 						<Switch
-							{...form.getInputProps('isCustomizeable')}
+							{...form.getInputProps('isCustomizable')}
 							size='lg'
 							labelPosition='left'
 							label={
 								<Text fz={18} fw={500}>
-									Is customizeable ?
+									Is customizable ?
 								</Text>
 							}
 							color='red'
-							defaultChecked={service?.isCustomizeable}
+							defaultChecked={service?.isCustomizable}
 						/>
 					</div>
 				</form>

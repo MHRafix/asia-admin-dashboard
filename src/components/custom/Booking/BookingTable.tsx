@@ -1,6 +1,6 @@
 import {
 	BULK_REMOVE_BOOKING,
-	PACAKGE_BOOKINGS_QUERY,
+	PACKAGE_BOOKINGS_QUERY,
 } from '@/app/config/queries/bookings.query';
 import {
 	TABLE_DATA_LIMITS,
@@ -26,11 +26,10 @@ import { FiTrash } from 'react-icons/fi';
 import BookingTableBody from './BookingTableBody';
 
 const BookingTable: React.FC<{}> = () => {
+	const router = useRouter();
 	const [page, setPage] = useState<number>(1);
 	const [limit, setLimit] = useState<number>(5);
 	const [bookingIds, setBookingIds] = useState<string[]>([]);
-
-	const router = useRouter();
 
 	// get booking packages
 	const {
@@ -40,7 +39,7 @@ const BookingTable: React.FC<{}> = () => {
 	} = useQuery<{
 		bookings: { nodes: IBooking[]; meta: IPaginationMeta };
 	}>(
-		PACAKGE_BOOKINGS_QUERY,
+		PACKAGE_BOOKINGS_QUERY,
 		Query_Variable(
 			router.query.page as string,
 			router.query.limit as string,

@@ -1,11 +1,34 @@
-import { IBooking } from '@/app/api/models/bookings.model';
-import { DELETE_BOOKING_MUTATION } from '@/app/config/queries/bookings.query';
+import {
+	BOOKING_STATUS,
+	IBooking,
+	PAYMENT_STATUS,
+} from '@/app/api/models/bookings.model';
+import {
+	getBadgeColors,
+	getPaymentBadgeColors,
+} from '@/app/config/logic/getColors';
+import {
+	DELETE_BOOKING_MUTATION,
+	UPDATE_BOOKING_STATUS,
+} from '@/app/config/queries/bookings.query';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import { handleSetUid } from '@/logic/handleSetUid';
 import { useMutation } from '@apollo/client';
-import { Badge, Button, Checkbox, Flex } from '@mantine/core';
+import {
+	ActionIcon,
+	Badge,
+	Button,
+	Checkbox,
+	CopyButton,
+	Flex,
+	Menu,
+	Text,
+	Tooltip,
+} from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import React from 'react';
+import React, { useState } from 'react';
+import { BiCopy } from 'react-icons/bi';
+import { FaCheck } from 'react-icons/fa';
 import { FiTrash } from 'react-icons/fi';
 
 interface IBookingTableBodyProps {
@@ -18,6 +41,8 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 	refetchBooking,
 	onStoreId,
 }) => {
+	const [status, setStatus] = useState<string>(booking?.status!);
+
 	// delete booking
 	const [deleteBooking, { loading: deletingBooking }] = useMutation(
 		DELETE_BOOKING_MUTATION,
@@ -28,6 +53,21 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 					title: 'Booking successfully deleted!',
 					color: 'red',
 					icon: <FiTrash size={20} />,
+					message: '',
+				});
+			},
+		}
+	);
+
+	// update booking
+	const [updateBooking, { loading: updatingBooking }] = useMutation(
+		UPDATE_BOOKING_STATUS,
+		{
+			onCompleted: () => {
+				refetchBooking();
+				showNotification({
+					title: 'Booking successfully updated!',
+					color: 'teal',
 					message: '',
 				});
 			},
@@ -44,31 +84,147 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 					{booking?.customerDetails?.name}
 				</Flex>
 			</td>
-			<td className='text-dimmed'>{booking?.customerDetails?.email}</td>
 			<td className='text-dimmed'>{booking?.customerDetails?.phone}</td>
-			<td className='text-dimmed'>{new Date().toDateString()}</td>
-
+			<td className='text-dimmed'>
+				<div className='flex gap-2 items-center'>
+					{booking?.transactionId}
+					<CopyButton value={booking?.transactionId!} timeout={2000}>
+						{({ copied, copy }) => (
+							<Tooltip
+								label={copied ? 'Copied' : 'Copy'}
+								withArrow
+								position='right'
+							>
+								<ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy}>
+									{copied ? <FaCheck size='1rem' /> : <BiCopy size='1rem' />}
+								</ActionIcon>
+							</Tooltip>
+						)}
+					</CopyButton>
+				</div>
+			</td>
 			<td className='text-dimmed'>
 				<Badge
-					color={getColors(booking?.status!)}
+					color={getPaymentBadgeColors(booking?.paymentDetails?.paymentStatus!)}
 					size='lg'
 					fw={500}
 					variant='light'
 					radius='sm'
 				>
-					{booking?.status}
+					{booking?.paymentDetails?.paymentStatus}
 				</Badge>
 			</td>
+
 			<td className='text-dimmed'>
 				<Button size='xs' color='violet' variant='filled' compact>
 					Track Pack
 				</Button>
 			</td>
 
+			<td className='text-dimmed'>
+				<Menu>
+					<Menu.Target>
+						<Badge
+							color={getBadgeColors(booking?.status!)}
+							size='lg'
+							fw={500}
+							variant='light'
+							radius='sm'
+						>
+							{booking?.status}
+						</Badge>
+					</Menu.Target>
+
+					<Menu.Dropdown className='!bg-[#1D1E2B]'>
+						<Menu.Item
+							disabled={status === 'PENDING'}
+							color='orange'
+							onClick={() => {
+								setStatus('PENDING');
+								updateBooking({
+									variables: {
+										id: booking._id,
+										status: BOOKING_STATUS.PENDING,
+										paymentDetails: {
+											paymentStatus: PAYMENT_STATUS.DUE,
+											totalAmount: booking?.paymentDetails?.totalAmount,
+										},
+									},
+								});
+							}}
+						>
+							<Text ml={15} size={'md'} fw={500}>
+								PENDING
+							</Text>
+						</Menu.Item>
+						<Menu.Item
+							disabled={status === 'APPROVED'}
+							color='violet'
+							onClick={() => {
+								setStatus('APPROVED');
+								updateBooking({
+									variables: {
+										id: booking._id,
+										status: BOOKING_STATUS.APPROVED,
+										paymentDetails: {
+											paymentStatus: PAYMENT_STATUS.PAID,
+											totalAmount: booking?.paymentDetails?.totalAmount,
+										},
+									},
+								});
+							}}
+						>
+							<Text ml={15} size={'md'} fw={500}>
+								APPROVED
+							</Text>
+						</Menu.Item>
+						<Menu.Item
+							disabled={status === 'COMPLETED'}
+							color='teal'
+							onClick={() => {
+								setStatus('COMPLETED');
+								updateBooking({
+									variables: {
+										id: booking._id,
+										status: BOOKING_STATUS.COMPLETED,
+										paymentDetails: {
+											paymentStatus: PAYMENT_STATUS.PAID,
+											totalAmount: booking?.paymentDetails?.totalAmount,
+										},
+									},
+								});
+							}}
+						>
+							<Text ml={15} size={'md'} fw={500}>
+								COMPLETED
+							</Text>
+						</Menu.Item>
+						<Menu.Item
+							disabled={status === 'CANCELED'}
+							color='red'
+							onClick={() => {
+								setStatus('CANCELED');
+								updateBooking({
+									variables: {
+										id: booking._id,
+										status: BOOKING_STATUS.CANCELED,
+										paymentDetails: {
+											paymentStatus: PAYMENT_STATUS.DUE,
+											totalAmount: booking?.paymentDetails?.totalAmount,
+										},
+									},
+								});
+							}}
+						>
+							<Text ml={15} size={'md'} fw={500}>
+								CANCELLED
+							</Text>
+						</Menu.Item>
+					</Menu.Dropdown>
+				</Menu>
+			</td>
+
 			<td className='flex gap-2 items-center'>
-				{/* <Button variant='filled' color='teal' size='xs' compact>
-					<FiEdit size={16} />
-				</Button> */}
 				<Button
 					loading={deletingBooking}
 					variant='filled'
@@ -85,17 +241,3 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 };
 
 export default BookingTableBody;
-
-const getColors = (status: string) => {
-	switch (status) {
-		case 'PENDING':
-			return 'yellow';
-		case 'APPROVED':
-			return 'violet';
-		case 'COMPLETED':
-			return 'teal';
-
-		default:
-			return 'red';
-	}
-};

@@ -8,6 +8,8 @@ import { Badge, Button, Checkbox, Flex, Menu, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import React, { useState } from 'react';
 import { FiTrash } from 'react-icons/fi';
+import TrackServicePopover from './TrackServicePopover';
+import { BsReply } from 'react-icons/bs';
 
 interface IAppointmentTableBodyProps {
 	appointment: IAppointment;
@@ -154,15 +156,13 @@ const AppointmentsTableBody: React.FC<IAppointmentTableBodyProps> = ({
 			<td className='text-dimmed'>{appointment?.profession}</td>
 
 			<td className='text-dimmed'>
-				<Button size='xs' color='violet' variant='filled' compact>
-					Track Service
-				</Button>
+				<TrackServicePopover serviceId={appointment?.serviceId!} />
 			</td>
 
 			<td className='flex gap-2 items-center'>
-				{/* <Button variant='filled' color='teal' size='xs' compact>
-					<FiEdit size={16} />
-				</Button> */}
+				<Button variant='filled' color='orange' size='xs' compact>
+					<BsReply size={16} />
+				</Button>
 				<Button
 					loading={deletingAppointment}
 					variant='filled'

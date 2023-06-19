@@ -30,6 +30,7 @@ import React, { useState } from 'react';
 import { BiCopy } from 'react-icons/bi';
 import { FaCheck } from 'react-icons/fa';
 import { FiTrash } from 'react-icons/fi';
+import TrackPackagePopover from './TrackPackagePopover';
 
 interface IBookingTableBodyProps {
 	booking: IBooking;
@@ -41,6 +42,7 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 	refetchBooking,
 	onStoreId,
 }) => {
+	console.log(booking);
 	const [status, setStatus] = useState<string>(booking?.status!);
 
 	// delete booking
@@ -116,9 +118,7 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 			</td>
 
 			<td className='text-dimmed'>
-				<Button size='xs' color='violet' variant='filled' compact>
-					Track Pack
-				</Button>
+				<TrackPackagePopover packageId={booking?.packageId!} />
 			</td>
 
 			<td className='text-dimmed'>

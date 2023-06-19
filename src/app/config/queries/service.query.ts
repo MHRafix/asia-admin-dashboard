@@ -30,7 +30,6 @@ export const GET_SERVICE_QUERY = gql`
 				desc
 				preRequirements
 				price
-				serviceId
 			}
 		}
 	}
@@ -45,7 +44,10 @@ export const GET_SINGLE_SERVICE = gql`
 			desc
 			preRequirements
 			price
-			serviceId
+			visaCategory
+			thumbnail
+			banner
+			country
 		}
 	}
 `;

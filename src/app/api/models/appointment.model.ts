@@ -1,11 +1,9 @@
-import { IService } from './service.model';
-
 export interface IAppointment {
 	_id: string;
 	name: string;
 	email: string;
 	phone: string;
-	service: IService;
+	serviceId: string;
 	subService: string;
 	profession: string;
 	status: string;

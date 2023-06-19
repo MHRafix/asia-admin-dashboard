@@ -16,6 +16,7 @@ export const PACKAGE_BOOKINGS_QUERY = gql`
 					email
 					phone
 				}
+				packageId
 				transactionId
 				bookingId
 				paymentDetails {

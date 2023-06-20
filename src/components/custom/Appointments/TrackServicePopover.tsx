@@ -20,7 +20,13 @@ const TrackServicePopover: React.FC<{ serviceId: string }> = ({
 		<div>
 			<Popover width={320} withArrow shadow='xl'>
 				<Popover.Target>
-					<Button size='xs' color='violet' variant='filled' compact>
+					<Button
+						ff={'Nunito sans, sans-serif'}
+						size='sm'
+						color='violet'
+						variant='filled'
+						compact
+					>
 						Track service
 					</Button>
 				</Popover.Target>

@@ -7,10 +7,10 @@ export interface IAppointment {
 	subService: string;
 	profession: string;
 	status: string;
-	clientQuestions: ClientQuestion[];
+	clientQuestions: IClientQuestion[];
 }
 
-export interface ClientQuestion {
+export interface IClientQuestion {
 	qTitle: string;
 	qDesc: string;
 }

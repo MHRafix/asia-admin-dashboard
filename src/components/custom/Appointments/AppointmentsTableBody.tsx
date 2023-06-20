@@ -1,6 +1,10 @@
 import { IAppointment } from '@/app/api/models/appointment.model';
+import { STATUS_ARR } from '@/app/api/models/bookings.model';
 import { getBadgeColors } from '@/app/config/logic/getColors';
-import { DELETE_APPOINTMENT_MUTATION } from '@/app/config/queries/appointments.query';
+import {
+	DELETE_APPOINTMENT_MUTATION,
+	UPDATE_APPOINTMENT,
+} from '@/app/config/queries/appointments.query';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import { handleSetUid } from '@/logic/handleSetUid';
 import { useMutation } from '@apollo/client';
@@ -8,8 +12,8 @@ import { Badge, Button, Checkbox, Flex, Menu, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import React, { useState } from 'react';
 import { FiTrash } from 'react-icons/fi';
+import ReplyDrawer from './ReplyDrawer';
 import TrackServicePopover from './TrackServicePopover';
-import { BsReply } from 'react-icons/bs';
 
 interface IAppointmentTableBodyProps {
 	appointment: IAppointment;
@@ -22,7 +26,7 @@ const AppointmentsTableBody: React.FC<IAppointmentTableBodyProps> = ({
 	refetchAppointment,
 	onStoreId,
 }) => {
-	const [status, setStatus] = useState('');
+	const [status, setStatus] = useState(appointment?.status);
 
 	// delete appointment
 	const [deleteAppointment, { loading: deletingAppointment }] = useMutation(
@@ -32,13 +36,24 @@ const AppointmentsTableBody: React.FC<IAppointmentTableBodyProps> = ({
 				refetchAppointment();
 				showNotification({
 					title: 'Appointment successfully deleted!',
-					color: 'red',
-					icon: <FiTrash size={20} />,
+					color: 'teal',
 					message: '',
 				});
 			},
 		}
 	);
+
+	// update appointment
+	const [updateAppointment] = useMutation(UPDATE_APPOINTMENT, {
+		onCompleted: () => {
+			refetchAppointment();
+			showNotification({
+				title: 'Appointment successfully updated!',
+				color: 'teal',
+				message: '',
+			});
+		},
+	});
 	return (
 		<tr>
 			<td className='text-dimmed !py-2'>
@@ -61,95 +76,33 @@ const AppointmentsTableBody: React.FC<IAppointmentTableBodyProps> = ({
 							variant='filled'
 							radius='sm'
 						>
-							{appointment?.status}
+							{status}
 						</Badge>
 					</Menu.Target>
 
 					<Menu.Dropdown className='!bg-[#1D1E2B]'>
-						<Menu.Item
-							disabled={status === 'PENDING'}
-							color='orange'
-							onClick={() => {
-								setStatus('PENDING');
-								// updateBooking({
-								// 	variables: {
-								// 		id: appointment._id,
-								// 		status: BOOKING_STATUS.PENDING,
-								// 		paymentDetails: {
-								// 			paymentStatus: PAYMENT_STATUS.DUE,
-								// 			totalAmount: booking?.paymentDetails?.totalAmount,
-								// 		},
-								// 	},
-								// });
-							}}
-						>
-							<Text ml={15} size={'md'} fw={500}>
-								PENDING
-							</Text>
-						</Menu.Item>
-						<Menu.Item
-							disabled={status === 'APPROVED'}
-							color='violet'
-							onClick={() => {
-								setStatus('APPROVED');
-								// updateBooking({
-								// 	variables: {
-								// 		id: booking._id,
-								// 		status: BOOKING_STATUS.APPROVED,
-								// 		paymentDetails: {
-								// 			paymentStatus: PAYMENT_STATUS.PAID,
-								// 			totalAmount: booking?.paymentDetails?.totalAmount,
-								// 		},
-								// 	},
-								// });
-							}}
-						>
-							<Text ml={15} size={'md'} fw={500}>
-								APPROVED
-							</Text>
-						</Menu.Item>
-						<Menu.Item
-							disabled={status === 'COMPLETED'}
-							color='teal'
-							onClick={() => {
-								setStatus('COMPLETED');
-								// updateBooking({
-								// 	variables: {
-								// 		id: booking._id,
-								// 		status: BOOKING_STATUS.COMPLETED,
-								// 		paymentDetails: {
-								// 			paymentStatus: PAYMENT_STATUS.PAID,
-								// 			totalAmount: booking?.paymentDetails?.totalAmount,
-								// 		},
-								// 	},
-								// });
-							}}
-						>
-							<Text ml={15} size={'md'} fw={500}>
-								COMPLETED
-							</Text>
-						</Menu.Item>
-						<Menu.Item
-							disabled={status === 'CANCELED'}
-							color='red'
-							onClick={() => {
-								setStatus('CANCELED');
-								// updateBooking({
-								// 	variables: {
-								// 		id: booking._id,
-								// 		status: BOOKING_STATUS.CANCELED,
-								// 		paymentDetails: {
-								// 			paymentStatus: PAYMENT_STATUS.DUE,
-								// 			totalAmount: booking?.paymentDetails?.totalAmount,
-								// 		},
-								// 	},
-								// });
-							}}
-						>
-							<Text ml={15} size={'md'} fw={500}>
-								CANCELLED
-							</Text>
-						</Menu.Item>
+						{STATUS_ARR.map((STATUS: string, idx: number) => (
+							<Menu.Item
+								key={idx}
+								disabled={status === STATUS}
+								color={getBadgeColors(STATUS)}
+								onClick={() => {
+									setStatus(STATUS);
+									updateAppointment({
+										variables: {
+											payload: {
+												_id: appointment._id,
+												status: STATUS,
+											},
+										},
+									});
+								}}
+							>
+								<Text ml={15} size={'md'} fw={500}>
+									{STATUS}
+								</Text>
+							</Menu.Item>
+						))}
 					</Menu.Dropdown>
 				</Menu>
 			</td>
@@ -160,9 +113,7 @@ const AppointmentsTableBody: React.FC<IAppointmentTableBodyProps> = ({
 			</td>
 
 			<td className='flex gap-2 items-center'>
-				<Button variant='filled' color='orange' size='xs' compact>
-					<BsReply size={16} />
-				</Button>
+				<ReplyDrawer clientQuestions={appointment?.clientQuestions} />
 				<Button
 					loading={deletingAppointment}
 					variant='filled'

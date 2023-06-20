@@ -20,7 +20,13 @@ const TrackPackagePopover: React.FC<{ packageId: string }> = ({
 		<div>
 			<Popover width={320} withArrow shadow='xl'>
 				<Popover.Target>
-					<Button size='xs' color='violet' variant='filled' compact>
+					<Button
+						size='sm'
+						ff={'Nunito sans, sans-serif'}
+						color='violet'
+						variant='filled'
+						compact
+					>
 						Track Pack
 					</Button>
 				</Popover.Target>

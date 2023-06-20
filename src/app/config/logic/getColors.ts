@@ -16,11 +16,11 @@ export const getBadgeColors = (status: string) => {
 
 export const getPaymentBadgeColors = (status: string) => {
 	switch (status) {
-		case PAYMENT_STATUS.DUE:
+		case PAYMENT_STATUS[0]:
 			return 'red';
-		case PAYMENT_STATUS.IN_REVIEW_PAID:
+		case PAYMENT_STATUS[1]:
 			return 'violet';
-		case PAYMENT_STATUS.PAID:
+		case PAYMENT_STATUS[2]:
 			return 'teal';
 
 		default:

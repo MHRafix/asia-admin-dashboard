@@ -7,6 +7,5 @@ export const prefillUpdateServiceForm = (service: IService) => {
 		desc: service?.desc,
 		preRequirements: service?.preRequirements,
 		price: service?.price,
-		isCustomizable: service?.isCustomizable,
 	};
 };

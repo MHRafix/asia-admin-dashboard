@@ -32,6 +32,14 @@ export const APPOINTMENTS_QUERY = gql`
 	}
 `;
 
+export const UPDATE_APPOINTMENT = gql`
+	mutation UPDATE_APPOINTMENT($payload: UpdateAppointmentInput!) {
+		updateAppointment(input: $payload) {
+			_id
+		}
+	}
+`;
+
 // booking delete query
 export const DELETE_APPOINTMENT_MUTATION = gql`
 	mutation DELETE_APPOINTMENT_MUTATION($id: String!) {

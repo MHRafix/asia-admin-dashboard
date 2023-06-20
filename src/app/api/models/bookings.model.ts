@@ -25,8 +25,6 @@ export enum BOOKING_STATUS {
 	COMPLETED = 'COMPLETED',
 }
 
-export enum PAYMENT_STATUS {
-	DUE = 'DUE',
-	IN_REVIEW_PAID = 'IN_REVIEW_PAID',
-	PAID = 'PAID',
-}
+export const PAYMENT_STATUS = ['DUE', 'IN_REVIEW_PAID', 'PAID', 'PAID'];
+
+export const STATUS_ARR = ['PENDING', 'APPROVED', 'COMPLETED', 'CANCELED'];

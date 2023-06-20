@@ -1,7 +1,7 @@
 import {
-	BOOKING_STATUS,
 	IBooking,
 	PAYMENT_STATUS,
+	STATUS_ARR,
 } from '@/app/api/models/bookings.model';
 import {
 	getBadgeColors,
@@ -136,90 +136,30 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 					</Menu.Target>
 
 					<Menu.Dropdown className='!bg-[#1D1E2B]'>
-						<Menu.Item
-							disabled={status === 'PENDING'}
-							color='orange'
-							onClick={() => {
-								setStatus('PENDING');
-								updateBooking({
-									variables: {
-										id: booking._id,
-										status: BOOKING_STATUS.PENDING,
-										paymentDetails: {
-											paymentStatus: PAYMENT_STATUS.DUE,
-											totalAmount: booking?.paymentDetails?.totalAmount,
+						{STATUS_ARR.map((STATUS: string, idx: number) => (
+							<Menu.Item
+								key={idx}
+								disabled={status === STATUS}
+								color={getBadgeColors(STATUS)}
+								onClick={() => {
+									setStatus(STATUS);
+									updateBooking({
+										variables: {
+											id: booking._id,
+											status: STATUS,
+											paymentDetails: {
+												paymentStatus: PAYMENT_STATUS[idx],
+												totalAmount: booking?.paymentDetails?.totalAmount,
+											},
 										},
-									},
-								});
-							}}
-						>
-							<Text ml={15} size={'md'} fw={500}>
-								PENDING
-							</Text>
-						</Menu.Item>
-						<Menu.Item
-							disabled={status === 'APPROVED'}
-							color='violet'
-							onClick={() => {
-								setStatus('APPROVED');
-								updateBooking({
-									variables: {
-										id: booking._id,
-										status: BOOKING_STATUS.APPROVED,
-										paymentDetails: {
-											paymentStatus: PAYMENT_STATUS.PAID,
-											totalAmount: booking?.paymentDetails?.totalAmount,
-										},
-									},
-								});
-							}}
-						>
-							<Text ml={15} size={'md'} fw={500}>
-								APPROVED
-							</Text>
-						</Menu.Item>
-						<Menu.Item
-							disabled={status === 'COMPLETED'}
-							color='teal'
-							onClick={() => {
-								setStatus('COMPLETED');
-								updateBooking({
-									variables: {
-										id: booking._id,
-										status: BOOKING_STATUS.COMPLETED,
-										paymentDetails: {
-											paymentStatus: PAYMENT_STATUS.PAID,
-											totalAmount: booking?.paymentDetails?.totalAmount,
-										},
-									},
-								});
-							}}
-						>
-							<Text ml={15} size={'md'} fw={500}>
-								COMPLETED
-							</Text>
-						</Menu.Item>
-						<Menu.Item
-							disabled={status === 'CANCELED'}
-							color='red'
-							onClick={() => {
-								setStatus('CANCELED');
-								updateBooking({
-									variables: {
-										id: booking._id,
-										status: BOOKING_STATUS.CANCELED,
-										paymentDetails: {
-											paymentStatus: PAYMENT_STATUS.DUE,
-											totalAmount: booking?.paymentDetails?.totalAmount,
-										},
-									},
-								});
-							}}
-						>
-							<Text ml={15} size={'md'} fw={500}>
-								CANCELLED
-							</Text>
-						</Menu.Item>
+									});
+								}}
+							>
+								<Text ml={15} size={'md'} fw={500}>
+									{STATUS}
+								</Text>
+							</Menu.Item>
+						))}
 					</Menu.Dropdown>
 				</Menu>
 			</td>

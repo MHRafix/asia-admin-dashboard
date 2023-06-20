@@ -16,10 +16,11 @@ import { CUSTOMER_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
 import TableHead from '@/components/common/TableHead';
 import { Query_Variable } from '@/logic/queryVariables';
 import { useMutation, useQuery } from '@apollo/client';
-import { Button, Select, Space, Table } from '@mantine/core';
+import { Button, Input, Select, Space, Table } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
 import { FiTrash } from 'react-icons/fi';
 import { TbUsers } from 'react-icons/tb';
 import CustomersTableBody from './CustomersTableBody';
@@ -79,6 +80,12 @@ const CustomerTable: React.FC<{}> = () => {
 				tagline='Our solid customers'
 				actionComponent={
 					<div className='flex items-center gap-2'>
+						<Input
+							icon={<FaSearch />}
+							variant='unstyled'
+							className='w-[300px] !border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
+							placeholder='Search customers...'
+						/>
 						<Button
 							loading={bulkDeleting}
 							disabled={!customerIds?.length}
@@ -95,6 +102,8 @@ const CustomerTable: React.FC<{}> = () => {
 							Bulk Remove
 						</Button>
 						<Select
+							variant='unstyled'
+							className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
 							w={120}
 							placeholder='Pick one'
 							onChange={(value) => handleLimitChange(value!)}

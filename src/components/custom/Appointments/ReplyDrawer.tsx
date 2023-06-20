@@ -23,6 +23,7 @@ const ReplyDrawer: React.FC<{ clientQuestions: IClientQuestion[] }> = ({
 				title='Reply to client'
 			>
 				<form className='mr-4'>
+					<Space h={20} />
 					{clientQuestions?.map((q, idx: number) => (
 						<Accordion
 							variant='separated'
@@ -37,18 +38,28 @@ const ReplyDrawer: React.FC<{ clientQuestions: IClientQuestion[] }> = ({
 										{q?.qDesc}
 									</Text>
 									<Space h={20} />
-									<Input.Wrapper label='Answer of client questions'>
+									<Input.Wrapper size='md' label='Answer of client questions'>
 										<Textarea
-											size='xl'
+											size='md'
 											onChange={(e) => setAnswer(e.target.value)}
 											value={answer}
-											placeholder='Answer of client questions'
+											placeholder='Answer of questions'
 										/>
 									</Input.Wrapper>
 								</Accordion.Panel>
 							</Accordion.Item>
 						</Accordion>
 					))}
+
+					<Space h={10} />
+					<Button
+						leftIcon={<BsReply size={20} />}
+						color='violet'
+						fullWidth
+						size='md'
+					>
+						Reply
+					</Button>
 				</form>
 			</DrawerWrapper>
 		</div>

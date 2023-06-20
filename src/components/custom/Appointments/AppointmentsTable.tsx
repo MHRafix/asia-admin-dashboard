@@ -17,12 +17,13 @@ import { APPOINTMENT_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
 import TableHead from '@/components/common/TableHead';
 import { Query_Variable } from '@/logic/queryVariables';
 import { useMutation, useQuery } from '@apollo/client';
-import { Button, Select, Space, Table } from '@mantine/core';
+import { Button, Input, Select, Space, Table } from '@mantine/core';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FiTrash } from 'react-icons/fi';
 import { SiGotomeeting } from 'react-icons/si';
 import AppointmentsTableBody from './AppointmentsTableBody';
+import { FaSearch } from 'react-icons/fa';
 
 const AppointmentsTable: React.FC<{}> = () => {
 	const [page, setPage] = useState<number>(1);
@@ -80,6 +81,12 @@ const AppointmentsTable: React.FC<{}> = () => {
 				tagline='Booked appointments'
 				actionComponent={
 					<div className='flex gap-2 mb-5'>
+						<Input
+							icon={<FaSearch />}
+							variant='unstyled'
+							className='w-[300px] !border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
+							placeholder='Search appointments...'
+						/>
 						<Button
 							loading={bulkDeleting}
 							disabled={!appointmentIds?.length}
@@ -100,6 +107,8 @@ const AppointmentsTable: React.FC<{}> = () => {
 							placeholder='Pick one'
 							onChange={(value) => handleLimitChange(value!)}
 							data={TABLE_DATA_LIMITS}
+							variant='unstyled'
+							className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
 							defaultValue={
 								(query.limit as string)
 									? (query.limit as string)

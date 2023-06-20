@@ -17,13 +17,14 @@ import { BOOKING_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
 import TableHead from '@/components/common/TableHead';
 import { Query_Variable } from '@/logic/queryVariables';
 import { useMutation, useQuery } from '@apollo/client';
-import { Button, Select, Space, Table } from '@mantine/core';
+import { Button, Input, Select, Space, Table } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { BsBookmarkCheck } from 'react-icons/bs';
 import { FiTrash } from 'react-icons/fi';
 import BookingTableBody from './BookingTableBody';
+import { FaSearch } from 'react-icons/fa';
 
 const BookingTable: React.FC<{}> = () => {
 	const router = useRouter();
@@ -84,6 +85,12 @@ const BookingTable: React.FC<{}> = () => {
 				tagline='Booked travel packages'
 				actionComponent={
 					<div className='flex items-center gap-2'>
+						<Input
+							icon={<FaSearch />}
+							variant='unstyled'
+							className='w-[300px] !border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
+							placeholder='Search bookings...'
+						/>
 						<Button
 							loading={bulkDeleting}
 							disabled={!bookingIds?.length}
@@ -96,6 +103,8 @@ const BookingTable: React.FC<{}> = () => {
 						<Select
 							w={120}
 							placeholder='Pick one'
+							variant='unstyled'
+							className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
 							onChange={(value) => handleLimitChange(value!)}
 							data={TABLE_DATA_LIMITS}
 							defaultValue={TABLE_DEFAULT_LIMIT}

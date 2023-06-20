@@ -17,12 +17,13 @@ import { EMPLOYEES_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
 import TableHead from '@/components/common/TableHead';
 import { Query_Variable } from '@/logic/queryVariables';
 import { useMutation, useQuery } from '@apollo/client';
-import { Button, Select, Space, Table } from '@mantine/core';
+import { Button, Input, Select, Space, Table } from '@mantine/core';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FiTrash } from 'react-icons/fi';
 import { RiTeamLine } from 'react-icons/ri';
 import EmployeesTableBody from './EmployeesTableBody';
+import { FaSearch } from 'react-icons/fa';
 
 const EmployeesTable: React.FC<{}> = () => {
 	const [page, setPage] = useState<number>(1);
@@ -86,6 +87,12 @@ const EmployeesTable: React.FC<{}> = () => {
 				]}
 				actionComponent={
 					<div className='flex items-center gap-2 mb-5'>
+						<Input
+							icon={<FaSearch />}
+							variant='unstyled'
+							className='w-[300px] !border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
+							placeholder='Search employee...'
+						/>
 						<Button
 							loading={bulkDeleting}
 							disabled={!employeesIds?.length}
@@ -101,6 +108,8 @@ const EmployeesTable: React.FC<{}> = () => {
 						</Button>
 						<Select
 							w={120}
+							variant='unstyled'
+							className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
 							placeholder='Pick one'
 							onChange={(value) => handleLimitChange(value!)}
 							data={TABLE_DATA_LIMITS}

@@ -142,7 +142,7 @@ const UploadThumbnails: React.FC = () => {
 								height={200}
 							/>
 						) : (
-							<HiOutlinePhotograph size={50} />
+							<HiOutlinePhotograph size={50} color='#5F3DC4' />
 						)}
 					</div>
 					<div className='absolute bottom-3 right-3'>
@@ -214,10 +214,21 @@ const UploadThumbnails: React.FC = () => {
 										height={250}
 									/>
 								) : (
-									<HiOutlinePhotograph color='#d0d1db' size={50} />
+									<HiOutlinePhotograph color='#5F3DC4' size={50} />
 								)}
 							</div>
-							<div className='absolute bottom-3 right-3'>
+							<div className='absolute bottom-3 right-3 gap-1 flex items-center'>
+								<Button
+									color='red'
+									onClick={() => {
+										setCarouselThumbnails((prev: string[]) => {
+											prev.splice(idx, 1);
+											return [...prev];
+										});
+									}}
+								>
+									Remove
+								</Button>
 								<FileButton
 									onChange={(file: File) =>
 										handleUploadPackageThumbnail(

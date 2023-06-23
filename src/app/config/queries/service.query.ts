@@ -60,6 +60,10 @@ export const UPDATE_SERVICE = gql`
 		$desc: String
 		$price: Float
 		$preRequirements: String
+		$thumbnail: String
+		$banner: String
+		$visaCategory: String
+		$country: String
 	) {
 		updateService(
 			input: {
@@ -69,6 +73,10 @@ export const UPDATE_SERVICE = gql`
 				desc: $desc
 				price: $price
 				preRequirements: $preRequirements
+				thumbnail: $thumbnail
+				banner: $banner
+				visaCategory: $visaCategory
+				country: $country
 			}
 		) {
 			_id

@@ -1,4 +1,8 @@
 import {
+	countriesSelectInputData,
+	visa_categories,
+} from '@/app/api/fakeData/data';
+import {
 	useGetService,
 	useUpdateService,
 } from '@/app/api/gql-api-hooks/service.api';
@@ -10,9 +14,21 @@ import CircularLoader from '@/components/common/Loader';
 import NotepadEditor from '@/components/common/NotepadEditor';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import AdminLayout from '@/components/layouts/AdminLayout';
-import { Button, Input, NumberInput, Text, Textarea } from '@mantine/core';
+import {
+	Button,
+	FileButton,
+	Input,
+	NumberInput,
+	Select,
+	Space,
+	Text,
+	Textarea,
+} from '@mantine/core';
 import { useForm, yupResolver } from '@mantine/form';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import { FiUpload } from 'react-icons/fi';
+import { HiOutlinePhotograph } from 'react-icons/hi';
 
 const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 	const { getingService, service, refetchService } = useGetService(serviceId);
@@ -20,6 +36,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 		service?.preRequirements
 	);
 	const [description, setDescription] = useState(service?.desc);
+	const [thumbnail, setThumbnail] = useState('');
 
 	const form = useForm({
 		initialValues: UPDATE_SERVICE_DEFAULT_VALUES,
@@ -34,6 +51,8 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 			title: service?.title,
 			shortDesc: service?.shortDesc,
 			price: service?.price,
+			country: service?.country,
+			visaCategory: service?.visaCategory,
 		});
 	}, [service]);
 
@@ -121,6 +140,45 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							/>
 						</Input.Wrapper>
 					</div>
+					<div className='grid lg:grid-cols-2 lg:gap-5'>
+						<Input.Wrapper
+							label={
+								<Text fz={18} my={5}>
+									Country
+								</Text>
+							}
+							my={10}
+							error={form.errors.country}
+						>
+							<Select
+								data={countriesSelectInputData}
+								variant='unstyled'
+								size={'md'}
+								placeholder='Pick a country'
+								className='!border-[1px] !border-[#32344b] border-solid px-2'
+								{...form.getInputProps('country')}
+							/>
+						</Input.Wrapper>
+
+						<Input.Wrapper
+							label={
+								<Text fz={18} my={5}>
+									Visa Category
+								</Text>
+							}
+							my={10}
+							error={form.errors.visaCategory}
+						>
+							<Select
+								data={visa_categories}
+								variant='unstyled'
+								size={'md'}
+								placeholder='Pick a category'
+								className='!border-[1px] !border-[#32344b] border-solid px-2'
+								{...form.getInputProps('visaCategory')}
+							/>
+						</Input.Wrapper>
+					</div>
 					<Input.Wrapper
 						label={
 							<Text fz={18} my={5}>
@@ -160,6 +218,99 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							}
 						>
 							<NotepadEditor value={description!} setValue={setDescription} />
+						</Input.Wrapper>
+					</div>
+					<Space h={10} />
+					<div className='grid grid-cols-2 gap-5'>
+						<Input.Wrapper
+							label={`Upload service thumbnail (size 300/250 px)`}
+							size='md'
+							className='relative'
+						>
+							<div className='h-[250px] bg-[#212231] flex items-center justify-center'>
+								{thumbnail ? (
+									<Image
+										src={thumbnail}
+										alt='Thumbnail'
+										width={200}
+										className='!w-full'
+										height={250}
+									/>
+								) : (
+									<HiOutlinePhotograph color='#5F3DC4' size={50} />
+								)}
+							</div>
+							<div className='absolute bottom-3 right-3 gap-1 flex items-center'>
+								<div>
+									<FileButton
+										onChange={() => console.log('first')}
+										// onChange={(file: File) =>
+										// 	handleUploadPackageThumbnail(
+										// 		file,
+										// 		`PACKAGE_CAROUSEL_THUMBNAILS_${idx}`,
+										// 		setCarouselThumbnails,
+										// 		idx
+										// 	)
+										// }
+										accept='image/png,image/jpeg'
+									>
+										{(props) => (
+											<Button
+												// loading={uploading === `PACKAGE_CAROUSEL_THUMBNAILS_${idx}`}
+												color='violet'
+												{...props}
+											>
+												<FiUpload size={16} />
+											</Button>
+										)}
+									</FileButton>
+								</div>
+							</div>
+						</Input.Wrapper>
+						<Input.Wrapper
+							label={`Upload service banner (size 750/300 px)`}
+							size='md'
+							className='relative'
+						>
+							<div className='h-[250px] bg-[#212231] flex items-center justify-center'>
+								{thumbnail ? (
+									<Image
+										src={thumbnail}
+										alt='Thumbnail'
+										width={200}
+										className='!w-full'
+										height={250}
+									/>
+								) : (
+									<HiOutlinePhotograph color='#5F3DC4' size={50} />
+								)}
+							</div>
+							<div className='absolute bottom-3 right-3 gap-1 flex items-center'>
+								<div>
+									<FileButton
+										onChange={() => console.log('first')}
+										// onChange={(file: File) =>
+										// 	handleUploadPackageThumbnail(
+										// 		file,
+										// 		`PACKAGE_CAROUSEL_THUMBNAILS_${idx}`,
+										// 		setCarouselThumbnails,
+										// 		idx
+										// 	)
+										// }
+										accept='image/png,image/jpeg'
+									>
+										{(props) => (
+											<Button
+												// loading={uploading === `PACKAGE_CAROUSEL_THUMBNAILS_${idx}`}
+												color='violet'
+												{...props}
+											>
+												<FiUpload size={16} />
+											</Button>
+										)}
+									</FileButton>
+								</div>
+							</div>
 						</Input.Wrapper>
 					</div>
 				</form>

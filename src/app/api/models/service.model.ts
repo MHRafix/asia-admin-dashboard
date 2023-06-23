@@ -6,4 +6,8 @@ export interface IService {
 	preRequirements: string;
 	price: number;
 	serviceId: string;
+	visaCategory: string;
+	country: string;
+	thumbnail: string;
+	banner: string;
 }

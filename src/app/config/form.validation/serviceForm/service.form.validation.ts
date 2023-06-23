@@ -2,6 +2,8 @@ export const UPDATE_SERVICE_DEFAULT_VALUES = {
 	title: '',
 	shortDesc: '',
 	price: 100,
+	country: 'Afghanistan',
+	visaCategory: 'Tourist',
 };
 
 import * as Yup from 'yup';
@@ -15,4 +17,6 @@ export const updateServiceSchema = Yup.object().shape({
 	title: Yup.string().nullable().required().label('Service title'),
 	shortDesc: Yup.string().nullable().required().label('Short description'),
 	price: Yup.string().required().nullable().label('Service price'),
+	visaCategory: Yup.string().required().nullable().label('Visa category'),
+	country: Yup.string().required().nullable().label('Country'),
 });

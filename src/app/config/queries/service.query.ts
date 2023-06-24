@@ -29,6 +29,7 @@ export const GET_SERVICE_QUERY = gql`
 				shortDesc
 				desc
 				preRequirements
+				thumbnail
 				price
 			}
 		}

@@ -39,6 +39,7 @@ const UploadThumbnails: React.FC = () => {
 			currentStep < 3 ? currentStep + 1 : currentStep
 		);
 
+	// upload thumbnail
 	const handleUploadPackageThumbnail = async (
 		file: File,
 		actionName: string,
@@ -124,6 +125,7 @@ const UploadThumbnails: React.FC = () => {
 			nextStep();
 		}
 	};
+
 	return (
 		<div>
 			<div className='flex justify-center items-center gap-8 mt-5'>

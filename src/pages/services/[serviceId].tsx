@@ -10,6 +10,7 @@ import {
 	UPDATE_SERVICE_DEFAULT_VALUES,
 	updateServiceSchema,
 } from '@/app/config/form.validation/serviceForm/service.form.validation';
+import { fileUploader } from '@/app/config/logic/fileUploader';
 import CircularLoader from '@/components/common/Loader';
 import NotepadEditor from '@/components/common/NotepadEditor';
 import PageTitleArea from '@/components/common/PageTitleArea';
@@ -25,18 +26,22 @@ import {
 	Textarea,
 } from '@mantine/core';
 import { useForm, yupResolver } from '@mantine/form';
+import { showNotification } from '@mantine/notifications';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 
 const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
+	const [uploading, setUploading] = useState('');
+	const [thumbnail, setThumbnail] = useState('');
+	const [banner, setBanner] = useState('');
+
 	const { getingService, service, refetchService } = useGetService(serviceId);
 	const [preRequirements, setPreRequirements] = useState(
 		service?.preRequirements
 	);
 	const [description, setDescription] = useState(service?.desc);
-	const [thumbnail, setThumbnail] = useState('');
 
 	const form = useForm({
 		initialValues: UPDATE_SERVICE_DEFAULT_VALUES,
@@ -54,9 +59,43 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 			country: service?.country,
 			visaCategory: service?.visaCategory,
 		});
+		setBanner(service?.banner!);
+		setThumbnail(service?.thumbnail!);
 	}, [service]);
 
 	const { updateService, updatingService } = useUpdateService(refetchService);
+
+	const handleUploadPackageThumbnail = async (
+		file: File,
+		actionName: string,
+		onChangeThumbnail: any
+	) => {
+		try {
+			setUploading(actionName);
+			const { file_upload_cloudinary } = fileUploader(
+				file,
+				'SERVICE_THUMBNAILS_AND_BANNER'
+			);
+
+			const uploaded = await file_upload_cloudinary();
+			if (uploaded) {
+				showNotification({
+					title: 'File uploaded successfully!',
+					message: 'Save file to database.',
+					color: 'teal',
+				});
+				onChangeThumbnail(uploaded);
+				setUploading('');
+			}
+		} catch (err: any) {
+			setUploading('');
+			showNotification({
+				title: 'Failed to upload file!',
+				message: err.message,
+				color: 'red',
+			});
+		}
+	};
 
 	const handleUpdateForm = (values: any) => {
 		// if (form.isDirty()) return;
@@ -66,6 +105,8 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 				desc: description,
 				preRequirements,
 				id: serviceId,
+				thumbnail: thumbnail ? thumbnail : service?.thumbnail,
+				banner: banner ? banner : service?.banner,
 			},
 		});
 	};
@@ -243,20 +284,18 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							<div className='absolute bottom-3 right-3 gap-1 flex items-center'>
 								<div>
 									<FileButton
-										onChange={() => console.log('first')}
-										// onChange={(file: File) =>
-										// 	handleUploadPackageThumbnail(
-										// 		file,
-										// 		`PACKAGE_CAROUSEL_THUMBNAILS_${idx}`,
-										// 		setCarouselThumbnails,
-										// 		idx
-										// 	)
-										// }
+										onChange={(file: File) =>
+											handleUploadPackageThumbnail(
+												file,
+												`SERVICE_THUMBNAIL`,
+												setThumbnail
+											)
+										}
 										accept='image/png,image/jpeg'
 									>
 										{(props) => (
 											<Button
-												// loading={uploading === `PACKAGE_CAROUSEL_THUMBNAILS_${idx}`}
+												loading={uploading === `SERVICE_THUMBNAIL`}
 												color='violet'
 												{...props}
 											>
@@ -273,9 +312,9 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							className='relative'
 						>
 							<div className='h-[250px] bg-[#212231] flex items-center justify-center'>
-								{thumbnail ? (
+								{banner ? (
 									<Image
-										src={thumbnail}
+										src={banner}
 										alt='Thumbnail'
 										width={200}
 										className='!w-full'
@@ -288,20 +327,18 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							<div className='absolute bottom-3 right-3 gap-1 flex items-center'>
 								<div>
 									<FileButton
-										onChange={() => console.log('first')}
-										// onChange={(file: File) =>
-										// 	handleUploadPackageThumbnail(
-										// 		file,
-										// 		`PACKAGE_CAROUSEL_THUMBNAILS_${idx}`,
-										// 		setCarouselThumbnails,
-										// 		idx
-										// 	)
-										// }
+										onChange={(file: File) =>
+											handleUploadPackageThumbnail(
+												file,
+												`SERVICE_BANNER`,
+												setBanner
+											)
+										}
 										accept='image/png,image/jpeg'
 									>
 										{(props) => (
 											<Button
-												// loading={uploading === `PACKAGE_CAROUSEL_THUMBNAILS_${idx}`}
+												loading={uploading === `SERVICE_BANNER`}
 												color='violet'
 												{...props}
 											>

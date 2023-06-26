@@ -46,7 +46,7 @@ const ServiceCard: React.FC<IServiceCardProp> = ({
 			</Flex> */}
 			<Flex justify='center'>
 				<img
-					src={service?.thumbnail}
+					src={service?.thumbnail ?? 'assets/images/placeholderImage.jpg'}
 					alt='service img'
 					width={300}
 					height={200}

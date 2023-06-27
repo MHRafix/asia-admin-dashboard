@@ -1,11 +1,8 @@
-import {
-	ActionIcon,
-	Navbar,
-	NavLink,
-	ScrollArea,
-	Space,
-	Text,
-} from '@mantine/core';
+import { IAppSettings } from '@/app/api/models/appSettings.model';
+import { APP_SETTINGS_QUERY } from '@/app/config/queries/appSettings.query';
+import { useQuery } from '@apollo/client';
+import { Navbar, NavLink, ScrollArea, Space, Text } from '@mantine/core';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -22,6 +19,14 @@ interface Props {
 const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 	const { pathname, asPath } = useRouter();
 
+	const {
+		data,
+		loading: fetchingSettings,
+		refetch,
+	} = useQuery<{
+		appSettings: { nodes: IAppSettings[] };
+	}>(APP_SETTINGS_QUERY);
+
 	return (
 		<Navbar
 			hiddenBreakpoint='sm'
@@ -29,23 +34,36 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 			width={{ sm: 200, lg: 250 }}
 			style={{ background: '#212231', zIndex: 100000000 }}
 		>
-			{' '}
 			<Navbar.Section>
-				<div className='flex items-center justify-center'>
-					{/* <Image src='/logo.png' alt='Logo' width={130} height={52} /> */}
-					<Text fz={35} ff={'Nunito sans, sans-serif'} fw={700} color='violet'>
-						Asia tours
-					</Text>
+				<Space h={10} />
+				<div className='flex items-center justify-start pl-3'>
+					{data?.appSettings?.nodes[0]?.logo ? (
+						<Image
+							src={data?.appSettings?.nodes[0]?.logo!}
+							alt='Logo'
+							width={130}
+							height={52}
+						/>
+					) : (
+						<Text
+							fz={35}
+							ff={'Nunito sans, sans-serif'}
+							fw={700}
+							color='violet'
+						>
+							Asia tours
+						</Text>
+					)}
 				</div>
 			</Navbar.Section>
 			<Space h={20} />
-			{opened && (
+			{/* {opened && (
 				<div className='p-3 ml-auto'>
 					<ActionIcon size='lg' color='red' onClick={() => setOpened(false)}>
 						✖
 					</ActionIcon>
 				</div>
-			)}
+			)} */}
 			<Navbar.Section grow component={ScrollArea}>
 				{menus.map((item) => (
 					<NavLink

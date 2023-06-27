@@ -2,11 +2,7 @@ import * as Yup from 'yup';
 
 // departure and destination form configuration
 export const APP_SETTINGS_FORM_DEFAULT_VALUES = {
-	visaCategories: [
-		{
-			visaCategory: '',
-		},
-	],
+	visaCategories: [''],
 
 	countriesVisa: [
 		{
@@ -30,11 +26,7 @@ export const APP_SETTINGS_FORM_DEFAULT_VALUES = {
 };
 
 export const APP_SETTINGS_FORM_SCHEMA = Yup.object().shape({
-	visaCategories: Yup.array().of(
-		Yup.object().shape({
-			visaCategory: Yup.string().required().label('Visa category'),
-		})
-	),
+	visaCategories: Yup.array().of(Yup.string().label('Categories')),
 
 	countriesVisa: Yup.array().of(
 		Yup.object().shape({
@@ -48,11 +40,7 @@ export const APP_SETTINGS_FORM_SCHEMA = Yup.object().shape({
 			branchName: Yup.string().required().label('Branch name'),
 			phone: Yup.string().required().label('Branch phone number'),
 			email: Yup.string().email().required().label('Branch email'),
-			address: Yup.object().shape({
-				name: Yup.string().required().label('Address'),
-				lat: Yup.string().label('Address latitude'),
-				lng: Yup.string().label('Address longitude'),
-			}),
+			address: Yup.string().required().label('Address'),
 		})
 	),
 });

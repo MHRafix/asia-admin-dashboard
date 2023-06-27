@@ -42,7 +42,6 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 	refetchBooking,
 	onStoreId,
 }) => {
-	console.log(booking);
 	const [status, setStatus] = useState<string>(booking?.status!);
 
 	// delete booking

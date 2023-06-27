@@ -1,9 +1,15 @@
+import { IAppSettings } from '@/app/api/models/appSettings.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
 import {
 	APP_SETTINGS_FORM_DEFAULT_VALUES,
 	APP_SETTINGS_FORM_SCHEMA,
 } from '@/app/config/form.validation/appSettingForm/appSetting.form';
 import { fileUploader } from '@/app/config/logic/fileUploader';
+import {
+	APP_SETTINGS_QUERY,
+	UPDATE_APP_SETTINGS,
+} from '@/app/config/queries/appSettings.query';
+import { useMutation, useQuery } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
@@ -19,7 +25,7 @@ import {
 } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { FaPassport, FaPlus } from 'react-icons/fa';
 import { FiUpload } from 'react-icons/fi';
@@ -31,8 +37,16 @@ const AppSettingsForm: React.FC = () => {
 	const [url, setUrl] = useState<string>('');
 	const [uploading, setUploading] = useState<boolean>(false);
 
+	const {
+		data,
+		loading: fetchingSettings,
+		refetch,
+	} = useQuery<{
+		appSettings: { nodes: IAppSettings[] };
+	}>(APP_SETTINGS_QUERY);
+
 	// upload avatar
-	const uploadAvatar = async (file: File) => {
+	const uploadLogo = async (file: File) => {
 		setUploading(true);
 		const { file_upload_cloudinary } = fileUploader(file, 'ASIA_LOGO');
 		const url = await file_upload_cloudinary();
@@ -50,6 +64,7 @@ const AppSettingsForm: React.FC = () => {
 		register,
 		formState: { errors },
 		setValue,
+		getValues,
 		handleSubmit,
 		control,
 		watch,
@@ -67,14 +82,16 @@ const AppSettingsForm: React.FC = () => {
 		control,
 		name: 'branches',
 	});
+
 	const {
 		fields: visaCategories__fields,
 		append: append__visaCategory,
 		remove: remove__visaCategory,
-	} = useFieldArray({
+	} = useFieldArray<any>({
 		control,
 		name: 'visaCategories',
 	});
+
 	const {
 		fields: countriesVisa__fields,
 		append: append__countriesVisa,
@@ -84,9 +101,35 @@ const AppSettingsForm: React.FC = () => {
 		name: 'countriesVisa',
 	});
 
-	const onSubmit = (v: any) => {
-		console.log(v);
+	useEffect(() => {
+		setUrl(data?.appSettings?.nodes[0]?.logo!);
+		setValue('visaCategories', data?.appSettings?.nodes[0]?.visaCategories!);
+		setValue('countriesVisa', data?.appSettings?.nodes[0]?.countriesVisa!);
+		setValue('branches', data?.appSettings?.nodes[0]?.branches!);
+	}, [data?.appSettings?.nodes[0]]);
+
+	const [updateAppSettings, { loading: updating }] = useMutation(
+		UPDATE_APP_SETTINGS,
+		Notify({
+			sucTitle: 'App settings updated successfully!',
+			sucMessage: 'Please refetch app settings.',
+			errMessage: 'Failed to update app settings!',
+			action: refetch,
+		})
+	);
+	const onSubmit = (v: IAppSettings) => {
+		// @ts-ignore
+		delete v.branches[0]?.__typename;
+		// @ts-ignore
+		delete v.countriesVisa[0]?.__typename;
+		// @ts-ignore
+		delete v.visaCategories[0]?.__typename;
+
+		updateAppSettings({
+			variables: { ...v, logo: url, id: data?.appSettings?.nodes[0]?._id },
+		});
 	};
+
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
 			<div className='grid lg:grid-cols-2 gap-8'>
@@ -98,18 +141,14 @@ const AppSettingsForm: React.FC = () => {
 					<Space h={'md'} />
 					<Flex justify={'space-between'} align={'center'}>
 						<div>
-							<Button color='teal' size='md' type='submit'>
+							<Button color='teal' size='md' type='submit' loading={updating}>
 								Save
 							</Button>
 						</div>
 						<ActionIcon
 							size={'lg'}
 							color='violet'
-							onClick={() =>
-								append__visaCategory({
-									visaCategory: '',
-								})
-							}
+							onClick={() => append__visaCategory('')}
 						>
 							<FaPlus />
 						</ActionIcon>
@@ -139,7 +178,7 @@ const AppSettingsForm: React.FC = () => {
 										error={
 											<ErrorMessage
 												errors={errors}
-												name={`visaCategories.${idx}.visaCategory`}
+												name={`visaCategories.${idx}`}
 											/>
 										}
 										size='md'
@@ -149,11 +188,11 @@ const AppSettingsForm: React.FC = () => {
 											variant='unstyled'
 											size={'md'}
 											className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
-											value={watch(`visaCategories.${idx}.visaCategory`)}
+											value={watch(`visaCategories.${idx}`) as any}
 											onChange={(v) =>
 												setValue(
-													`visaCategories.${idx}.visaCategory`,
-													v.target.value!
+													`visaCategories.${idx}`,
+													v.target.value! as any
 												)
 											}
 										/>
@@ -394,7 +433,7 @@ const AppSettingsForm: React.FC = () => {
 										error={
 											<ErrorMessage
 												errors={errors}
-												name={`branches.${idx}.address.name`}
+												name={`branches.${idx}.address`}
 											/>
 										}
 									>
@@ -403,11 +442,11 @@ const AppSettingsForm: React.FC = () => {
 											variant='unstyled'
 											size={'md'}
 											className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
-											value={watch(`branches.${idx}.address.name`)}
+											value={watch(`branches.${idx}.address`) as any}
 											onChange={(v) =>
 												setValue(
-													`branches.${idx}.address.name`,
-													v.target.value!
+													`branches.${idx}.address`,
+													v.target.value! as any
 												)
 											}
 										/>
@@ -444,7 +483,7 @@ const AppSettingsForm: React.FC = () => {
 					<Input.Wrapper label='Upload logo' size='md'>
 						<Space h={8} />
 						<Dropzone
-							onDrop={(files) => uploadAvatar(files[0])}
+							onDrop={(files) => uploadLogo(files[0])}
 							onReject={(files) => {}}
 							loading={uploading}
 							w={350}

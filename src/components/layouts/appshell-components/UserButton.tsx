@@ -110,7 +110,7 @@ export const UserButton: React.FC = () => {
 								},
 								confirmProps: { color: 'red' },
 								onCancel: () => {},
-								onConfirm: () => console.log('deleted'),
+								onConfirm: () => {},
 							})
 						}
 					>

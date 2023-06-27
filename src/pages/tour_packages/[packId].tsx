@@ -9,7 +9,7 @@ import { Divider, Skeleton, Title } from '@mantine/core';
 import { NextPage } from 'next';
 const SingleTourPage: NextPage<{ packId: string }> = ({ packId }) => {
 	const { singlePackage, loading } = useGetSinglePackage(packId);
-	console.log(loading);
+
 	return (
 		<AdminLayout>
 			<>

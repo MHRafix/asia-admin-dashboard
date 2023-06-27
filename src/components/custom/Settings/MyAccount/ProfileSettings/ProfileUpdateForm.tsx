@@ -1,18 +1,11 @@
 import { Notify } from '@/app/config/alertNotification/Notification';
-import fileUploader from '@/app/config/fileUpload/uplaod';
 import {
 	PROFILE_DETAILS_FORM_DEFAULT_VALUE,
 	UPDATE_PROFILE_DETAILS_SCHEMA,
 } from '@/app/config/form.validation/userForm.config';
-// import { mutationQueryVariable } from '@/app/config/forms/auth/auth.config';
-// import {
-// 	PROFILE_DETAILS_FORM_DEFAULT_VALUE,
-// 	UPDATE_PROFILE_DETAILS_SCHEMA,
-// } from '@/app/config/forms/auth/userForm.config';
-
+import { fileUploader } from '@/app/config/logic/fileUploader';
 import { useGetSession } from '@/app/config/logic/getSession';
 import { UPDATE_USER_DETAILS } from '@/app/config/queries/user.query';
-// import { UPDATE_USER_DETAILS } from '@/app/config/query/user.query';
 import { useMutation } from '@apollo/client';
 import {
 	Button,
@@ -55,7 +48,7 @@ const ProfileUpdateForm: React.FC<{}> = () => {
 	// upload avatar
 	const uploadAvatar = async (file: File) => {
 		setUploading(true);
-		const { file_upload_cloudinary } = fileUploader(file);
+		const { file_upload_cloudinary } = fileUploader(file, 'asia_user_profile');
 		const url = await file_upload_cloudinary();
 		if (url) {
 			Notify({

@@ -47,7 +47,7 @@ const SingleTourPage: NextPage<{ packId: string }> = ({ packId }) => {
 											(transport: ITransportation, idx: number) => (
 												<TravelTransportItem
 													key={idx}
-													serialNumber={idx + 1}
+													serialNumber={idx}
 													transportation={transport}
 												/>
 											)

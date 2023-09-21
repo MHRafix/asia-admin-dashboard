@@ -1,12 +1,12 @@
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
-import EmployeesTable from '@/components/custom/Employees/EmployeesTable';
+import EmployeesList from '@/components/custom/Employees/EmployeesList';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { NextPage } from 'next';
 
 const Employees: NextPage = () => {
 	return (
 		<AdminLayout title='Employees'>
-			<EmployeesTable />
+			<EmployeesList />
 		</AdminLayout>
 	);
 };

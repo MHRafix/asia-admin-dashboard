@@ -5,6 +5,7 @@ const nextConfig = {
 		domains: [
 			'encrypted-tbn0.gstatic.com',
 			'www.travelities.com',
+			"www.google.com",
 			'www.deshghuri.com',
 			'images.unsplash.com',
 			'cdn-icons-png.flaticon.com',

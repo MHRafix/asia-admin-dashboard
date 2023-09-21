@@ -7,8 +7,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { menus } from './menus';
-import { NotificationButton } from './NotificationButton';
-import { SettingsMenuButton } from './SettingsMenuButton';
 import { UserButton } from './UserButton';
 
 interface Props {
@@ -70,7 +68,7 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 						style={{
 							fontFamily: 'Nunito sans, sans-serif',
 							borderLeft:
-								asPath.includes(item.href) && asPath === item.href
+								asPath.includes(item.href!) && asPath === item.href
 									? '4px solid #5d34d8'
 									: 0,
 						}}
@@ -83,7 +81,7 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 							</Text>
 						}
 						component={Link}
-						href={item.href}
+						href={item.href!}
 						disabled={
 							item?.href === '/rating_&&_reviews' ||
 							item?.href === '/expenses_calculation'
@@ -92,16 +90,40 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 						styles={(theme) => ({
 							// theme.colors.brand[9]
 							root: {
-								fontWeight: asPath.includes(item.href) ? 600 : 400,
+								fontWeight: asPath.includes(item.href!) ? 600 : 400,
 								fontFamily: 'Nunito sans, sans-serif',
 								fontSize: 20,
 							},
 						})}
-					/>
+					>
+						{item?.children?.map((i, idx) => (
+							<NavLink
+								style={{
+									fontFamily: 'Nunito sans, sans-serif',
+									borderLeft:
+										asPath.includes(i.href!) && asPath === i.href
+											? '4px solid #5d34d8'
+											: 0,
+								}}
+								active={asPath === i.href}
+								styles={(theme) => ({
+									// theme.colors.brand[9]
+									root: {
+										fontWeight: asPath.includes(i.href!) ? 600 : 400,
+										fontFamily: 'Nunito sans, sans-serif',
+										fontSize: 20,
+									},
+								})}
+								fz={20}
+								key={idx}
+								icon={i.icon}
+								component={Link}
+								href={i.href!}
+								label={i.label}
+							/>
+						))}
+					</NavLink>
 				))}
-
-				<NotificationButton />
-				<SettingsMenuButton />
 			</Navbar.Section>
 			<Space h={20} />
 			<Navbar.Section>

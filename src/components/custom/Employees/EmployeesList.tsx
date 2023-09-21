@@ -5,29 +5,22 @@ import {
 	BULK_REMOVE_EMPLOYEE,
 	EMPLOYEES_QUERY,
 } from '@/app/config/queries/employees.query';
-import {
-	TABLE_DATA_LIMITS,
-	TABLE_DEFAULT_LIMIT,
-} from '@/app/config/table_configuration';
+import { BOOKING_TABLE_DEFAULT_SORTBY } from '@/app/config/table_configuration';
 import EmptyPannel from '@/components/common/EmptyPannel';
-import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';
-import Pagination from '@/components/common/Pagination';
-import { EMPLOYEES_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
-import TableHead from '@/components/common/TableHead';
-import { Query_Variable } from '@/logic/queryVariables';
 import { useMutation, useQuery } from '@apollo/client';
-import { Button, Input, Select, Space, Table } from '@mantine/core';
-import Router, { useRouter } from 'next/router';
+import { Button, Input, Space } from '@mantine/core';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { FaSearch } from 'react-icons/fa';
 import { FiTrash } from 'react-icons/fi';
 import { RiTeamLine } from 'react-icons/ri';
-import EmployeesTableBody from './EmployeesTableBody';
-import { FaSearch } from 'react-icons/fa';
+import EmployeeCard from './EmployeeCard';
+import EmployeeCardSkeleton from './EmployeeCardSkeleton';
 
-const EmployeesTable: React.FC<{}> = () => {
+const EmployeesList: React.FC<{}> = () => {
 	const [page, setPage] = useState<number>(1);
-	const [limit, setLimit] = useState<number>(5);
+	const [limit, setLimit] = useState<number>(50);
 	const [employeesIds, setEmployeesIds] = useState<string[]>([]);
 
 	const router = useRouter();
@@ -39,24 +32,13 @@ const EmployeesTable: React.FC<{}> = () => {
 		refetch,
 	} = useQuery<{
 		teams: { nodes: IEmployees[]; meta: IPaginationMeta };
-	}>(
-		EMPLOYEES_QUERY,
-		Query_Variable(
-			router.query.page as string,
-			router.query.limit as string,
-			page,
-			limit,
-			router.query.sort as string
-		)
-	);
-
-	// change booking limits
-	const handleLimitChange = (limit: string) => {
-		Router.replace({
-			query: { ...Router.query, limit, page: 1 },
-		});
-		setLimit(parseInt(limit));
-	};
+	}>(EMPLOYEES_QUERY, {
+		variables: {
+			page: page,
+			limit: limit,
+			sortBy: BOOKING_TABLE_DEFAULT_SORTBY,
+		},
+	});
 
 	const onSuccess = () => {
 		refetch();
@@ -106,56 +88,29 @@ const EmployeesTable: React.FC<{}> = () => {
 						>
 							Bulk Remove
 						</Button>
-						<Select
-							w={120}
-							variant='unstyled'
-							className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
-							placeholder='Pick one'
-							onChange={(value) => handleLimitChange(value!)}
-							data={TABLE_DATA_LIMITS}
-							defaultValue={TABLE_DEFAULT_LIMIT}
-						/>
 					</div>
 				}
 			/>
 
-			<div className='bg-[#212231] shadow-lg rounded-md'>
-				<Table>
-					<thead>
-						<tr>
-							{EMPLOYEES_TABLE_HEAD?.map((head: string, idx: number) => (
-								<TableHead key={idx} headData={head} />
-							))}
-						</tr>
-					</thead>
-					<tbody>
-						{employeesData?.teams?.nodes?.map(
-							(employee: IEmployees, idx: number) => (
-								<EmployeesTableBody
-									key={idx}
-									employee={employee}
-									refetchEmployee={refetch}
-									onStoreId={setEmployeesIds}
-								/>
-							)
-						)}
-					</tbody>
-				</Table>
+			<div className='shadow-lg rounded-md'>
+				<div className='grid grid-cols-3 gap-3'>
+					{employeesData?.teams?.nodes?.map((data: IEmployees, idx: number) => (
+						<EmployeeCard key={idx} data={data} onRefetch={refetch} />
+					))}
+				</div>
+
+				{fetching && (
+					<div className='grid grid-cols-3 gap-3'>
+						{new Array(12).fill(12).map((_, idx) => (
+							<EmployeeCardSkeleton key={idx} />
+						))}
+					</div>
+				)}
+
 				<EmptyPannel
 					isShow={!employeesData?.teams?.nodes?.length && !fetching}
 					title='There is no employees found!'
 					Icon={<RiTeamLine size={40} color='red' />}
-				/>
-				<CircularLoader isShow={fetching} />
-				<Pagination
-					isShow={
-						(employeesData?.teams?.nodes?.length! as number) &&
-						(!fetching as boolean)
-					}
-					limit={limit}
-					onPageChange={setPage}
-					page={page}
-					meta={employeesData?.teams?.meta!}
 				/>
 
 				<Space h={10} />
@@ -164,4 +119,4 @@ const EmployeesTable: React.FC<{}> = () => {
 	);
 };
 
-export default EmployeesTable;
+export default EmployeesList;

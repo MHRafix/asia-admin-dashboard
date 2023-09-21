@@ -1,6 +1,13 @@
 import { useGetSession } from '@/app/config/logic/getSession';
 import { signOut } from '@/app/config/logic/signOut';
-import { Avatar, Group, Menu, Text, UnstyledButton } from '@mantine/core';
+import {
+	Avatar,
+	Button,
+	Group,
+	Menu,
+	Text,
+	UnstyledButton,
+} from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';
 import Link from 'next/link';
 import React, { useRef } from 'react';
@@ -49,10 +56,14 @@ export const UserButton: React.FC = () => {
 						</Group>
 					</UnstyledButton>
 				</Menu.Target>
-				<Menu.Dropdown py={10} bg={'#262736'}>
+				<Menu.Dropdown py={10} bg={'#262736'} className='!text-center'>
 					<Menu.Label fz={19} ff={'Nunito sans, sans-serif'}>
 						{user?.name}
 					</Menu.Label>
+					<Button color='teal' radius={100} my={10}>
+						Attendance Request
+					</Button>
+
 					<Link
 						href={'/settings/my-profile/update-profile'}
 						className='!no-underline'

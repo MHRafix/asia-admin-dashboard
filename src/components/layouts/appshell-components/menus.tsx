@@ -5,16 +5,19 @@ import { HiOutlineViewGrid, HiOutlineViewGridAdd } from 'react-icons/hi';
 import {
 	MdOutlineAnalytics,
 	MdOutlineCalculate,
+	MdOutlineDocumentScanner,
 	MdOutlineLocalOffer,
 	MdOutlineLockClock,
 	MdOutlineNotifications,
 	MdOutlineNotificationsActive,
+	MdOutlinePostAdd,
 	MdOutlineRateReview,
 	MdWorkspacesOutline,
 } from 'react-icons/md';
 import { SiGotomeeting } from 'react-icons/si';
 import {
 	TbActivityHeartbeat,
+	TbDeviceDesktop,
 	TbFileSymlink,
 	TbListCheck,
 	TbListDetails,
@@ -30,70 +33,7 @@ export const menus = [
 		href: '/',
 		// href: 'https://asia-admin.vercel.app',
 	},
-	{
-		label: 'Bookings',
-		icon: <BsBookmarkCheck size={20} />,
-		href: '/bookings',
-	},
-	{
-		label: 'Customers',
-		icon: <TbUsers size={20} />,
-		href: '/customers',
-	},
-	{
-		label: 'Services',
-		icon: <TbListCheck size={20} />,
-		href: '/services',
-	},
-	{
-		label: 'Packages and Plans',
-		icon: <BsUiChecksGrid size={20} />,
-		href: '/tour',
-		children: [
-			{
-				label: 'Tour Packages',
-				icon: <HiOutlineViewGrid size={20} />,
-				href: '/tour_packages',
-			},
-			{
-				label: 'New Package',
-				icon: <HiOutlineViewGridAdd size={20} />,
-				href: '/tour_packages/createPackage',
-			},
-			{
-				label: 'All Offers',
-				icon: <MdOutlineLocalOffer size={20} />,
-				href: '/offers',
-			},
-			{
-				label: 'New Offers',
-				icon: <TbTextPlus size={20} />,
-				href: '/offers/new_offers',
-			},
-		],
-	},
-	{
-		label: 'Appointments',
-		icon: <SiGotomeeting size={20} />,
-		href: '/appointments',
-	},
-	{
-		label: 'Manage Employees',
-		icon: <MdWorkspacesOutline size={20} />,
-		href: '/manage',
-		children: [
-			{
-				label: 'All Employees',
-				icon: <FaNetworkWired size={20} />,
-				href: '/employees',
-			},
-			{
-				label: 'New Employee',
-				icon: <BiUserPlus size={20} />,
-				href: '/new_employee',
-			},
-		],
-	},
+
 	{
 		label: 'Reception Managing',
 		icon: <BsReceipt size={20} />,
@@ -105,6 +45,11 @@ export const menus = [
 				href: '/attendance_activities',
 			},
 			{
+				label: 'Appointments',
+				icon: <SiGotomeeting size={20} />,
+				href: '/appointments',
+			},
+			{
 				label: 'Task Review',
 				icon: <FaTasks size={20} />,
 				href: '/task_review',
@@ -113,6 +58,67 @@ export const menus = [
 				label: 'Business Data',
 				icon: <MdOutlineAnalytics size={20} />,
 				href: '/business_data',
+			},
+		],
+	},
+
+	{
+		label: 'IT Sector',
+		icon: <TbDeviceDesktop size={20} />,
+		href: '/it_sector',
+		children: [
+			{
+				label: 'Package Bookings',
+				icon: <BsBookmarkCheck size={20} />,
+				href: '/bookings',
+			},
+			{
+				label: 'Visa Requirements',
+				icon: <MdOutlineDocumentScanner size={20} />,
+				href: '/visa_requirements',
+			},
+			{
+				label: 'Blogs',
+				icon: <MdOutlinePostAdd size={20} />,
+				href: '/blogs',
+			},
+			{
+				label: 'Packages and Plans',
+				icon: <BsUiChecksGrid size={20} />,
+				href: '/tour',
+				children: [
+					{
+						label: 'Tour Packages',
+						icon: <HiOutlineViewGrid size={20} />,
+						href: '/tour_packages',
+					},
+					{
+						label: 'New Package',
+						icon: <HiOutlineViewGridAdd size={20} />,
+						href: '/tour_packages/createPackage',
+					},
+					{
+						label: 'All Offers',
+						icon: <MdOutlineLocalOffer size={20} />,
+						href: '/offers',
+					},
+					{
+						label: 'New Offers',
+						icon: <TbTextPlus size={20} />,
+						href: '/offers/new_offers',
+					},
+				],
+			},
+			{
+				label: 'Customers',
+				icon: <TbUsers size={20} />,
+				href: '/customers',
+			},
+
+			{
+				label: 'Services',
+				icon: <TbListCheck size={20} />,
+				href: '/services',
 			},
 		],
 	},
@@ -155,6 +161,25 @@ export const menus = [
 			},
 		],
 	},
+
+	{
+		label: 'Manage Employees',
+		icon: <MdWorkspacesOutline size={20} />,
+		href: '/manage',
+		children: [
+			{
+				label: 'All Employees',
+				icon: <FaNetworkWired size={20} />,
+				href: '/employees',
+			},
+			{
+				label: 'New Employee',
+				icon: <BiUserPlus size={20} />,
+				href: '/new_employee',
+			},
+		],
+	},
+
 	{
 		label: 'Rating & Reviews',
 		icon: <MdOutlineRateReview size={20} />,

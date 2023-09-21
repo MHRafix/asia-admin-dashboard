@@ -120,7 +120,34 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 								component={Link}
 								href={i.href!}
 								label={i.label}
-							/>
+							>
+								{i?.children?.map((child, idxI) => (
+									<NavLink
+										style={{
+											fontFamily: 'Nunito sans, sans-serif',
+											borderLeft:
+												asPath.includes(child.href!) && asPath === child.href
+													? '4px solid #5d34d8'
+													: 0,
+										}}
+										active={asPath === child.href}
+										styles={(theme) => ({
+											// theme.colors.brand[9]
+											root: {
+												fontWeight: asPath.includes(child.href!) ? 600 : 400,
+												fontFamily: 'Nunito sans, sans-serif',
+												fontSize: 20,
+											},
+										})}
+										fz={20}
+										key={idxI}
+										icon={child.icon}
+										component={Link}
+										href={child.href!}
+										label={child.label}
+									/>
+								))}
+							</NavLink>
 						))}
 					</NavLink>
 				))}

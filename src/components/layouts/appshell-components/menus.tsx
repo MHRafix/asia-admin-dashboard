@@ -30,7 +30,7 @@ export const menus = [
 	{
 		label: 'Dashboard',
 		icon: <FaRegChartBar size={20} />,
-		href: '/',
+		href: '',
 		// href: 'https://asia-admin.vercel.app',
 	},
 
@@ -42,22 +42,22 @@ export const menus = [
 			{
 				label: 'Attendance Activities',
 				icon: <TbActivityHeartbeat size={20} />,
-				href: '/attendance_activities',
+				href: '/reception_management/attendance_activities',
 			},
 			{
 				label: 'Appointments',
 				icon: <SiGotomeeting size={20} />,
-				href: '/appointments',
+				href: '/reception_management/appointments',
 			},
 			{
 				label: 'Task Review',
 				icon: <FaTasks size={20} />,
-				href: '/task_review',
+				href: '/reception_management/task_review',
 			},
 			{
-				label: 'Business Data',
+				label: 'Customers Data',
 				icon: <MdOutlineAnalytics size={20} />,
-				href: '/business_data',
+				href: '/reception_management/business_data',
 			},
 		],
 	},
@@ -70,55 +70,55 @@ export const menus = [
 			{
 				label: 'Package Bookings',
 				icon: <BsBookmarkCheck size={20} />,
-				href: '/bookings',
+				href: '/it_sector/bookings',
 			},
 			{
 				label: 'Visa Requirements',
 				icon: <MdOutlineDocumentScanner size={20} />,
-				href: '/visa_requirements',
+				href: '/it_sector/visa_requirements',
 			},
 			{
 				label: 'Blogs',
 				icon: <MdOutlinePostAdd size={20} />,
-				href: '/blogs',
+				href: '/it_sector/blogs',
 			},
 			{
 				label: 'Packages and Plans',
 				icon: <BsUiChecksGrid size={20} />,
-				href: '/tour',
+				href: '/it_sector/tour',
 				children: [
 					{
 						label: 'Tour Packages',
 						icon: <HiOutlineViewGrid size={20} />,
-						href: '/tour_packages',
+						href: '/it_sector/tour/tour_packages',
 					},
 					{
 						label: 'New Package',
 						icon: <HiOutlineViewGridAdd size={20} />,
-						href: '/tour_packages/createPackage',
+						href: '/it_sector/tour/tour_packages/createPackage',
 					},
 					{
 						label: 'All Offers',
 						icon: <MdOutlineLocalOffer size={20} />,
-						href: '/offers',
+						href: '/it_sector/tour/offers',
 					},
 					{
 						label: 'New Offers',
 						icon: <TbTextPlus size={20} />,
-						href: '/offers/new_offers',
+						href: '/it_sector/tour/offers/new_offers',
 					},
 				],
 			},
 			{
 				label: 'Customers',
 				icon: <TbUsers size={20} />,
-				href: '/customers',
+				href: '/it_sector/customers',
 			},
 
 			{
 				label: 'Services',
 				icon: <TbListCheck size={20} />,
-				href: '/services',
+				href: '/it_sector/services',
 			},
 		],
 	},
@@ -165,17 +165,17 @@ export const menus = [
 	{
 		label: 'Manage Employees',
 		icon: <MdWorkspacesOutline size={20} />,
-		href: '/manage',
+		href: '/manage_employee',
 		children: [
 			{
 				label: 'All Employees',
 				icon: <FaNetworkWired size={20} />,
-				href: '/employees',
+				href: '/manage_employee/employees',
 			},
 			{
 				label: 'New Employee',
 				icon: <BiUserPlus size={20} />,
-				href: '/new_employee',
+				href: '/manage_employee/new_employee',
 			},
 		],
 	},

@@ -68,7 +68,7 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({ data, onRefetch }) => {
 				<Button
 					fullWidth
 					component={Link}
-					href={`/services/${data?._id}`}
+					href={`/manage_employee/${data?._id}`}
 					variant='filled'
 					color='violet'
 					size='sm'

@@ -22,7 +22,7 @@ const TourPackages: NextPage = () => {
 				]}
 				actionComponent={
 					<div className='flex items-center gap-2 my-5'>
-						<Link href='/tour_packages/createPackage'>
+						<Link href='/it_sector/tour/tour_packages/createPackage'>
 							<Button
 								leftIcon={<AiOutlinePlus size={25} />}
 								variant='light'

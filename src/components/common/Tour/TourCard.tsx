@@ -11,7 +11,7 @@ interface ITourCardProp {
 const TourCard: React.FC<ITourCardProp> = ({ TPackage }) => {
 	return (
 		<Link
-			href={`/tour_packages/${TPackage?._id}`}
+			href={`/it_sector/tour/tour_packages/${TPackage?._id}`}
 			className='no-underline text-white'
 		>
 			<Box className=' bg-[#212231] hover:bg-[#212237] relative rounded-lg grid shadow-xl pb-3'>

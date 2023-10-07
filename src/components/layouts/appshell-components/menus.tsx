@@ -30,7 +30,7 @@ export const menus = [
 	{
 		label: 'Dashboard',
 		icon: <FaRegChartBar size={20} />,
-		href: '',
+		href: '/',
 		// href: 'https://asia-admin.vercel.app',
 	},
 

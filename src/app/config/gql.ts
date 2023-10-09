@@ -73,3 +73,9 @@ export enum SortType {
 	Asc = 'ASC',
 	Desc = 'DESC',
 }
+
+export enum Attendance_Status {
+	VERIFIED = 'VERIFIED',
+	PENDING = 'PENDING',
+	NOT_PRESENT = 'NOT_PRESENT',
+}

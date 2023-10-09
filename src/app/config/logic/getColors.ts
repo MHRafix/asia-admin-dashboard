@@ -1,4 +1,5 @@
 import { PAYMENT_STATUS } from '@/app/api/models/bookings.model';
+import { Attendance_Status } from '../gql';
 
 export const getBadgeColors = (status: string) => {
 	switch (status) {
@@ -11,6 +12,20 @@ export const getBadgeColors = (status: string) => {
 
 		default:
 			return 'red';
+	}
+};
+
+export const getAttendanceStatusColor = (status: Attendance_Status) => {
+	switch (status) {
+		case 'PENDING':
+			return 'orange';
+		case 'VERIFIED':
+			return 'teal';
+		case 'NOT_PRESENT':
+			return 'red';
+
+		default:
+			return 'violet';
 	}
 };
 

@@ -1,17 +1,38 @@
+import { IAttendance } from '@/app/api/models/attendance.model';
+import { IMeta } from '@/app/api/models/common.model';
+import { Notify } from '@/app/config/alertNotification/Notification';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
-import { MatchOperator } from '@/app/config/gql';
+import { Attendance_Status } from '@/app/config/gql';
+import { getAttendanceStatusColor } from '@/app/config/logic/getColors';
+import { useGetSession } from '@/app/config/logic/getSession';
 import { DELETE_APPOINTMENT_MUTATION } from '@/app/config/queries/appointments.query';
+import {
+	CHECK_IS_ELIGIBLE_FOR_ATTENDANCE,
+	GET_ATTENDANCES_QUERY,
+	UPDATE_ATTENDANCE_MUTATION,
+} from '@/app/config/queries/attendance.query';
 import DataTable from '@/components/common/Table/DataTable';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import AdminLayout from '@/components/layouts/AdminLayout';
-import { useMutation } from '@apollo/client';
-import { Badge, Button, Menu } from '@mantine/core';
+import { useMutation, useQuery } from '@apollo/client';
+import {
+	Avatar,
+	Badge,
+	Button,
+	Drawer,
+	Flex,
+	Input,
+	Menu,
+	Space,
+	Text,
+	Textarea,
+} from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { MRT_ColumnDef } from 'mantine-react-table';
 import { NextPage } from 'next';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 interface IState {
 	modalOpened: boolean;
@@ -19,20 +40,41 @@ interface IState {
 	operationId?: string | null;
 	operationPayload?: any;
 	refetching: boolean;
+	status: Attendance_Status;
 }
 
 const AttendanceActivities: NextPage = () => {
+	const { user } = useGetSession();
+	const [reportTxt, setReportTxt] = useState<string>('');
+
 	const [state, setState] = useSetState<IState>({
 		modalOpened: false,
 		operationType: 'create',
 		operationId: null,
 		operationPayload: {},
 		refetching: false,
+		status: Attendance_Status.PENDING,
 	});
 
-	// const { data, loading, refetch } = useQuery<{
-	// 	accounting__transactions: any;
-	// }>(APPOINTMENTS_QUERY);
+	const {
+		data,
+		loading: fetching__attendance,
+		refetch,
+	} = useQuery<{
+		Attendances: {
+			nodes: IAttendance[];
+			meta: IMeta;
+		};
+	}>(GET_ATTENDANCES_QUERY, {
+		variables: {
+			input: {
+				sort: 'DESC',
+				sortBy: '_id',
+			},
+		},
+	});
+
+	// console.log(data?.Attendances?.nodes);
 
 	// const { data: accountData, refetch: refetchAccounts } = useQuery<{
 	// 	accounting__accounts: AccountsWithPagination;
@@ -46,14 +88,38 @@ const AttendanceActivities: NextPage = () => {
 		onCompleted: () => handleRefetch({}),
 	});
 
+	const [updateMutation, { loading: updating }] = useMutation(
+		UPDATE_ATTENDANCE_MUTATION,
+		Notify({
+			sucTitle: 'Updated successfully!',
+			action: () => handleRefetch({}),
+		})
+	);
+
+	const handleUpdateAttendee = (
+		_id: string,
+		status: Attendance_Status,
+		note: string
+	) => {
+		updateMutation({
+			variables: {
+				input: {
+					_id,
+					status,
+					verifyBy: user?._id,
+					note,
+				},
+			},
+		});
+	};
 	const handleRefetch = (variables: any) => {
-		setState({ refetching: true });
-		// refetch(variables).finally(() => {
-		// 	setState({ refetching: false });
-		// });
+		setState({ refetching: true, operationId: '', modalOpened: false });
+		refetch(variables).finally(() => {
+			setState({ refetching: false });
+		});
 	};
 
-	const handleDeleteAccount = (_id: string) => {
+	const handleDeleteAttendance = (_id: string) => {
 		deleteConfirmModal(deleteMutation, _id);
 		//   title: "Sure to delete account?",
 		//   description: "Be careful!! Once you deleted, it can not be undone",
@@ -70,58 +136,173 @@ const AttendanceActivities: NextPage = () => {
 	const columns = useMemo<MRT_ColumnDef<any>[]>(
 		() => [
 			{
-				accessorFn: (row: any) =>
-					`${row?.account?.name} [${row?.account?.referenceNumber}]`,
-				header: 'Account',
+				accessorKey: 'attendee.name',
+				accessorFn: (originalRow: IAttendance) => (
+					<Flex align={'center'} gap={10}>
+						<Avatar
+							src={originalRow?.attendee?.avatar}
+							size={'md'}
+							radius={100}
+						/>
+						<Text fw={500}>{originalRow?.attendee?.name}</Text>
+					</Flex>
+				),
+				header: 'Attendee Name',
 			},
 			{
-				accessorKey: 'account.brunchName',
-				header: 'Brunch Name',
+				accessorKey: 'verifyBy.name',
+				accessorFn: (originalRow: IAttendance) => (
+					<Flex align={'center'} gap={5}>
+						<Avatar
+							size={'md'}
+							radius={100}
+							src={originalRow?.verifyBy?.avatar}
+						/>
+						<Text fw={500}>{originalRow?.verifyBy?.name}</Text>
+					</Flex>
+				),
+				header: 'Verified by',
 			},
 			{
-				accessorKey: 'amount',
-				header: 'Amount',
+				accessorKey: 'status',
+				accessorFn: (row: IAttendance) => (
+					<Menu>
+						<Menu.Target>
+							<Badge
+								color={getAttendanceStatusColor(
+									row?.status as Attendance_Status
+								)}
+								variant='outline'
+							>
+								{row.status}
+							</Badge>
+						</Menu.Target>
+						<Menu.Dropdown>
+							<Menu.Item
+								color='yellow'
+								disabled={row.status === Attendance_Status.PENDING}
+								onClick={() =>
+									handleUpdateAttendee(
+										row?._id,
+										Attendance_Status.PENDING,
+										row?.note
+									)
+								}
+							>
+								{Attendance_Status.PENDING}
+							</Menu.Item>
+							<Menu.Item
+								color='teal'
+								disabled={row.status === Attendance_Status.VERIFIED}
+								onClick={() =>
+									handleUpdateAttendee(
+										row?._id,
+										Attendance_Status.VERIFIED,
+										row?.note
+									)
+								}
+							>
+								{Attendance_Status.VERIFIED}
+							</Menu.Item>
+							<Menu.Item
+								color='red'
+								disabled={row.status === Attendance_Status.NOT_PRESENT}
+								onClick={() =>
+									handleUpdateAttendee(
+										row?._id,
+										Attendance_Status.NOT_PRESENT,
+										row?.note
+									)
+								}
+							>
+								{Attendance_Status.NOT_PRESENT}
+							</Menu.Item>
+						</Menu.Dropdown>
+					</Menu>
+				),
+				header: 'Status',
 			},
 			{
-				accessorFn: (row: any) =>
-					row?.type === 'DEBIT' ? (
-						<Badge color='red'>Reduce Balance</Badge>
-					) : (
-						<Badge color='green'>Add Balance</Badge>
-					),
-				header: 'Type',
-			},
-			{
-				accessorFn: (row: any) =>
+				accessorFn: (row: IAttendance) =>
 					dayjs(row?.createdAt).format('MMMM D, YYYY h:mm A'),
 				// filterVariant: "date-range",
 				accessorKey: 'createdAt',
-				header: 'Date',
+				header: 'Attendance time',
+			},
+			{
+				accessorKey: 'note',
+				accessorFn: (originalRow: IAttendance) => (
+					<Text className='p-2 rounded-sm text-violet-500 capitalize'>
+						{originalRow?.note}
+					</Text>
+				),
+				header: 'Report note',
 			},
 		],
 		[]
 	);
 	return (
 		<AdminLayout title='Attendance'>
+			<Drawer
+				opened={state.modalOpened}
+				onClose={() => setState({ modalOpened: false })}
+				position='right'
+			>
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						handleUpdateAttendee(state?.operationId!, state.status, reportTxt);
+					}}
+				>
+					<Input.Wrapper label='Describe report'>
+						<Textarea
+							onChange={(txt) => setReportTxt(txt.target.value)}
+							defaultValue={reportTxt}
+							placeholder='Describe your report...'
+						/>
+					</Input.Wrapper>
+					<Space h='md' />
+
+					<Button type='submit' loading={updating} fullWidth color='teal'>
+						Save Report
+					</Button>
+				</form>
+			</Drawer>
+			{/* <FunctionalComponentWithFunctionalComponentToPrint> */}
 			<DataTable
 				columns={columns}
-				data={[]}
-				filters={[
-					{
-						key: 'source',
-						operator: MatchOperator.Eq,
-						value: 'Accounting_Transaction_Source.BalanceAdjustment',
-					},
-				]}
+				data={data?.Attendances?.nodes ?? []}
+				// filters={[
+				// 	{
+				// 		key: 'source',
+				// 		operator: MatchOperator.Eq,
+				// 		value: 'Accounting_Transaction_Source.BalanceAdjustment',
+				// 	},
+				// ]}
 				refetch={handleRefetch}
-				totalCount={100}
-				RowActionMenu={(row: any) => (
+				totalCount={data?.Attendances?.meta?.totalCount ?? 100}
+				RowActionMenu={(row: IAttendance) => (
 					<>
-						<Menu.Item
-							onClick={() => handleDeleteAccount(row._id)}
+						{/* <Menu.Item
+							onClick={() => handleDeleteAttendance(row._id)}
 							icon={<IconTrash size={18} />}
+							color='red'
 						>
 							Delete
+						</Menu.Item> */}
+						<Menu.Item
+							onClick={() => {
+								setReportTxt(row?.note);
+								setState({
+									modalOpened: true,
+									operationId: row?._id,
+									status: row?.status as Attendance_Status,
+								});
+							}}
+							icon={<IconTrash size={18} />}
+							color='yellow'
+						>
+							Report on Attendee
 						</Menu.Item>
 					</>
 				)}
@@ -142,6 +323,7 @@ const AttendanceActivities: NextPage = () => {
 				}
 				loading={state.refetching}
 			/>
+			{/* </FunctionalComponentWithFunctionalComponentToPrint> */}
 		</AdminLayout>
 	);
 };

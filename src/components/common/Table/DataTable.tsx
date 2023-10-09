@@ -3,34 +3,25 @@ import {
 	MatchOperator,
 	SortType,
 } from '@/app/config/gql';
-import { ActionIcon, Flex, Menu, UnstyledButton, rem } from '@mantine/core';
-import {
-	IconCsv,
-	IconDownload,
-	IconPdf,
-	IconRefresh,
-} from '@tabler/icons-react';
+import { ActionIcon, Button, Flex } from '@mantine/core';
+import { IconDownload, IconRefresh } from '@tabler/icons-react';
 import cls from 'classnames';
-import {
-	download as downloadCsvFile,
-	generateCsv,
-	mkConfig,
-} from 'export-to-csv';
+import { mkConfig } from 'export-to-csv';
 import {
 	MRT_ColumnDef,
 	MRT_GlobalFilterTextInput,
 	MRT_ShowHideColumnsButton,
-	MRT_ToggleFiltersButton,
-	MRT_ToggleFullScreenButton,
 	MantineReactTable,
 	useMantineReactTable,
 } from 'mantine-react-table';
-import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import React, { useEffect, useRef, useState } from 'react';
+import ReactToPrint from 'react-to-print';
 
 interface Prop {
 	columns: MRT_ColumnDef<any>[];
 	data: any[];
-	filters?: CommonFindDocumentDto[];
+	where?: CommonFindDocumentDto[];
 	refetch: (v: any) => void;
 	totalCount: number;
 	loading: boolean;
@@ -48,25 +39,26 @@ const DataTable: React.FC<Prop> = ({
 	columns,
 	loading,
 	data,
-	filters = [],
+	where = [],
 	refetch,
 	ActionArea,
 	RowActionMenu,
 	totalCount,
 }) => {
+	const { pathname } = useRouter();
 	const [pagination, setPagination] = useState({
 		pageIndex: 0,
 		pageSize: 100,
 	});
 	const [sorting, setSorting] = useState<any[]>([]);
 	const [columnFilters, setColumnFilters] = useState<any[]>([]);
-	const where = {
+	const input = {
 		page: pagination.pageIndex + 1,
 		limit: pagination.pageSize,
-		sortBy: sorting[0]?.id,
-		sort: sorting[0]?.desc ? SortType.Desc : SortType.Asc,
-		filters: [
-			...filters,
+		sortBy: sorting[0]?.id ? 'id' : '_id',
+		sort: sorting[0]?.desc ? SortType.Asc : SortType.Desc,
+		where: [
+			...where,
 			...columnFilters.map((f: any) => ({
 				key: f.id,
 				operator: MatchOperator.Contains,
@@ -76,17 +68,31 @@ const DataTable: React.FC<Prop> = ({
 	};
 
 	useEffect(() => {
-		refetch({ where });
+		refetch({ input });
 	}, [pagination.pageIndex, pagination.pageSize, sorting, columnFilters]);
 
-	const exportCSV = () => {
-		const csv = generateCsv(csvConfig)(data);
-		downloadCsvFile(csvConfig)(csv);
-	};
+	// const exportCSV = () => {
+	// 	const csv = generateCsv(csvConfig)(data);
+	// 	downloadCsvFile(csvConfig)(csv);
+	// };
+
+	// const handleExportRows = (rows: MRT_Row<IAttendance>[]) => {
+	// 	const doc = new jsPDF();
+	// 	const tableData = rows.map((row) => Object.values(row.original));
+	// 	const tableHeaders = columns.map((c) => c.header);
+
+	// 	autoTable(doc, {
+	// 		head: [tableHeaders],
+	// 		body: tableData,
+	// 	});
+
+	// 	doc.save('mrt-pdf-example.pdf');
+	// };
 
 	const table = useMantineReactTable({
 		columns,
 		data,
+		columnFilterDisplayMode: 'popover',
 
 		state: {
 			showProgressBars: loading,
@@ -111,6 +117,7 @@ const DataTable: React.FC<Prop> = ({
 		paginationDisplayMode: 'pages',
 		initialState: {
 			showGlobalFilter: true,
+			showColumnFilters: true,
 			density: 'xs',
 		},
 		enableRowActions: RowActionMenu ? true : false,
@@ -121,29 +128,8 @@ const DataTable: React.FC<Prop> = ({
 				<div className='flex justify-between p-2'>
 					<div className='flex items-center gap-1'>
 						<MRT_GlobalFilterTextInput table={table} />
-						<MRT_ToggleFiltersButton table={table} />
-						<MRT_ToggleFullScreenButton table={table} />
+
 						<MRT_ShowHideColumnsButton table={table} />
-						<Menu shadow='md' width={200}>
-							<Menu.Target>
-								<UnstyledButton>
-									<IconDownload color='gray' size={20} />
-								</UnstyledButton>
-							</Menu.Target>
-							<Menu.Dropdown>
-								<Menu.Item
-									icon={<IconPdf style={{ width: rem(18), height: rem(18) }} />}
-								>
-									Download Pdf
-								</Menu.Item>
-								<Menu.Item
-									onClick={exportCSV}
-									icon={<IconCsv style={{ width: rem(18), height: rem(18) }} />}
-								>
-									Download Excel
-								</Menu.Item>
-							</Menu.Dropdown>
-						</Menu>
 					</div>
 					<Flex gap={'md'}>
 						<ActionIcon
@@ -156,15 +142,38 @@ const DataTable: React.FC<Prop> = ({
 								className={cls({ 'animate-reverse-spin': loading })}
 							/>
 						</ActionIcon>
+						<ReactToPrint
+							content={reactToPrintContent}
+							documentTitle={pathname}
+							// onAfterPrint={handleAfterPrint}
+							removeAfterPrint
+							trigger={reactToPrintTrigger}
+						/>
 						{ActionArea}
 					</Flex>
 				</div>
 			);
 		},
 	});
+	const componentRef = useRef(null);
+
+	const reactToPrintContent = React.useCallback(() => {
+		return componentRef.current;
+	}, [componentRef.current]);
+
+	const reactToPrintTrigger = React.useCallback(() => {
+		return (
+			<Button color='teal' leftIcon={<IconDownload />}>
+				Print or Save PDF
+			</Button>
+		);
+	}, []);
+
 	return (
 		<>
-			<MantineReactTable table={table} />
+			<div ref={componentRef}>
+				<MantineReactTable table={table} />
+			</div>
 		</>
 	);
 };

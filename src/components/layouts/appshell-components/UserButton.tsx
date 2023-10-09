@@ -1,14 +1,24 @@
+import { IAttendance } from '@/app/api/models/attendance.model';
+import { IMeta } from '@/app/api/models/common.model';
+import { Notify } from '@/app/config/alertNotification/Notification';
 import { useGetSession } from '@/app/config/logic/getSession';
 import { signOut } from '@/app/config/logic/signOut';
+import {
+	CHECK_IS_ELIGIBLE_FOR_ATTENDANCE,
+	CREATE_ATTENDANCE_MUTATION,
+} from '@/app/config/queries/attendance.query';
+import { useMutation, useQuery } from '@apollo/client';
 import {
 	Avatar,
 	Button,
 	Group,
 	Menu,
 	Text,
+	Tooltip,
 	UnstyledButton,
 } from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';
+import dayjs from 'dayjs';
 import Link from 'next/link';
 import React, { useRef } from 'react';
 import { BsGear } from 'react-icons/bs';
@@ -17,6 +27,38 @@ import { MdChevronRight } from 'react-icons/md';
 export const UserButton: React.FC = () => {
 	const { loading, user } = useGetSession();
 	const ref = useRef();
+
+	const { data, refetch } = useQuery<{
+		Attendances: {
+			nodes: IAttendance[];
+			meta: IMeta;
+		};
+	}>(CHECK_IS_ELIGIBLE_FOR_ATTENDANCE, {
+		variables: {
+			input: {
+				limit: 1,
+				sort: 'DESC',
+				sortBy: 'createdAt',
+				where: [
+					{
+						key: 'attendee',
+						operator: 'eq',
+						value: user?._id,
+					},
+				],
+			},
+		},
+	});
+
+	const [createAttendance, { loading: creating }] = useMutation(
+		CREATE_ATTENDANCE_MUTATION,
+		Notify({
+			sucTitle: 'Attendance request sent successfully!',
+			sucMessage: "You'll notified after approved.",
+			action: () => refetch(),
+		})
+	);
+
 	return (
 		<Group position='center' bg={'#262736'}>
 			<Menu withArrow>
@@ -60,9 +102,31 @@ export const UserButton: React.FC = () => {
 					<Menu.Label fz={19} ff={'Nunito sans, sans-serif'}>
 						{user?.name}
 					</Menu.Label>
-					<Button color='teal' radius={100} my={10}>
-						Attendance Request
-					</Button>
+
+					<Tooltip label={'Attendance can only be eligible once a day.'}>
+						<Button
+							color='teal'
+							radius={100}
+							my={10}
+							disabled={
+								dayjs(data?.Attendances?.nodes?.[0]?.createdAt!).format(
+									'MMMM D, YYYY'
+								) === dayjs(new Date()).format('MMMM D, YYYY')
+							}
+							loading={creating}
+							onClick={() =>
+								createAttendance({
+									variables: {
+										input: {
+											attendee: user?._id,
+										},
+									},
+								})
+							}
+						>
+							Attendance Request
+						</Button>
+					</Tooltip>
 
 					<Link
 						href={'/settings/my-profile/update-profile'}

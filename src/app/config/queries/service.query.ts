@@ -1,20 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_SERVICE = gql`
-	mutation CREATE_SERVICE(
-		$title: String!
-		$shortDesc: String!
-		$desc: String!
-		$price: Float!
-	) {
-		createService(
-			input: {
-				title: $title
-				shortDesc: $shortDesc
-				desc: $desc
-				price: $price
-			}
-		) {
+	mutation CREATE_SERVICE($input: CreateServiceInput!) {
+		createService(input: $input) {
 			_id
 		}
 	}

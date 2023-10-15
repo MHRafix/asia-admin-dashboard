@@ -2,6 +2,7 @@ import { useGetServices } from '@/app/api/gql-api-hooks/service.api';
 import { IService } from '@/app/api/models/service.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
+import { useGetSession } from '@/app/config/logic/getSession';
 import { CREATE_SERVICE } from '@/app/config/queries/service.query';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import ServiceCard from '@/components/custom/Services/ServiceCard';
@@ -15,11 +16,13 @@ import { AiOutlinePlus } from 'react-icons/ai';
 
 const Services: NextPage = () => {
 	const { getingServices, services, refetchServices } = useGetServices();
+	const { user } = useGetSession();
 
 	const onSuccess = (res: { createService: IService }) => {
 		refetchServices();
-		Router?.push(`/services/${res?.createService?._id}`);
+		Router?.push(`/it_sector/services/${res?.createService?._id}`);
 	};
+
 	const [createService, { loading: creatingService }] = useMutation(
 		CREATE_SERVICE,
 		Notify({
@@ -52,10 +55,13 @@ const Services: NextPage = () => {
 							onClick={() =>
 								createService({
 									variables: {
-										title: `New service ${services?.length! + 1}`,
-										shortDesc: 'This short description ... ... ...',
-										desc: 'This is description ... ... ...',
-										price: 100,
+										input: {
+											title: `New service ${services?.length! + 1}`,
+											shortDesc: 'This short description ... ... ...',
+											desc: 'This is description ... ... ...',
+											price: 100,
+											author: user?._id,
+										},
 									},
 								})
 							}

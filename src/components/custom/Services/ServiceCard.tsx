@@ -46,9 +46,9 @@ const ServiceCard: React.FC<IServiceCardProp> = ({
 			</Flex> */}
 			<Flex justify='center'>
 				<img
-					src={service?.thumbnail ?? 'assets/images/placeholderImage.jpg'}
+					src={service?.thumbnail ?? '/placeholderImage.jpg'}
 					alt='service img'
-					width={300}
+					width={310}
 					height={200}
 				/>
 			</Flex>
@@ -67,7 +67,7 @@ const ServiceCard: React.FC<IServiceCardProp> = ({
 					<Button
 						fullWidth
 						component={Link}
-						href={`/services/${service?._id}`}
+						href={`/it_sector/services/${service?._id}`}
 						variant='filled'
 						color='violet'
 						size='sm'

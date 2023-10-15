@@ -4,3 +4,10 @@ export interface IMeta {
 	hasNextPage: boolean;
 	totalPages: number;
 }
+
+export enum Visa_Types {
+	TOURIST = 'TOURIST',
+	WORK_PERMIT = 'WORK_PERMIT',
+	MEDICAL = 'MEDICAL',
+	BUSINESS = 'BUSINESS',
+}

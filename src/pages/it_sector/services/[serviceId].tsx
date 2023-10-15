@@ -6,6 +6,7 @@ import {
 	useGetService,
 	useUpdateService,
 } from '@/app/api/gql-api-hooks/service.api';
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import {
 	UPDATE_SERVICE_DEFAULT_VALUES,
 	updateServiceSchema,
@@ -131,7 +132,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							},
 							{
 								pathName: 'Services',
-								href: '/services',
+								href: '/it_sector/services',
 							},
 						]}
 						actionComponent={
@@ -356,7 +357,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 	);
 };
 
-export default SingleService;
+export default protectWithSession(SingleService);
 
 export async function getServerSideProps({
 	params,

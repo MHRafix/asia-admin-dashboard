@@ -6,6 +6,11 @@ export const UPDATE_SERVICE_DEFAULT_VALUES = {
 	visaCategory: 'Tourist',
 };
 
+export const UPDATE_BLOG_DEFAULT_VALUES = {
+	title: '',
+	description: '',
+};
+
 import * as Yup from 'yup';
 
 export const loginSchema = Yup.object().shape({
@@ -19,4 +24,9 @@ export const updateServiceSchema = Yup.object().shape({
 	price: Yup.string().required().nullable().label('Service price'),
 	visaCategory: Yup.string().required().nullable().label('Visa category'),
 	country: Yup.string().required().nullable().label('Country'),
+});
+
+export const updateBlogSchema = Yup.object().shape({
+	title: Yup.string().required().label('Title'),
+	description: Yup.string().required().label('Description'),
 });

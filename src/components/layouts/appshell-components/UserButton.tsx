@@ -103,30 +103,59 @@ export const UserButton: React.FC = () => {
 						{user?.name}
 					</Menu.Label>
 
-					<Tooltip label={'Attendance can only be eligible once a day.'}>
-						<Button
-							color='teal'
-							radius={100}
-							my={10}
-							disabled={
-								dayjs(data?.Attendances?.nodes?.[0]?.createdAt!).format(
-									'MMMM D, YYYY'
-								) === dayjs(new Date()).format('MMMM D, YYYY')
-							}
-							loading={creating}
-							onClick={() =>
-								createAttendance({
-									variables: {
-										input: {
-											attendee: user?._id,
+					{dayjs(data?.Attendances?.nodes?.[0]?.createdAt!).format(
+						'MMMM D, YYYY'
+					) === dayjs(new Date()).format('MMMM D, YYYY') ? (
+						<Tooltip label={'Leaving from office ? Please press me!'}>
+							<Button
+								color='red'
+								radius={100}
+								my={10}
+								disabled={
+									dayjs(data?.Attendances?.nodes?.[0]?.createdAt!).format(
+										'MMMM D, YYYY'
+									) !== dayjs(new Date()).format('MMMM D, YYYY')
+								}
+								loading={creating}
+								onClick={() =>
+									createAttendance({
+										variables: {
+											input: {
+												attendee: user?._id,
+											},
 										},
-									},
-								})
-							}
-						>
-							Attendance Request
-						</Button>
-					</Tooltip>
+									})
+								}
+							>
+								Leave Now
+							</Button>
+						</Tooltip>
+					) : (
+						<Tooltip label={'Attendance can only be eligible once a day.'}>
+							<Button
+								color='teal'
+								radius={100}
+								my={10}
+								disabled={
+									dayjs(data?.Attendances?.nodes?.[0]?.createdAt!).format(
+										'MMMM D, YYYY'
+									) === dayjs(new Date()).format('MMMM D, YYYY')
+								}
+								loading={creating}
+								onClick={() =>
+									createAttendance({
+										variables: {
+											input: {
+												attendee: user?._id,
+											},
+										},
+									})
+								}
+							>
+								Attendance Request
+							</Button>
+						</Tooltip>
+					)}
 
 					<Link
 						href={'/settings/my-profile/update-profile'}

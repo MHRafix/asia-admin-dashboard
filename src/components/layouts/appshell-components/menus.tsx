@@ -27,12 +27,12 @@ import {
 import { VscSettings } from 'react-icons/vsc';
 
 export const menus = [
-	{
-		label: 'Dashboard',
-		icon: <FaRegChartBar size={20} />,
-		href: '/',
-		// href: 'https://asia-admin.vercel.app',
-	},
+	// {
+	// 	label: 'Dashboard',
+	// 	icon: <FaRegChartBar size={20} />,
+	// 	href: '/',
+	// 	// href: 'https://asia-admin.vercel.app',
+	// },
 
 	{
 		label: 'Reception Managing',

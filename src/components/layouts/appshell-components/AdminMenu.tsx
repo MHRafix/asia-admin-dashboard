@@ -17,6 +17,7 @@ interface Props {
 const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 	const { pathname, asPath } = useRouter();
 
+	console.log(asPath);
 	const {
 		data,
 		loading: fetchingSettings,
@@ -86,7 +87,8 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 							item?.href === '/rating_&&_reviews' ||
 							item?.href === '/expenses_calculation'
 						}
-						active={asPath === item.href}
+						active={asPath.includes(item.href)}
+						defaultOpened={asPath.includes(item.href)}
 						styles={(theme) => ({
 							// theme.colors.brand[9]
 							root: {
@@ -105,7 +107,8 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 											? '4px solid #5d34d8'
 											: 0,
 								}}
-								active={asPath === i.href}
+								active={asPath.includes(i.href)}
+								defaultOpened={asPath.includes(i.href)}
 								styles={(theme) => ({
 									// theme.colors.brand[9]
 									root: {

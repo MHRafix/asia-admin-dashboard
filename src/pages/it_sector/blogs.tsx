@@ -37,7 +37,7 @@ const Blogs: React.FC = () => {
 		<AdminLayout title='Blog posts'>
 			<PageTitleArea
 				title='Blog posts'
-				tagline='Reach out more customers'
+				tagline='Reach out more clients'
 				actionComponent={
 					<div className='flex items-center gap-2 mb-5'>
 						<Button

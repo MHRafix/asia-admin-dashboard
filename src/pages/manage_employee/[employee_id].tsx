@@ -1,5 +1,8 @@
+import protectWithSession from "@/app/config/authProtection/protectWithSession";
+import AdminLayout from "@/components/layouts/AdminLayout";
+
 const EmployeeId = () => {
-	return <div>EmployeeId</div>;
+	return <AdminLayout>EmployeeId</AdminLayout>;
 };
 
-export default EmployeeId;
+export default protectWithSession(EmployeeId);

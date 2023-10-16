@@ -1,4 +1,5 @@
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import { DELETE_APPOINTMENT_MUTATION } from '@/app/config/queries/appointments.query';
 import { GET_TRAVEL_PACKAGES } from '@/app/config/queries/travelPackage.query';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
@@ -18,7 +19,7 @@ interface IState {
 	refetching: boolean;
 }
 
-const AttendanceActivities: React.FC = () => {
+const TaskReview: React.FC = () => {
 	const [state, setState] = useSetState<IState>({
 		modalOpened: false,
 		operationType: 'create',
@@ -147,4 +148,4 @@ const AttendanceActivities: React.FC = () => {
 	);
 };
 
-export default AttendanceActivities;
+export default protectWithSession(TaskReview);

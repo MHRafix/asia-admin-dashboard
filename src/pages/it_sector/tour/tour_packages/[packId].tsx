@@ -1,4 +1,5 @@
 import { useGetSinglePackage } from '@/app/api/gql-api-hooks/travelPackage.api';
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import PackageDetails from '@/components/custom/SinglePackages/PackageDetails';
 import ReviewAndRatingForm from '@/components/custom/SinglePackages/ReviewAndRatingForm';
 import TravelOutline from '@/components/custom/SinglePackages/TravelOutline';
@@ -83,7 +84,7 @@ const SingleTourPage: NextPage<{ packId: string }> = ({ packId }) => {
 	);
 };
 
-export default SingleTourPage;
+export default protectWithSession(SingleTourPage);
 
 export async function getServerSideProps({
 	params,

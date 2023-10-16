@@ -38,20 +38,12 @@ const ServiceCard: React.FC<IServiceCardProp> = ({
 			}}
 			className='relative rounded-lg grid bg-[#212131]'
 		>
-			{/* <Flex justify='space-between' align='center'>
-				<ThemeIcon fw={500} variant='light' radius='xl' size={50} color='pink'>
-					${service?.price}
-				</ThemeIcon>
-				
-			</Flex> */}
-			<Flex justify='center'>
-				<img
-					src={service?.thumbnail ?? '/placeholderImage.jpg'}
-					alt='service img'
-					width={310}
-					height={200}
-				/>
-			</Flex>
+			<img
+				src={service?.thumbnail ?? '/placeholderImage.jpg'}
+				alt='service img'
+				height={200}
+				className='w-full'
+			/>
 			<Group position='apart' mb='xs' px={10} mt={10}>
 				<Text weight={500} fz={18} ff={'Nunito sans, sans-serif'}>
 					{service?.title}

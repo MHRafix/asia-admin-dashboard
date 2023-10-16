@@ -9,7 +9,7 @@ import {
 
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IBooking } from '@/app/api/models/bookings.model';
-import EmptyPannel from '@/components/common/EmptyPannel';
+import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import Pagination from '@/components/common/Pagination';
@@ -21,10 +21,9 @@ import { Button, Input, Select, Space, Table } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { BsBookmarkCheck } from 'react-icons/bs';
+import { FaSearch } from 'react-icons/fa';
 import { FiTrash } from 'react-icons/fi';
 import BookingTableBody from './BookingTableBody';
-import { FaSearch } from 'react-icons/fa';
 
 const BookingTable: React.FC<{}> = () => {
 	const router = useRouter();
@@ -135,10 +134,10 @@ const BookingTable: React.FC<{}> = () => {
 						)}
 					</tbody>
 				</Table>
-				<EmptyPannel
+				<EmptyPanel
 					isShow={!bookings?.bookings?.nodes?.length && !fetching}
-					title='There is no bookings found!'
-					Icon={<BsBookmarkCheck size={40} color='red' />}
+					title='Oops sorry, No bookings found!'
+					imgPath='/emptyPanel.png'
 				/>
 				<CircularLoader isShow={fetching} />
 				<Pagination

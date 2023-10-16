@@ -1,3 +1,4 @@
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import AdminLayout from '@/components/layouts/AdminLayout';
 
 const BusinessData = () => {
@@ -14,4 +15,4 @@ const BusinessData = () => {
 	);
 };
 
-export default BusinessData;
+export default protectWithSession(BusinessData);

@@ -1,32 +1,34 @@
-import { IBlog } from '@/app/api/models/blog.model';
+import { IVisaReq } from '@/app/api/models/visaRequirements.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
 import { MatchOperator } from '@/app/config/gql';
 import { getTimeDistance } from '@/app/config/logic/getTimeDistance';
-import { REMOVE_BLOG } from '@/app/config/queries/blogs.query';
+import { REMOVE_REQUIREMENT } from '@/app/config/queries/requirements.query';
 import { useMutation } from '@apollo/client';
 import { Avatar, Box, Button, Flex, Space, Text } from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';
-import { IconThumbUp } from '@tabler/icons-react';
 import Link from 'next/link';
 import React from 'react';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 
-interface IBlogProps {
-	blog: IBlog;
-	refetchBlog?: () => void;
+interface IVisaReqProps {
+	visaReq: IVisaReq;
+	refetchVisaReq?: () => void;
 }
 
-const BlogCard: React.FC<IBlogProps> = ({ blog, refetchBlog }) => {
+const RequirementCard: React.FC<IVisaReqProps> = ({
+	visaReq,
+	refetchVisaReq,
+}) => {
 	const onSuccess = () => {
-		refetchBlog?.();
+		refetchVisaReq?.();
 	};
 
-	const [deleteBlog, { loading: deletingBlog }] = useMutation(
-		REMOVE_BLOG,
+	const [deleteReq, { loading: deletingReq }] = useMutation(
+		REMOVE_REQUIREMENT,
 		Notify({
-			sucTitle: 'Blog deleted successfully!',
-			sucMessage: 'Refetch blogs again.',
-			errMessage: 'Try again to delete blog.',
+			sucTitle: 'Visa requirements deleted successfully!',
+			sucMessage: 'Refetch visa requirements again.',
+			errMessage: 'Try again to delete visa requirements.',
 			action: onSuccess,
 		})
 	);
@@ -35,11 +37,11 @@ const BlogCard: React.FC<IBlogProps> = ({ blog, refetchBlog }) => {
 			style={{
 				boxShadow: boxShadow,
 			}}
-			className='relative rounded-lg grid bg-[#212131]'
+			className='relative grid rounded-lg bg-[#212131]'
 		>
 			<img
-				src={blog?.image ?? '/placeholderImage.jpg'}
-				alt='blog img'
+				src={visaReq?.image ?? '/placeholderImage.jpg'}
+				alt='visa req img'
 				height={200}
 				className='w-full'
 			/>
@@ -48,11 +50,11 @@ const BlogCard: React.FC<IBlogProps> = ({ blog, refetchBlog }) => {
 
 			<Box px={10}>
 				<Text weight={500} fz={18} ff={'Nunito sans, sans-serif'}>
-					{blog?.title}
+					{visaReq?.title}
 				</Text>
 				<Space h={5} />
 				<Text size='md' color='dimmed' ff={'Nunito sans, sans-serif'}>
-					{blog?.description.slice(0, 120)}
+					{visaReq?.description.slice(0, 120)}
 				</Text>
 			</Box>
 
@@ -60,36 +62,27 @@ const BlogCard: React.FC<IBlogProps> = ({ blog, refetchBlog }) => {
 
 			<Flex px={10} justify={'space-between'} align={'center'}>
 				<Flex align={'center'} gap={10}>
-					<Avatar src={blog?.author?.avatar} radius={100} />
+					<Avatar src={visaReq?.author?.avatar} radius={100} />
 
 					<div>
 						<Text size={'sm'} fw={700} ff={'Nunito sans, sans-serif'}>
-							{blog?.author?.name}{' '}
+							{visaReq?.author?.name}{' '}
 						</Text>
 						<Text size={'xs'} fw={500} ff={'Nunito sans, sans-serif'} my={-2}>
-							{getTimeDistance(blog?.createdAt)}
+							{getTimeDistance(visaReq?.createdAt)}
 						</Text>
 					</div>
 				</Flex>
-
-				<Button
-					size='sm'
-					leftIcon={<IconThumbUp />}
-					color='red'
-					variant='subtle'
-				>
-					<Text ff={'Nunito sans, sans-serif'}>{blog?.like ?? 0}</Text>
-				</Button>
 			</Flex>
 
 			<Space h={'md'} />
 
-			{refetchBlog && (
+			{refetchVisaReq && (
 				<Flex color='teal' gap={10} px={10}>
 					<Button
 						fullWidth
 						component={Link}
-						href={`/it_sector/blogs/${blog?._id}`}
+						href={`/it_sector/visa_requirements/${visaReq?._id}`}
 						variant='filled'
 						color='violet'
 						size='sm'
@@ -101,7 +94,7 @@ const BlogCard: React.FC<IBlogProps> = ({ blog, refetchBlog }) => {
 					<Button
 						fullWidth
 						className='rounded-sm'
-						loading={deletingBlog}
+						loading={deletingReq}
 						variant='filled'
 						color='red'
 						size='sm'
@@ -118,12 +111,12 @@ const BlogCard: React.FC<IBlogProps> = ({ blog, refetchBlog }) => {
 								confirmProps: { color: 'red' },
 								onCancel: () => {},
 								onConfirm: () =>
-									deleteBlog({
+									deleteReq({
 										variables: {
 											input: {
 												key: '_id',
 												operator: MatchOperator.Eq,
-												value: blog?._id,
+												value: visaReq?._id,
 											},
 										},
 									}),
@@ -140,7 +133,7 @@ const BlogCard: React.FC<IBlogProps> = ({ blog, refetchBlog }) => {
 	);
 };
 
-export default BlogCard;
+export default RequirementCard;
 
 export const boxShadow =
 	'0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)';

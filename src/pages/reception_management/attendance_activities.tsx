@@ -7,10 +7,11 @@ import { getAttendanceStatusColor } from '@/app/config/logic/getColors';
 import { useGetSession } from '@/app/config/logic/getSession';
 import { DELETE_APPOINTMENT_MUTATION } from '@/app/config/queries/appointments.query';
 import {
-	CHECK_IS_ELIGIBLE_FOR_ATTENDANCE,
 	GET_ATTENDANCES_QUERY,
 	UPDATE_ATTENDANCE_MUTATION,
 } from '@/app/config/queries/attendance.query';
+import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
+import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import AdminLayout from '@/components/layouts/AdminLayout';
@@ -242,7 +243,79 @@ const AttendanceActivities: NextPage = () => {
 		[]
 	);
 	return (
-		<AdminLayout title='Attendance'>
+		<AdminLayout title='Employees Attendance'>
+			<PageTitleArea
+				title='Attendances'
+				tagline='Track attendances of employees'
+				currentPathName='Attendances'
+				othersPath={[
+					{
+						pathName: 'Home',
+						href: '/',
+					},
+				]}
+			/>
+
+			<Space h={30} />
+
+			{/* <FunctionalComponentWithFunctionalComponentToPrint> */}
+			{data?.Attendances?.nodes?.length && (
+				<DataTable
+					columns={columns}
+					data={data?.Attendances?.nodes ?? []}
+					// filters={[
+					// 	{
+					// 		key: 'source',
+					// 		operator: MatchOperator.Eq,
+					// 		value: 'Accounting_Transaction_Source.BalanceAdjustment',
+					// 	},
+					// ]}
+					refetch={handleRefetch}
+					totalCount={data?.Attendances?.meta?.totalCount ?? 100}
+					RowActionMenu={(row: IAttendance) => (
+						<>
+							{/* <Menu.Item
+							onClick={() => handleDeleteAttendance(row._id)}
+							icon={<IconTrash size={18} />}
+							color='red'
+						>
+							Delete
+						</Menu.Item> */}
+							<Menu.Item
+								onClick={() => {
+									setReportTxt(row?.note);
+									setState({
+										modalOpened: true,
+										operationId: row?._id,
+										status: row?.status as Attendance_Status,
+									});
+								}}
+								icon={<IconTrash size={18} />}
+								color='yellow'
+							>
+								Report on Attendee
+							</Menu.Item>
+						</>
+					)}
+					ActionArea={
+						<>
+							<Button
+								color='violet'
+								variant='light'
+								leftIcon={<IconPlus size={16} />}
+								onClick={() =>
+									setState({ modalOpened: true, operationType: 'create' })
+								}
+								size='sm'
+							>
+								Add new
+							</Button>
+						</>
+					}
+					loading={state.refetching}
+				/>
+			)}
+
 			<Drawer
 				opened={state.modalOpened}
 				onClose={() => setState({ modalOpened: false })}
@@ -268,60 +341,11 @@ const AttendanceActivities: NextPage = () => {
 					</Button>
 				</form>
 			</Drawer>
-			{/* <FunctionalComponentWithFunctionalComponentToPrint> */}
-			<DataTable
-				columns={columns}
-				data={data?.Attendances?.nodes ?? []}
-				// filters={[
-				// 	{
-				// 		key: 'source',
-				// 		operator: MatchOperator.Eq,
-				// 		value: 'Accounting_Transaction_Source.BalanceAdjustment',
-				// 	},
-				// ]}
-				refetch={handleRefetch}
-				totalCount={data?.Attendances?.meta?.totalCount ?? 100}
-				RowActionMenu={(row: IAttendance) => (
-					<>
-						{/* <Menu.Item
-							onClick={() => handleDeleteAttendance(row._id)}
-							icon={<IconTrash size={18} />}
-							color='red'
-						>
-							Delete
-						</Menu.Item> */}
-						<Menu.Item
-							onClick={() => {
-								setReportTxt(row?.note);
-								setState({
-									modalOpened: true,
-									operationId: row?._id,
-									status: row?.status as Attendance_Status,
-								});
-							}}
-							icon={<IconTrash size={18} />}
-							color='yellow'
-						>
-							Report on Attendee
-						</Menu.Item>
-					</>
-				)}
-				ActionArea={
-					<>
-						<Button
-							color='violet'
-							variant='light'
-							leftIcon={<IconPlus size={16} />}
-							onClick={() =>
-								setState({ modalOpened: true, operationType: 'create' })
-							}
-							size='sm'
-						>
-							Add new
-						</Button>
-					</>
-				}
-				loading={state.refetching}
+
+			<EmptyPanel
+				imgPath='/attendance.png'
+				title='There is no attendance found!'
+				isShow={!data?.Attendances?.nodes?.length && !fetching__attendance}
 			/>
 			{/* </FunctionalComponentWithFunctionalComponentToPrint> */}
 		</AdminLayout>

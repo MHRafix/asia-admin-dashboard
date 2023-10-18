@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { FaRegChartBar } from 'react-icons/fa';
 import { menus } from './menus';
 import { UserButton } from './UserButton';
 
@@ -64,6 +65,31 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 				</div>
 			)} */}
 			<Navbar.Section grow component={ScrollArea}>
+				<NavLink
+					style={{
+						fontFamily: 'Nunito sans, sans-serif',
+						borderLeft: asPath === '/' ? '4px solid #5d34d8' : 0,
+					}}
+					fz={20}
+					icon={<FaRegChartBar size={20} />}
+					label={
+						<Text size='md' weight={500} ff={'Nunito sans, sans-serif'}>
+							Dashboard
+						</Text>
+					}
+					component={Link}
+					href={'/'}
+					active={asPath === '/'}
+					defaultOpened={asPath === '/'}
+					styles={(theme) => ({
+						// theme.colors.brand[9]
+						root: {
+							fontWeight: asPath === '/' ? 600 : 400,
+							fontFamily: 'Nunito sans, sans-serif',
+							fontSize: 20,
+						},
+					})}
+				/>
 				{menus.map((item) => (
 					<NavLink
 						style={{

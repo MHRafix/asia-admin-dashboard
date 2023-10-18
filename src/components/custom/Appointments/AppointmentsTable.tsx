@@ -9,7 +9,7 @@ import {
 	TABLE_DATA_LIMITS,
 	TABLE_DEFAULT_LIMIT,
 } from '@/app/config/table_configuration';
-import EmptyPannel from '@/components/common/EmptyPannel';
+import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import Pagination from '@/components/common/Pagination';
@@ -20,10 +20,9 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Button, Input, Select, Space, Table } from '@mantine/core';
 import Router, { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { FiTrash } from 'react-icons/fi';
-import { SiGotomeeting } from 'react-icons/si';
-import AppointmentsTableBody from './AppointmentsTableBody';
 import { FaSearch } from 'react-icons/fa';
+import { FiTrash } from 'react-icons/fi';
+import AppointmentsTableBody from './AppointmentsTableBody';
 
 const AppointmentsTable: React.FC<{}> = () => {
 	const [page, setPage] = useState<number>(1);
@@ -148,10 +147,11 @@ const AppointmentsTable: React.FC<{}> = () => {
 						)}
 					</tbody>
 				</Table>
-				<EmptyPannel
+
+				<EmptyPanel
+					imgPath='/emptyAppointment.png'
 					isShow={!appointmentsData?.appointments?.nodes?.length && !fetching}
 					title='There is no appointments found!'
-					Icon={<SiGotomeeting size={40} color='red' />}
 				/>
 				<CircularLoader isShow={fetching} />
 				<Pagination

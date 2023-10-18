@@ -4,6 +4,7 @@ import { Notify } from '@/app/config/alertNotification/Notification';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import { useGetSession } from '@/app/config/logic/getSession';
 import { CREATE_BLOG } from '@/app/config/queries/blogs.query';
+import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import BlogCard from '@/components/custom/Blog/BlogCard';
 import ServiceSkeleton from '@/components/custom/Services/Services.Skeleton';
@@ -78,6 +79,12 @@ const Blogs: React.FC = () => {
 					<BlogCard key={idx} blog={blog} refetchBlog={refetchBlogs} />
 				))}
 			</div>
+
+			<EmptyPanel
+				imgPath='/emptyBlog.png'
+				isShow={!blogs?.length && !gettingBlogs}
+				title='There is no blogs found!'
+			/>
 		</AdminLayout>
 	);
 };

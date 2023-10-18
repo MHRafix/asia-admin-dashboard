@@ -12,7 +12,7 @@ const EmptyPanel: React.FC<{
 	}
 
 	return (
-		<div className='text-center shadow-md rounded-lg p-4'>
+		<div className='text-center rounded-lg p-4'>
 			<Image
 				src={imgPath}
 				alt='image'

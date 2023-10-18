@@ -4,6 +4,7 @@ import { Notify } from '@/app/config/alertNotification/Notification';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import { useGetSession } from '@/app/config/logic/getSession';
 import { CREATE_SERVICE } from '@/app/config/queries/service.query';
+import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import ServiceCard from '@/components/custom/Services/ServiceCard';
 import ServiceSkeleton from '@/components/custom/Services/Services.Skeleton';
@@ -82,6 +83,12 @@ const Services: NextPage = () => {
 					/>
 				))}
 			</div>
+
+			<EmptyPanel
+				imgPath='/service.png'
+				isShow={!services?.length && !getingServices}
+				title='There is no service found!'
+			/>
 		</AdminLayout>
 	);
 };

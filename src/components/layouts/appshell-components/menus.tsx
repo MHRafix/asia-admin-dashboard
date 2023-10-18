@@ -1,6 +1,6 @@
 import { BiNotification, BiUserPlus } from 'react-icons/bi';
 import { BsBookmarkCheck, BsReceipt, BsUiChecksGrid } from 'react-icons/bs';
-import { FaNetworkWired, FaRegChartBar, FaTasks } from 'react-icons/fa';
+import { FaNetworkWired, FaTasks } from 'react-icons/fa';
 import { HiOutlineViewGrid, HiOutlineViewGridAdd } from 'react-icons/hi';
 import {
 	MdOutlineAnalytics,
@@ -55,7 +55,7 @@ export const menus = [
 				href: '/reception_management/task_review',
 			},
 			{
-				label: 'Customers Data',
+				label: 'Clients list',
 				icon: <MdOutlineAnalytics size={20} />,
 				href: '/reception_management/business_data',
 			},

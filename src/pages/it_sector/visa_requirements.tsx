@@ -87,7 +87,7 @@ const VisaRequirements: React.FC = () => {
 			<EmptyPanel
 				isShow={!requirements?.length && !gettingRequirements}
 				title='Oops sorry, No visa requirements article found!'
-				imgPath='/emptyPanel.png'
+				imgPath='/req.png'
 			/>
 		</AdminLayout>
 	);

@@ -1,7 +1,7 @@
-import { ActionIcon, Burger, MediaQuery } from '@mantine/core';
+import { ActionIcon } from '@mantine/core';
+import Router, { useRouter } from 'next/router';
 import React from 'react';
 import { MdArrowBackIosNew } from 'react-icons/md';
-import Router, { useRouter } from 'next/router';
 
 interface Props {
 	title?: string;

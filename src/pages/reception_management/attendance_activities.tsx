@@ -35,15 +35,6 @@ import { MRT_ColumnDef } from 'mantine-react-table';
 import { NextPage } from 'next';
 import { useMemo, useState } from 'react';
 
-interface IState {
-	modalOpened: boolean;
-	operationType: 'create' | 'update';
-	operationId?: string | null;
-	operationPayload?: any;
-	refetching: boolean;
-	status: Attendance_Status;
-}
-
 const AttendanceActivities: NextPage = () => {
 	const { user } = useGetSession();
 	const [reportTxt, setReportTxt] = useState<string>('');
@@ -75,16 +66,6 @@ const AttendanceActivities: NextPage = () => {
 		},
 	});
 
-	// console.log(data?.Attendances?.nodes);
-
-	// const { data: accountData, refetch: refetchAccounts } = useQuery<{
-	// 	accounting__accounts: AccountsWithPagination;
-	// }>(ACCOUNTS_LIST_DROPDOWN, {
-	// 	variables: {
-	// 		where: { limit: -1 },
-	// 	},
-	// });
-
 	const [deleteMutation] = useMutation(DELETE_APPOINTMENT_MUTATION, {
 		onCompleted: () => handleRefetch({}),
 	});
@@ -113,25 +94,12 @@ const AttendanceActivities: NextPage = () => {
 			},
 		});
 	};
+
 	const handleRefetch = (variables: any) => {
 		setState({ refetching: true, operationId: '', modalOpened: false });
 		refetch(variables).finally(() => {
 			setState({ refetching: false });
 		});
-	};
-
-	const handleDeleteAttendance = (_id: string) => {
-		deleteConfirmModal(deleteMutation, _id);
-		//   title: "Sure to delete account?",
-		//   description: "Be careful!! Once you deleted, it can not be undone",
-		//   isDangerous: true,
-		//   onConfirm() {
-		// 	deleteAccountMutation({
-		// 	  variables: {
-		// 		where: { key: "_id", operator: MatchOperator.Eq, value: _id },
-		// 	  },
-		// 	});
-		//   },
 	};
 
 	const columns = useMemo<MRT_ColumnDef<any>[]>(
@@ -324,7 +292,7 @@ const AttendanceActivities: NextPage = () => {
 				<form
 					onSubmit={(e) => {
 						e.preventDefault();
-						handleUpdateAttendee(state?.operationId!, state.status, reportTxt);
+						handleUpdateAttendee(state?.operationId!, state.status!, reportTxt);
 					}}
 				>
 					<Input.Wrapper label='Describe report'>
@@ -353,3 +321,11 @@ const AttendanceActivities: NextPage = () => {
 };
 
 export default protectWithSession(AttendanceActivities);
+export interface IState {
+	modalOpened: boolean;
+	operationType: 'create' | 'update';
+	operationId?: string | null;
+	operationPayload?: any;
+	refetching: boolean;
+	status?: Attendance_Status;
+}

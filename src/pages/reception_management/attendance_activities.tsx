@@ -13,7 +13,6 @@ import {
 import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
-import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -231,24 +230,10 @@ const AttendanceActivities: NextPage = () => {
 				<DataTable
 					columns={columns}
 					data={data?.Attendances?.nodes ?? []}
-					// filters={[
-					// 	{
-					// 		key: 'source',
-					// 		operator: MatchOperator.Eq,
-					// 		value: 'Accounting_Transaction_Source.BalanceAdjustment',
-					// 	},
-					// ]}
 					refetch={handleRefetch}
 					totalCount={data?.Attendances?.meta?.totalCount ?? 100}
 					RowActionMenu={(row: IAttendance) => (
 						<>
-							{/* <Menu.Item
-							onClick={() => handleDeleteAttendance(row._id)}
-							icon={<IconTrash size={18} />}
-							color='red'
-						>
-							Delete
-						</Menu.Item> */}
 							<Menu.Item
 								onClick={() => {
 									setReportTxt(row?.note);
@@ -315,7 +300,6 @@ const AttendanceActivities: NextPage = () => {
 				title='There is no attendance found!'
 				isShow={!data?.Attendances?.nodes?.length && !fetching__attendance}
 			/>
-			{/* </FunctionalComponentWithFunctionalComponentToPrint> */}
 		</AdminLayout>
 	);
 };
@@ -327,5 +311,5 @@ export interface IState {
 	operationId?: string | null;
 	operationPayload?: any;
 	refetching: boolean;
-	status?: Attendance_Status;
+	status?: any;
 }

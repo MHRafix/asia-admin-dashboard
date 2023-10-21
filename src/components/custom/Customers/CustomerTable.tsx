@@ -4,57 +4,37 @@ import {
 	BULK_REMOVE_USER,
 	USERS_QUERY,
 } from '@/app/config/queries/users.query';
-import {
-	TABLE_DATA_LIMITS,
-	TABLE_DEFAULT_LIMIT,
-} from '@/app/config/table_configuration';
 import EmptyPannel from '@/components/common/EmptyPannel';
-import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';
-import Pagination from '@/components/common/Pagination';
-import { CUSTOMER_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
-import TableHead from '@/components/common/TableHead';
-import { Query_Variable } from '@/logic/queryVariables';
+import DataTable from '@/components/common/Table/DataTable';
+import { IState } from '@/pages/reception_management/attendance_activities';
 import { useMutation, useQuery } from '@apollo/client';
-import { Button, Input, Select, Space, Table } from '@mantine/core';
+import { Avatar, Button, Flex, Menu, Space, Text } from '@mantine/core';
+import { useSetState } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
-import Router, { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import { IconPlus, IconTrash } from '@tabler/icons-react';
+import { MRT_ColumnDef } from 'mantine-react-table';
+import React, { useMemo } from 'react';
 import { FiTrash } from 'react-icons/fi';
 import { TbUsers } from 'react-icons/tb';
-import CustomersTableBody from './CustomersTableBody';
 
 const CustomerTable: React.FC<{}> = () => {
-	const [page, setPage] = useState<number>(1);
-	const [limit, setLimit] = useState<number>(5);
-	const [customerIds, setCustomerIds] = useState<string[]>([]);
-	const router = useRouter();
+	const [state, setState] = useSetState<IState>({
+		modalOpened: false,
+		operationType: 'create',
+		operationId: null,
+		operationPayload: {},
+		refetching: false,
+	});
 
 	// get booking packages
 	const {
-		data: customers,
+		data,
 		loading: fetching,
 		refetch,
 	} = useQuery<{
 		users: { nodes: IUser[]; meta: IPaginationMeta };
-	}>(
-		USERS_QUERY,
-		Query_Variable(
-			router.query.page as string,
-			router.query.limit as string,
-			page,
-			limit
-		)
-	);
-
-	// change booking limits
-	const handleLimitChange = (limit: string) => {
-		Router.replace({
-			query: { ...Router.query, limit, page: 1 },
-		});
-		setLimit(parseInt(limit));
-	};
+	}>(USERS_QUERY);
 
 	// remove bulk bookings
 	const [bulkDeleteCustomer, { loading: bulkDeleting }] = useMutation(
@@ -62,9 +42,8 @@ const CustomerTable: React.FC<{}> = () => {
 		{
 			onCompleted: () => {
 				refetch();
-				setCustomerIds([]);
 				showNotification({
-					title: 'Customers bulk delete successfull!',
+					title: 'Customers bulk delete successful!',
 					color: 'red',
 					icon: <FiTrash size={20} />,
 					message: '',
@@ -73,86 +52,98 @@ const CustomerTable: React.FC<{}> = () => {
 		}
 	);
 
+	const handleRefetch = (variables: any) => {
+		setState({ refetching: true, operationId: '', modalOpened: false });
+		refetch(variables).finally(() => {
+			setState({ refetching: false });
+		});
+	};
+
+	const columns = useMemo<MRT_ColumnDef<any>[]>(
+		() => [
+			{
+				accessorKey: 'name',
+				accessorFn: (originalRow: IUser) => (
+					<Flex align={'center'} gap={10}>
+						<Avatar src={originalRow?.avatar} size={'md'} radius={100} />
+						<Text fw={500}>{originalRow?.name}</Text>
+					</Flex>
+				),
+				header: 'Name',
+			},
+			{
+				accessorKey: 'email',
+				header: 'Email',
+			},
+			{
+				accessorKey: 'phone',
+				header: 'Phone Number',
+			},
+		],
+		[]
+	);
 	return (
 		<>
 			<PageTitleArea
 				title='Our customers'
 				tagline='Our solid customers'
-				actionComponent={
-					<div className='flex items-center gap-2'>
-						<Input
-							icon={<FaSearch />}
-							variant='unstyled'
-							className='w-[300px] !border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
-							placeholder='Search customers...'
-						/>
-						<Button
-							loading={bulkDeleting}
-							disabled={!customerIds?.length}
-							color='red'
-							leftIcon={<FiTrash size={16} />}
-							onClick={() =>
-								bulkDeleteCustomer({
-									variables: {
-										uIds: customerIds,
-									},
-								})
-							}
-						>
-							Bulk Remove
-						</Button>
-						<Select
-							variant='unstyled'
-							className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
-							w={120}
-							placeholder='Pick one'
-							onChange={(value) => handleLimitChange(value!)}
-							data={TABLE_DATA_LIMITS}
-							defaultValue={TABLE_DEFAULT_LIMIT}
-						/>
-					</div>
-				}
+				currentPathName='Customers'
+				othersPath={[
+					{
+						pathName: 'Home',
+						href: '/',
+					},
+				]}
 			/>
 
-			<div className='bg-[#212231] shadow-lg rounded-md'>
-				<Table>
-					<thead>
-						<tr>
-							{CUSTOMER_TABLE_HEAD.map((head: string, idx: number) => (
-								<TableHead key={idx} headData={head} />
-							))}
-						</tr>
-					</thead>
-					<tbody>
-						{customers?.users?.nodes?.map((customer: IUser, idx: number) => (
-							<CustomersTableBody
-								key={idx}
-								customer={customer}
-								refetchUser={refetch}
-								onStoreId={setCustomerIds}
-							/>
-						))}
-					</tbody>
-				</Table>
-
-				<EmptyPannel
-					isShow={!customers?.users?.nodes?.length && !fetching}
-					title='There is no customers found!'
-					Icon={<TbUsers size={40} color='red' />}
-				/>
-				<CircularLoader isShow={fetching} />
-				<Pagination
-					isShow={
-						(customers?.users?.nodes?.length! as number) &&
-						(!fetching as boolean)
+			{data?.users?.nodes?.length && (
+				<DataTable
+					columns={columns}
+					data={data?.users?.nodes ?? []}
+					refetch={handleRefetch}
+					totalCount={data?.users?.meta?.totalCount ?? 100}
+					RowActionMenu={(row: IUser) => (
+						<>
+							<Menu.Item
+								onClick={() => {
+									setState({
+										modalOpened: true,
+										operationId: row?._id,
+									});
+								}}
+								icon={<IconTrash size={18} />}
+								color='red'
+							>
+								Remove
+							</Menu.Item>
+						</>
+					)}
+					ActionArea={
+						<>
+							<Button
+								color='violet'
+								variant='light'
+								leftIcon={<IconPlus size={16} />}
+								onClick={() =>
+									setState({ modalOpened: true, operationType: 'create' })
+								}
+								size='sm'
+							>
+								Add new
+							</Button>
+						</>
 					}
-					limit={limit}
-					onPageChange={setPage}
-					page={page}
-					meta={customers?.users?.meta!}
+					loading={state.refetching}
 				/>
-				<Space h={10} />
-			</div>
+			)}
+
+			<EmptyPannel
+				isShow={!data?.users?.nodes?.length && !fetching}
+				title='There is no customers found!'
+				Icon={<TbUsers size={40} color='red' />}
+			/>
+
+			<Space h={10} />
 		</>
 	);
 };

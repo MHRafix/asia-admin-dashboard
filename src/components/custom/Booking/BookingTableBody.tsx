@@ -102,7 +102,7 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 							</Tooltip>
 						)}
 					</CopyButton>
-				</div>
+				</div> 
 			</td>
 			<td className='text-dimmed'>
 				<Badge

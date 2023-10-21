@@ -1,35 +1,63 @@
 import {
 	BULK_REMOVE_BOOKING,
+	DELETE_BOOKING_MUTATION,
 	PACKAGE_BOOKINGS_QUERY,
+	UPDATE_BOOKING_STATUS,
 } from '@/app/config/queries/bookings.query';
-import {
-	TABLE_DATA_LIMITS,
-	TABLE_DEFAULT_LIMIT,
-} from '@/app/config/table_configuration';
 
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
-import { IBooking } from '@/app/api/models/bookings.model';
+import {
+	BOOKING_STATUS,
+	IBooking,
+	PAYMENT_STATUS,
+	STATUS_ARR,
+} from '@/app/api/models/bookings.model';
+import {
+	getBadgeColors,
+	getPaymentBadgeColors,
+} from '@/app/config/logic/getColors';
 import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
-import CircularLoader from '@/components/common/Loader';
 import PageTitleArea from '@/components/common/PageTitleArea';
-import Pagination from '@/components/common/Pagination';
-import { BOOKING_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
-import TableHead from '@/components/common/TableHead';
+import DataTable from '@/components/common/Table/DataTable';
 import { Query_Variable } from '@/logic/queryVariables';
+import { IState } from '@/pages/reception_management/attendance_activities';
 import { useMutation, useQuery } from '@apollo/client';
-import { Button, Input, Select, Space, Table } from '@mantine/core';
+import {
+	ActionIcon,
+	Badge,
+	Button,
+	CopyButton,
+	Flex,
+	Menu,
+	Text,
+	Tooltip,
+} from '@mantine/core';
+import { useSetState } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
+import { IconPlus, IconTrash } from '@tabler/icons-react';
+import { MRT_ColumnDef } from 'mantine-react-table';
 import Router, { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
+import React, { useMemo, useState } from 'react';
+import { BiCopy } from 'react-icons/bi';
+import { FaCheck } from 'react-icons/fa';
 import { FiTrash } from 'react-icons/fi';
-import BookingTableBody from './BookingTableBody';
+import TrackPackagePopover from './TrackPackagePopover';
 
 const BookingTable: React.FC<{}> = () => {
 	const router = useRouter();
 	const [page, setPage] = useState<number>(1);
 	const [limit, setLimit] = useState<number>(5);
 	const [bookingIds, setBookingIds] = useState<string[]>([]);
+
+	const [state, setState] = useSetState<IState>({
+		modalOpened: false,
+		operationType: 'create',
+		operationId: null,
+		operationPayload: {},
+		refetching: false,
+		status: BOOKING_STATUS.PENDING,
+	});
+	// const [status, setStatus] = useState<string>(booking?.status!);
 
 	// get booking packages
 	const {
@@ -47,6 +75,164 @@ const BookingTable: React.FC<{}> = () => {
 			limit,
 			router.query.sort as string
 		)
+	);
+
+	// delete booking
+	const [deleteBooking, { loading: deletingBooking }] = useMutation(
+		DELETE_BOOKING_MUTATION,
+		{
+			onCompleted: () => {
+				// refetchBooking();
+				showNotification({
+					title: 'Booking successfully deleted!',
+					color: 'red',
+					icon: <FiTrash size={20} />,
+					message: '',
+				});
+			},
+		}
+	);
+
+	// update booking
+	const [updateBooking, { loading: updatingBooking }] = useMutation(
+		UPDATE_BOOKING_STATUS,
+		{
+			onCompleted: () => {
+				// refetchBooking();
+				showNotification({
+					title: 'Booking successfully updated!',
+					color: 'teal',
+					message: '',
+				});
+			},
+		}
+	);
+	// const handleUpdateAttendee = (
+	// 	_id: string,
+	// 	status: BOOKING_STATUS,
+	// 	note: string
+	// ) => {
+	// 	updateMutation({
+	// 		variables: {
+	// 			input: {
+	// 				_id,
+	// 				status,
+	// 				verifyBy: user?._id,
+	// 				note,
+	// 			},
+	// 		},
+	// 	});
+	// };
+
+	const handleRefetch = (variables: any) => {
+		setState({ refetching: true, operationId: '', modalOpened: false });
+		refetch(variables).finally(() => {
+			setState({ refetching: false });
+		});
+	};
+
+	const columns = useMemo<MRT_ColumnDef<any>[]>(
+		() => [
+			{
+				accessorKey: 'customerDetails.name',
+				accessorFn: (originalRow: IBooking) => (
+					<Flex align={'center'} gap={10}>
+						<Text fw={500}>{originalRow?.customerDetails?.name}</Text>
+					</Flex>
+				),
+				header: 'Name',
+			},
+			{
+				accessorKey: 'transactionId',
+				accessorFn: (originalRow: IBooking) => (
+					<div className='flex gap-2 items-center'>
+						{originalRow?.transactionId}
+						<CopyButton value={originalRow?.transactionId!} timeout={2000}>
+							{({ copied, copy }) => (
+								<Tooltip
+									label={copied ? 'Copied' : 'Copy'}
+									withArrow
+									position='right'
+								>
+									<ActionIcon color={copied ? 'teal' : 'gray'} onClick={copy}>
+										{copied ? <FaCheck size='1rem' /> : <BiCopy size='1rem' />}
+									</ActionIcon>
+								</Tooltip>
+							)}
+						</CopyButton>
+					</div>
+				),
+				header: 'Transaction ID',
+			},
+			{
+				accessorKey: 'paymentDetails.paymentStatus',
+				accessorFn: (row: IBooking) => (
+					<Badge
+						color={getPaymentBadgeColors(row?.paymentDetails?.paymentStatus!)}
+						size='lg'
+						fw={500}
+						variant='dot'
+						radius='sm'
+					>
+						{row?.paymentDetails?.paymentStatus}
+					</Badge>
+				),
+				header: 'Status',
+			},
+			{
+				accessorKey: 'packageId',
+				accessorFn: (originalRow: IBooking) => (
+					<TrackPackagePopover packageId={originalRow?.packageId!} />
+				),
+				header: 'Track',
+			},
+			{
+				accessorKey: 'packageId',
+				accessorFn: (originalRow: IBooking) => (
+					<Menu>
+						<Menu.Target>
+							<Badge
+								color={getBadgeColors(originalRow?.status!)}
+								size='lg'
+								fw={500}
+								variant='filled'
+								radius='sm'
+							>
+								{originalRow?.status}
+							</Badge>
+						</Menu.Target>
+
+						<Menu.Dropdown className='!bg-[#1D1E2B]'>
+							{STATUS_ARR.map((STATUS: string, idx: number) => (
+								<Menu.Item
+									key={idx}
+									disabled={status === STATUS}
+									color={getBadgeColors(STATUS)}
+									onClick={() => {
+										updateBooking({
+											variables: {
+												id: originalRow._id,
+												status: STATUS,
+												paymentDetails: {
+													paymentStatus: PAYMENT_STATUS[idx],
+													totalAmount: originalRow?.paymentDetails?.totalAmount,
+												},
+											},
+										});
+									}}
+								>
+									<Text ml={15} size={'md'} fw={500}>
+										{STATUS}
+									</Text>
+								</Menu.Item>
+							))}
+						</Menu.Dropdown>
+					</Menu>
+				),
+				header: 'Track',
+			},
+		],
+		[]
 	);
 
 	// change booking limits
@@ -69,7 +255,7 @@ const BookingTable: React.FC<{}> = () => {
 				refetch();
 				setBookingIds([]);
 				showNotification({
-					title: 'Bookings bulk delete successfull!',
+					title: 'Bookings bulk delete successful!',
 					color: 'red',
 					icon: <FiTrash size={20} />,
 					message: '',
@@ -82,77 +268,55 @@ const BookingTable: React.FC<{}> = () => {
 			<PageTitleArea
 				title='Package Bookings'
 				tagline='Booked travel packages'
-				actionComponent={
-					<div className='flex items-center gap-2'>
-						<Input
-							icon={<FaSearch />}
-							variant='unstyled'
-							className='w-[300px] !border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
-							placeholder='Search bookings...'
-						/>
-						<Button
-							loading={bulkDeleting}
-							disabled={!bookingIds?.length}
-							color='red'
-							leftIcon={<FiTrash size={16} />}
-							onClick={() => bulkDeleteBooking()}
-						>
-							Bulk Remove
-						</Button>
-						<Select
-							w={120}
-							placeholder='Pick one'
-							variant='unstyled'
-							className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
-							onChange={(value) => handleLimitChange(value!)}
-							data={TABLE_DATA_LIMITS}
-							defaultValue={TABLE_DEFAULT_LIMIT}
-						/>
-					</div>
-				}
+				currentPathName='Package Bookings'
+				othersPath={[
+					{
+						pathName: 'Home',
+						href: '/',
+					},
+				]}
 			/>
 
-			<div className='bg-[#212231] shadow-lg rounded-md'>
-				<Table>
-					<thead>
-						<tr>
-							{BOOKING_TABLE_HEAD?.map((head: string, idx: number) => (
-								<TableHead key={idx} headData={head} />
-							))}
-						</tr>
-					</thead>
-					<tbody>
-						{bookings?.bookings?.nodes?.map(
-							(booking: IBooking, idx: number) => (
-								<BookingTableBody
-									key={idx}
-									booking={booking}
-									refetchBooking={refetch}
-									onStoreId={setBookingIds}
-								/>
-							)
-						)}
-					</tbody>
-				</Table>
-				<EmptyPanel
-					isShow={!bookings?.bookings?.nodes?.length && !fetching}
-					title='Oops sorry, No bookings found!'
-					imgPath='/emptyPanel.png'
-				/>
-				<CircularLoader isShow={fetching} />
-				<Pagination
-					isShow={
-						(bookings?.bookings?.nodes?.length! as number) &&
-						(!fetching as boolean)
+			{bookings?.bookings?.nodes?.length && (
+				<DataTable
+					columns={columns}
+					data={bookings?.bookings?.nodes ?? []}
+					refetch={handleRefetch}
+					totalCount={bookings?.bookings?.meta?.totalCount ?? 100}
+					RowActionMenu={(row: IBooking) => (
+						<>
+							<Menu.Item
+								// onClick={() => handleDeleteAttendance(row._id)}
+								icon={<IconTrash size={18} />}
+								color='red'
+							>
+								Delete
+							</Menu.Item>
+						</>
+					)}
+					ActionArea={
+						<>
+							<Button
+								color='violet'
+								variant='light'
+								leftIcon={<IconPlus size={16} />}
+								onClick={() =>
+									setState({ modalOpened: true, operationType: 'create' })
+								}
+								size='sm'
+							>
+								Add new
+							</Button>
+						</>
 					}
-					limit={limit}
-					onPageChange={setPage}
-					page={page}
-					meta={bookings?.bookings?.meta!}
+					loading={state.refetching}
 				/>
-
-				<Space h={10} />
-			</div>
+			)}
+			<EmptyPanel
+				isShow={!bookings?.bookings?.nodes?.length && !fetching}
+				title='Oops sorry, No bookings found!'
+				imgPath='/emptyPanel.png'
+			/>
 		</>
 	);
 };

@@ -1,48 +1,26 @@
 export const visa_categories = [
 	{
 		label: 'Tourist',
-		value: 'Tourist',
+		value: 'TOURIST',
 	},
 	{
 		label: 'Student',
-		value: 'Student',
+		value: 'STUDENT',
 	},
 	{
 		label: 'Medical',
-		value: 'Medical',
+		value: 'MEDICAL',
 	},
 	{
 		label: 'Work Permit',
-		value: 'Work Permit',
+		value: 'WORK_PERMIT',
+	},
+	{
+		label: 'Business',
+		value: 'BUSINESS',
 	},
 ];
 
-// export const profession = [
-//   {
-//     label: "JOB",
-//     value: "JOB",
-//   },
-//   {
-//     label: "Engineer",
-//     value: "Engineer",
-//   },
-//   {
-//     label: "Teacher",
-//     value: "Teacher",
-//   },
-//   {
-//     label: "Business",
-//     value: "Business",
-//   },
-//   {
-//     label: "Doctor",
-//     value: "Doctor",
-//   },
-//   {
-//     label: "Others",
-//     value: "Others",
-//   },
-// ];
 export const countries_data = [
 	{
 		name: 'Afghanistan',

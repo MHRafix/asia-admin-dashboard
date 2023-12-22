@@ -11,6 +11,13 @@ export const UPDATE_BLOG_DEFAULT_VALUES = {
 	description: '',
 };
 
+export const UPDATE_REQ_DEFAULT_VALUES = {
+	title: '',
+	description: '',
+	destinationCountry: 'Afghanistan',
+	visaType: 'Tourist',
+};
+
 import * as Yup from 'yup';
 
 export const loginSchema = Yup.object().shape({
@@ -29,4 +36,11 @@ export const updateServiceSchema = Yup.object().shape({
 export const updateBlogSchema = Yup.object().shape({
 	title: Yup.string().required().label('Title'),
 	description: Yup.string().required().label('Description'),
+});
+
+export const updateReqSchema = Yup.object().shape({
+	title: Yup.string().required().label('Title'),
+	description: Yup.string().required().label('Description'),
+	destinationCountry: Yup.string().required().label('Country'),
+	visaType: Yup.string().required().label('Visa type'),
 });

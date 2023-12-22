@@ -51,10 +51,6 @@ const RequirementCard: React.FC<IVisaReqProps> = ({
 				<Text weight={500} fz={18} ff={'Nunito sans, sans-serif'}>
 					{visaReq?.title}
 				</Text>
-				<Space h={5} />
-				<Text size='md' color='dimmed' ff={'Nunito sans, sans-serif'}>
-					{visaReq?.description.slice(0, 120)}
-				</Text>
 			</Box>
 
 			<Space h={'md'} />

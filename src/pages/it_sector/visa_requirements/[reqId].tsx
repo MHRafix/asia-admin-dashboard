@@ -53,6 +53,8 @@ const EditVisaReq: React.FC<{ reqId: string }> = ({ reqId }) => {
 		// setDescription(requirement?.description);
 		setValue('title', requirement?.title!);
 		setValue('description', requirement?.description!);
+		setValue('visaType', requirement?.visaType!);
+		setValue('destinationCountry', requirement?.destinationCountry!);
 
 		setBanner(requirement?.cover!);
 		setThumbnail(requirement?.image!);
@@ -173,7 +175,7 @@ const EditVisaReq: React.FC<{ reqId: string }> = ({ reqId }) => {
 							variant='unstyled'
 							size={'md'}
 							data={countriesSelectInputData}
-							defaultValue={watch('destinationCountry')}
+							value={watch('destinationCountry')}
 							onChange={(e) => setValue('destinationCountry', e!)}
 							className='!border-[1px] !border-[#32344b] border-solid px-2'
 						/>
@@ -189,7 +191,7 @@ const EditVisaReq: React.FC<{ reqId: string }> = ({ reqId }) => {
 							variant='unstyled'
 							size={'md'}
 							data={visa_categories}
-							defaultValue={watch('visaType')}
+							value={watch('visaType')}
 							onChange={(e) => setValue('visaType', e!)}
 							className='!border-[1px] !border-[#32344b] border-solid px-2'
 						/>

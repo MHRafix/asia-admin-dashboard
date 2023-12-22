@@ -6,7 +6,7 @@ export interface IVisaReq {
 	status: string;
 	title: string;
 	description: string;
-	country: string;
+	destinationCountry: string;
 	image: string;
 	cover: string;
 	visaType: Visa_Types;

@@ -10,4 +10,5 @@ export enum Visa_Types {
 	WORK_PERMIT = 'WORK_PERMIT',
 	MEDICAL = 'MEDICAL',
 	BUSINESS = 'BUSINESS',
+	STUDENT = 'STUDENT',
 }

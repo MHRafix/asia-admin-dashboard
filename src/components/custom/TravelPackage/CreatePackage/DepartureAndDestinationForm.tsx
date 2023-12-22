@@ -54,7 +54,6 @@ const DepartureAndDestinationForm: React.FC = () => {
 		CREATE_TRAVEL_PACKAGE,
 		Notify({
 			sucTitle: 'Package saved successfully!',
-			sucMessage: 'Please refetch package list.',
 			errMessage: 'Failed to save package.',
 		})
 	);

@@ -67,7 +67,6 @@ const AppointmentsTable: React.FC<{}> = () => {
 		BULK_REMOVE_APPOINTMENT,
 		Notify({
 			sucTitle: 'Appointments bulk delete successfull!',
-			sucMessage: 'Please refetch appointments.',
 			errMessage: 'Please try again.',
 			action: onSuccess,
 		})

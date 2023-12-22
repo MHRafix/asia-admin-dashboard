@@ -93,7 +93,6 @@ const TransportationForm: React.FC = () => {
 		CREATE_TRAVEL_PACKAGE,
 		Notify({
 			sucTitle: 'Package saved successfully!',
-			sucMessage: 'Please refetch package list.',
 			errMessage: 'Failed to save package.',
 			action: () => Router.push('/tour_packages'),
 		})

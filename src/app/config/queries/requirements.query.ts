@@ -26,7 +26,7 @@ export const VISA_REQUIREMENTS = gql`
 				status
 				title
 				description
-				country
+				destinationCountry
 				image
 				cover
 				visaType
@@ -41,13 +41,13 @@ export const VISA_REQUIREMENTS = gql`
 	}
 `;
 export const VISA_REQUIREMENT = gql`
-	query Requirement($input: CommonMatchInput) {
-		VisaRequirements(input: $input) {
+	query Requirement($input: CommonMatchInput!) {
+		VisaRequirement(input: $input) {
 			_id
 			status
 			title
 			description
-			country
+			destinationCountry
 			image
 			cover
 			visaType

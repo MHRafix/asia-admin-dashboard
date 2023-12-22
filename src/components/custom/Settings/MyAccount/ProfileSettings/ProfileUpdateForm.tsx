@@ -70,7 +70,6 @@ const ProfileUpdateForm: React.FC<{}> = () => {
 		UPDATE_USER_DETAILS,
 		Notify({
 			sucTitle: 'Your profile details updated successfully!',
-			sucMessage: 'Refetch profile details.',
 			errMessage: 'Failed to update details!',
 			action: onSuccess,
 		})

@@ -24,7 +24,6 @@ const ServiceCard: React.FC<IServiceCardProp> = ({
 		DELETE_SERVICE,
 		Notify({
 			sucTitle: 'Service deleted successfully!',
-			sucMessage: 'Refetch services again.',
 			errMessage: 'Try again to delete service.',
 			action: onSuccess,
 		})

@@ -48,7 +48,6 @@ export const useUpdateBlog = (actionFunc: () => void) => {
 		UPDATE_BLOG,
 		Notify({
 			sucTitle: 'Blog details updated successfully!',
-			sucMessage: 'Refetch blog details.',
 			errMessage: 'Try again to update blog details.',
 			action: actionFunc,
 		})

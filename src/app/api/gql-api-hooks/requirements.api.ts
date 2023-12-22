@@ -56,7 +56,6 @@ export const useUpdateRequirement = (actionFunc: () => void) => {
 		UPDATE_REQUIREMENT,
 		Notify({
 			sucTitle: 'Visa requirements updated successfully!',
-			sucMessage: 'Refetch visa requirements details.',
 			errMessage: 'Try again to update visa requirements details.',
 			action: actionFunc,
 		})

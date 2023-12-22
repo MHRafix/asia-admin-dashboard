@@ -27,7 +27,6 @@ const RequirementCard: React.FC<IVisaReqProps> = ({
 		REMOVE_REQUIREMENT,
 		Notify({
 			sucTitle: 'Visa requirements deleted successfully!',
-			sucMessage: 'Refetch visa requirements again.',
 			errMessage: 'Try again to delete visa requirements.',
 			action: onSuccess,
 		})

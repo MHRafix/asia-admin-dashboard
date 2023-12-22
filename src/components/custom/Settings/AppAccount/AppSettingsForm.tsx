@@ -112,7 +112,6 @@ const AppSettingsForm: React.FC = () => {
 		UPDATE_APP_SETTINGS,
 		Notify({
 			sucTitle: 'App settings updated successfully!',
-			sucMessage: 'Please refetch app settings.',
 			errMessage: 'Failed to update app settings!',
 			action: refetch,
 		})

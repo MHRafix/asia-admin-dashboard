@@ -50,7 +50,6 @@ const EmployeesList: React.FC<{}> = () => {
 		BULK_REMOVE_EMPLOYEE,
 		Notify({
 			sucTitle: 'Employee bulk delete successfully!',
-			sucMessage: 'Please refetch employees.',
 			errMessage: 'Please try again.',
 			action: onSuccess,
 		})

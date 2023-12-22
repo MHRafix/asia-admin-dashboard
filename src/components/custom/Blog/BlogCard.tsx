@@ -25,7 +25,6 @@ const BlogCard: React.FC<IBlogProps> = ({ blog, refetchBlog }) => {
 		REMOVE_BLOG,
 		Notify({
 			sucTitle: 'Blog deleted successfully!',
-			sucMessage: 'Refetch blogs again.',
 			errMessage: 'Try again to delete blog.',
 			action: onSuccess,
 		})

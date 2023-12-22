@@ -43,7 +43,6 @@ export const useUpdateService = (actionFunc: () => void) => {
 		UPDATE_SERVICE,
 		Notify({
 			sucTitle: 'Service details updated successfully!',
-			sucMessage: 'Refetch service details.',
 			errMessage: 'Try again to update service details.',
 			action: actionFunc,
 		})

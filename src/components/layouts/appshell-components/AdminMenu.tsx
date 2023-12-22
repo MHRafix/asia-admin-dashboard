@@ -16,14 +16,9 @@ interface Props {
 }
 
 const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
-	const { pathname, asPath } = useRouter();
+	const { asPath } = useRouter();
 
-	console.log(asPath);
-	const {
-		data,
-		loading: fetchingSettings,
-		refetch,
-	} = useQuery<{
+	const { data } = useQuery<{
 		appSettings: { nodes: IAppSettings[] };
 	}>(APP_SETTINGS_QUERY);
 

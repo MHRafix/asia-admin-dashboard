@@ -17,9 +17,9 @@ import { AiOutlinePlus } from 'react-icons/ai';
 
 const VisaRequirements: React.FC = () => {
 	const { gettingRequirements, requirements, refetchRequirements } =
-		useGetRequirements();
+		useGetRequirements(); // visa requirements fetching
 
-	const { user } = useGetSession();
+	const { user } = useGetSession(); // user session
 
 	const onSuccess = (res: { createVisaReq: IVisaReq }) => {
 		refetchRequirements();

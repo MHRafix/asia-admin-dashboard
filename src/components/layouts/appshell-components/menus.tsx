@@ -20,6 +20,7 @@ import {
 	TbDeviceDesktop,
 	TbListCheck,
 	TbListDetails,
+	TbReceipt2,
 	TbTextPlus,
 	TbUsers,
 } from 'react-icons/tb';
@@ -215,6 +216,11 @@ export const menus = [
 				label: 'Basic information',
 				href: '/settings/app_info/basic_info',
 				icon: <TbListDetails size={18} />,
+			},
+			{
+				label: 'Money receipt',
+				href: '/settings/app_info/money_receipt',
+				icon: <TbReceipt2 size={18} />,
 			},
 			{
 				label: 'Opening hours',

@@ -130,6 +130,7 @@ const DataTable: React.FC<Prop> = ({
 						<MRT_GlobalFilterTextInput table={table} />
 
 						<MRT_ShowHideColumnsButton table={table} />
+						{/* <MRT_ToggleFullScreenButton table={table} /> */}
 					</div>
 					<Flex gap={'md'}>
 						<ActionIcon

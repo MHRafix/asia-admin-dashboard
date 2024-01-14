@@ -11,9 +11,9 @@ export const Money_Receipt_Query = gql`
 				contactNumber
 				passportNo
 				paymentType
+				serviceName
 				amountInWords
 				amountInNumber
-				serviceName
 				serialNo
 				mrNo
 				quantity

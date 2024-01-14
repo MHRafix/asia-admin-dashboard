@@ -10,7 +10,12 @@ import { IState } from '@/pages/reception_management/attendance_activities';
 import { useQuery } from '@apollo/client';
 import { Avatar, Button, Flex, Menu, Text } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
-import { IconPlus, IconTrash } from '@tabler/icons-react';
+import {
+	IconPencil,
+	IconPlus,
+	IconReceipt,
+	IconTrash,
+} from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { MRT_ColumnDef } from 'mantine-react-table';
 import { NextPage } from 'next';
@@ -39,9 +44,51 @@ const MoneyReceiptPage: NextPage = () => {
 			setState({ refetching: false });
 		});
 	};
-
+	// contactNumber
+	// passportNo
+	// paymentType
+	// serviceName
 	const columns = useMemo<MRT_ColumnDef<any>[]>(
 		() => [
+			{
+				accessorKey: 'mrNo',
+				header: 'MR No',
+			},
+			{
+				accessorKey: 'clientName',
+				header: 'Client name',
+			},
+			{
+				accessorKey: 'contactNumber',
+				header: 'Phone',
+			},
+			{
+				accessorKey: 'serviceName',
+				header: 'Service',
+			},
+			{
+				accessorKey: 'passportNo',
+				accessorFn: (originalRow: MoneyReceipt) => (
+					<Text color='teal' fw={700}>
+						{originalRow?.passportNo}
+					</Text>
+				),
+				header: 'Passport No',
+			},
+			{
+				accessorKey: 'paymentType',
+				header: 'Payment Type',
+			},
+
+			{
+				accessorKey: 'amountInNumber',
+				accessorFn: (originalRow: MoneyReceipt) => (
+					<Text className='p-2 rounded-sm text-violet-500 capitalize'>
+						{originalRow?.amountInNumber ?? 0} BDT
+					</Text>
+				),
+				header: 'Total amount',
+			},
 			{
 				accessorKey: 'authorizeBy.name',
 				accessorFn: (originalRow: MoneyReceipt) => (
@@ -71,15 +118,6 @@ const MoneyReceiptPage: NextPage = () => {
 				accessorKey: 'deliveryDate',
 				header: 'Delivery date',
 			},
-			{
-				accessorKey: 'amountInNumber',
-				accessorFn: (originalRow: MoneyReceipt) => (
-					<Text className='p-2 rounded-sm text-violet-500 capitalize'>
-						{originalRow?.amountInNumber ?? 0} BDT
-					</Text>
-				),
-				header: 'Total amount',
-			},
 		],
 		[]
 	);
@@ -99,19 +137,14 @@ const MoneyReceiptPage: NextPage = () => {
 					totalCount={data?.moneyReceipts?.meta?.totalCount ?? 100}
 					RowActionMenu={(row: MoneyReceipt) => (
 						<>
-							<Menu.Item
-								// onClick={() => {
-								// 	setReportTxt(row?.note);
-								// 	setState({
-								// 		modalOpened: true,
-								// 		operationId: row?._id,
-								// 		status: row?.status as Attendance_Status,
-								// 	});
-								// }}
-								icon={<IconTrash size={18} />}
-								color='yellow'
-							>
-								Report on Attendee
+							<Menu.Item icon={<IconReceipt size={18} />} color='teal'>
+								View Receipt
+							</Menu.Item>
+							<Menu.Item icon={<IconPencil size={18} />} color='orange'>
+								Edit Receipt
+							</Menu.Item>
+							<Menu.Item icon={<IconTrash size={18} />} color='red'>
+								Remove Receipt
 							</Menu.Item>
 						</>
 					)}

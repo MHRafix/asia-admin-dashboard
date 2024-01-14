@@ -44,6 +44,12 @@ export const menus = [
 				icon: <TbActivityHeartbeat size={20} />,
 				href: '/reception_management/attendance_activities',
 			},
+
+			{
+				label: 'Money receipt',
+				href: '/reception_management/money_receipt',
+				icon: <TbReceipt2 size={18} />,
+			},
 			{
 				label: 'Appointments',
 				icon: <SiGotomeeting size={20} />,
@@ -217,11 +223,7 @@ export const menus = [
 				href: '/settings/app_info/basic_info',
 				icon: <TbListDetails size={18} />,
 			},
-			{
-				label: 'Money receipt',
-				href: '/settings/app_info/money_receipt',
-				icon: <TbReceipt2 size={18} />,
-			},
+
 			{
 				label: 'Opening hours',
 				href: '/settings/app_info/opening_hours',

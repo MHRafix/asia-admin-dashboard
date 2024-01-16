@@ -3,8 +3,10 @@ import {
 	MoneyReceipt,
 	MoneyReceiptsWithPagination,
 } from '@/app/api/models/money-receipt.model';
+import DrawerWrapper from '@/components/common/Drawer/DrawerWrapper';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
+import MoneyReceiptDemo from '@/components/custom/MoneyReceipts/MoneyReceiptDemo';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { IState } from '@/pages/reception_management/attendance_activities';
 import { useQuery } from '@apollo/client';
@@ -19,7 +21,7 @@ import {
 import dayjs from 'dayjs';
 import { MRT_ColumnDef } from 'mantine-react-table';
 import { NextPage } from 'next';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 const MoneyReceiptPage: NextPage = () => {
 	const [state, setState] = useSetState<IState>({
@@ -29,6 +31,7 @@ const MoneyReceiptPage: NextPage = () => {
 		operationPayload: {},
 		refetching: false,
 	});
+	const [receipt, setReceipt] = useState<MoneyReceipt | null>();
 
 	const {
 		data,
@@ -129,6 +132,20 @@ const MoneyReceiptPage: NextPage = () => {
 				tagline='Money receipt as payment prove'
 			/>
 
+			<DrawerWrapper
+				opened={state.modalOpened}
+				size='75%'
+				title='Money Receipt'
+				close={() => {
+					setState({
+						modalOpened: false,
+					});
+					setReceipt(null);
+				}}
+			>
+				<MoneyReceiptDemo receipt={receipt!} />
+			</DrawerWrapper>
+
 			{data?.moneyReceipts?.nodes?.length && (
 				<DataTable
 					columns={columns}
@@ -137,7 +154,16 @@ const MoneyReceiptPage: NextPage = () => {
 					totalCount={data?.moneyReceipts?.meta?.totalCount ?? 100}
 					RowActionMenu={(row: MoneyReceipt) => (
 						<>
-							<Menu.Item icon={<IconReceipt size={18} />} color='teal'>
+							<Menu.Item
+								icon={<IconReceipt size={18} />}
+								color='teal'
+								onClick={() => {
+									setState({
+										modalOpened: true,
+									});
+									setReceipt(row);
+								}}
+							>
 								View Receipt
 							</Menu.Item>
 							<Menu.Item icon={<IconPencil size={18} />} color='orange'>

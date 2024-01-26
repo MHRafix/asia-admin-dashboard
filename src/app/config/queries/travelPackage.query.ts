@@ -1,40 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_TRAVEL_PACKAGE = gql`
-	mutation CREATE_TRAVEL_PACKAGE(
-		$packageTitle: String!
-		$regularPrice: Float!
-		$salePrice: Float
-		$countDown: CountDownTimerInput
-		$thumbnail: String
-		$description: String
-		$shortDescription: String
-		$carouselThumbnails: [String!]
-		$saleStatus: SALE_STATUS
-		$packageStatus: PACKAGE_STATUS
-		$isPublished: Boolean!
-		$departureFrom: PlaceInfoInput
-		$destination: PlaceInfoInput
-		$transportation: [TransportationInput!]
-	) {
-		createTravelPackage(
-			input: {
-				packageTitle: $packageTitle
-				regularPrice: $regularPrice
-				salePrice: $salePrice
-				countDown: $countDown
-				thumbnail: $thumbnail
-				description: $description
-				shortDescription: $shortDescription
-				carouselThumbnails: $carouselThumbnails
-				saleStatus: $saleStatus
-				isPublished: $isPublished
-				packageStatus: $packageStatus
-				departureFrom: $departureFrom
-				destination: $destination
-				transportation: $transportation
-			}
-		) {
+	mutation CREATE_TRAVEL_PACKAGE($input: CreateTravelPackageInput!) {
+		createTravelPackage(input: $input) {
 			_id
 		}
 	}

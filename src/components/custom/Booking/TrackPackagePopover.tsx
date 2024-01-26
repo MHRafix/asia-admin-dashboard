@@ -1,23 +1,14 @@
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
-import { GET_SINGLE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
 import TourCard from '@/components/common/Tour/TourCard';
-import { useQuery } from '@apollo/client';
 import { Button, Popover } from '@mantine/core';
 import React from 'react';
 
-const TrackPackagePopover: React.FC<{ packageId: string }> = ({
-	packageId,
+const TrackPackagePopover: React.FC<{ TPackage: ITravelPackage }> = ({
+	TPackage,
 }) => {
-	const { data } = useQuery<{
-		travelPackage: ITravelPackage;
-	}>(GET_SINGLE_TRAVEL_PACKAGE, {
-		variables: {
-			packageId,
-		},
-	});
-
 	return (
 		<div>
+			{/* {JSON.stringify(packageId, null)} */}
 			<Popover width={320} withArrow shadow='xl'>
 				<Popover.Target>
 					<Button
@@ -31,7 +22,7 @@ const TrackPackagePopover: React.FC<{ packageId: string }> = ({
 					</Button>
 				</Popover.Target>
 				<Popover.Dropdown p={0}>
-					<TourCard TPackage={data?.travelPackage!} />
+					<TourCard TPackage={TPackage as ITravelPackage} />
 				</Popover.Dropdown>
 			</Popover>
 		</div>

@@ -1,5 +1,4 @@
 import {
-	BULK_REMOVE_BOOKING,
 	DELETE_BOOKING_MUTATION,
 	PACKAGE_BOOKINGS_QUERY,
 	UPDATE_BOOKING_STATUS,
@@ -19,13 +18,11 @@ import {
 import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
-import { Query_Variable } from '@/logic/queryVariables';
 import { IState } from '@/pages/reception_management/attendance_activities';
 import { useMutation, useQuery } from '@apollo/client';
 import {
 	ActionIcon,
 	Badge,
-	Button,
 	CopyButton,
 	Flex,
 	Menu,
@@ -34,9 +31,9 @@ import {
 } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
-import { IconPlus, IconTrash } from '@tabler/icons-react';
+import { IconTrash } from '@tabler/icons-react';
 import { MRT_ColumnDef } from 'mantine-react-table';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useMemo, useState } from 'react';
 import { BiCopy } from 'react-icons/bi';
 import { FaCheck } from 'react-icons/fa';
@@ -46,8 +43,7 @@ import TrackPackagePopover from './TrackPackagePopover';
 const BookingTable: React.FC<{}> = () => {
 	const router = useRouter();
 	const [page, setPage] = useState<number>(1);
-	const [limit, setLimit] = useState<number>(5);
-	const [bookingIds, setBookingIds] = useState<string[]>([]);
+	const [limit, setLimit] = useState<number>(1000000);
 
 	const [state, setState] = useSetState<IState>({
 		modalOpened: false,
@@ -66,63 +62,39 @@ const BookingTable: React.FC<{}> = () => {
 		refetch,
 	} = useQuery<{
 		bookings: { nodes: IBooking[]; meta: IPaginationMeta };
-	}>(
-		PACKAGE_BOOKINGS_QUERY,
-		Query_Variable(
-			router.query.page as string,
-			router.query.limit as string,
-			page,
-			limit,
-			router.query.sort as string
-		)
-	);
+	}>(PACKAGE_BOOKINGS_QUERY, {
+		variables: {
+			input: {
+				sort: 'DESC',
+				sortBy: '_id',
+			},
+		},
+	});
 
 	// delete booking
-	const [deleteBooking, { loading: deletingBooking }] = useMutation(
-		DELETE_BOOKING_MUTATION,
-		{
-			onCompleted: () => {
-				// refetchBooking();
-				showNotification({
-					title: 'Booking successfully deleted!',
-					color: 'red',
-					icon: <FiTrash size={20} />,
-					message: '',
-				});
-			},
-		}
-	);
+	const [deleteBooking] = useMutation(DELETE_BOOKING_MUTATION, {
+		onCompleted: () => {
+			refetch();
+			showNotification({
+				title: 'Booking successfully deleted!',
+				color: 'red',
+				icon: <FiTrash size={20} />,
+				message: '',
+			});
+		},
+	});
 
 	// update booking
-	const [updateBooking, { loading: updatingBooking }] = useMutation(
-		UPDATE_BOOKING_STATUS,
-		{
-			onCompleted: () => {
-				// refetchBooking();
-				showNotification({
-					title: 'Booking successfully updated!',
-					color: 'teal',
-					message: '',
-				});
-			},
-		}
-	);
-	// const handleUpdateAttendee = (
-	// 	_id: string,
-	// 	status: BOOKING_STATUS,
-	// 	note: string
-	// ) => {
-	// 	updateMutation({
-	// 		variables: {
-	// 			input: {
-	// 				_id,
-	// 				status,
-	// 				verifyBy: user?._id,
-	// 				note,
-	// 			},
-	// 		},
-	// 	});
-	// };
+	const [updateBooking] = useMutation(UPDATE_BOOKING_STATUS, {
+		onCompleted: () => {
+			refetch();
+			showNotification({
+				title: 'Booking successfully updated!',
+				color: 'teal',
+				message: '',
+			});
+		},
+	});
 
 	const handleRefetch = (variables: any) => {
 		setState({ refetching: true, operationId: '', modalOpened: false });
@@ -182,12 +154,12 @@ const BookingTable: React.FC<{}> = () => {
 			{
 				accessorKey: 'packageId',
 				accessorFn: (originalRow: IBooking) => (
-					<TrackPackagePopover packageId={originalRow?.packageId!} />
+					<TrackPackagePopover TPackage={originalRow?.packageId!} />
 				),
-				header: 'Track',
+				header: 'Package',
 			},
 			{
-				accessorKey: 'packageId',
+				accessorKey: 'status',
 				accessorFn: (originalRow: IBooking) => (
 					<Menu>
 						<Menu.Target>
@@ -235,34 +207,6 @@ const BookingTable: React.FC<{}> = () => {
 		[]
 	);
 
-	// change booking limits
-	const handleLimitChange = (limit: string) => {
-		Router.replace({
-			query: { ...Router.query, limit, page: 1 },
-		});
-		setLimit(parseInt(limit));
-	};
-
-	// remove bulk bookings
-	const [bulkDeleteBooking, { loading: bulkDeleting }] = useMutation(
-		BULK_REMOVE_BOOKING,
-		{
-			variables: {
-				uIds: bookingIds,
-			},
-
-			onCompleted: () => {
-				refetch();
-				setBookingIds([]);
-				showNotification({
-					title: 'Bookings bulk delete successful!',
-					color: 'red',
-					icon: <FiTrash size={20} />,
-					message: '',
-				});
-			},
-		}
-	);
 	return (
 		<>
 			<PageTitleArea
@@ -277,41 +221,46 @@ const BookingTable: React.FC<{}> = () => {
 				]}
 			/>
 
-			{bookings?.bookings?.nodes?.length && (
-				<DataTable
-					columns={columns}
-					data={bookings?.bookings?.nodes ?? []}
-					refetch={handleRefetch}
-					totalCount={bookings?.bookings?.meta?.totalCount ?? 100}
-					RowActionMenu={(row: IBooking) => (
-						<>
-							<Menu.Item
-								// onClick={() => handleDeleteAttendance(row._id)}
-								icon={<IconTrash size={18} />}
-								color='red'
-							>
-								Delete
-							</Menu.Item>
-						</>
-					)}
-					ActionArea={
-						<>
-							<Button
-								color='violet'
-								variant='light'
-								leftIcon={<IconPlus size={16} />}
-								onClick={() =>
-									setState({ modalOpened: true, operationType: 'create' })
-								}
-								size='sm'
-							>
-								Add new
-							</Button>
-						</>
-					}
-					loading={state.refetching}
-				/>
-			)}
+			<DataTable
+				columns={columns}
+				data={bookings?.bookings?.nodes ?? []}
+				refetch={handleRefetch}
+				totalCount={bookings?.bookings?.meta?.totalCount ?? 100}
+				RowActionMenu={(row: IBooking) => (
+					<>
+						<Menu.Item
+							onClick={() =>
+								deleteBooking({
+									variables: {
+										id: row._id,
+									},
+								})
+							}
+							icon={<IconTrash size={18} />}
+							color='red'
+						>
+							Delete
+						</Menu.Item>
+					</>
+				)}
+				// ActionArea={
+				// 	<>
+				// 		<Button
+				// 			color='violet'
+				// 			variant='light'
+				// 			leftIcon={<IconPlus size={16} />}
+				// 			onClick={() =>
+				// 				setState({ modalOpened: true, operationType: 'create' })
+				// 			}
+				// 			size='sm'
+				// 		>
+				// 			Add new
+				// 		</Button>
+				// 	</>
+				// }
+				loading={state.refetching}
+			/>
+
 			<EmptyPanel
 				isShow={!bookings?.bookings?.nodes?.length && !fetching}
 				title='Oops sorry, No bookings found!'

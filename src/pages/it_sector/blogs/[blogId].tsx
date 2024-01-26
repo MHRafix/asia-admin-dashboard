@@ -104,7 +104,7 @@ const EditBlog: React.FC<{ blogId: string }> = ({ blogId }) => {
 					<PageTitleArea
 						title='Edit blog details'
 						tagline='Update blog details'
-						currentPathName='Create services'
+						currentPathName='Create blog'
 						othersPath={[
 							{
 								pathName: 'Home',

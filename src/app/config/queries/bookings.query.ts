@@ -5,10 +5,8 @@ import { gql } from '@apollo/client';
  */
 // bookings get query
 export const PACKAGE_BOOKINGS_QUERY = gql`
-	query PACKAGE_BOOKINGS_QUERY($page: Int, $limit: Int, $sortBy: String) {
-		bookings(
-			input: { page: $page, limit: $limit, sort: DESC, sortBy: $sortBy }
-		) {
+	query PACKAGE_BOOKINGS_QUERY($input: BookingPackageListQueryDto) {
+		bookings(input: $input) {
 			nodes {
 				_id
 				customerDetails {
@@ -16,7 +14,16 @@ export const PACKAGE_BOOKINGS_QUERY = gql`
 					email
 					phone
 				}
-				packageId
+				packageId {
+					_id
+					packageTitle
+					regularPrice
+					salePrice
+					thumbnail
+					destination {
+						name
+					}
+				}
 				transactionId
 				bookingId
 				paymentDetails {

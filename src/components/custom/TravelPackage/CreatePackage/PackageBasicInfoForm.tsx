@@ -3,6 +3,7 @@ import {
 	CREATE_PACKAGE_FORM_BASIC_INFO_DEFAULT_VALUE,
 	CREATE_PACKAGE_FORM_BASIC_INFO_SCHEMA,
 } from '@/app/config/form.validation/packageForm/package.form.validation';
+import { useGetSession } from '@/app/config/logic/getSession';
 import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
 import NotepadEditor from '@/components/common/NotepadEditor';
 import { activeStep, packageBasicInfoAtom } from '@/store/createPackgage.store';
@@ -17,8 +18,11 @@ import { useForm } from 'react-hook-form';
 import { FiCalendar } from 'react-icons/fi';
 
 const PackageBasicInfoForm: React.FC = () => {
+	const { user } = useGetSession();
+
 	const [desc, setDesc] = useState<string>();
 	const [packageBasicInfo, onChangePackageInfo] = useAtom(packageBasicInfoAtom);
+
 	const [step, onChangeStep] = useAtom(activeStep);
 	const nextStep = () =>
 		onChangeStep((currentStep) =>
@@ -61,7 +65,10 @@ const PackageBasicInfoForm: React.FC = () => {
 	const onSubmit = (value: IPackageBasicInfoFormState) => {
 		onChangePackageInfo({
 			...packageBasicInfo,
-			...value,
+			packageTitle: value.packageTitle,
+			regularPrice: value.regularPrice,
+			salePrice: value.salePrice,
+			shortDescription: value.shortDescription,
 			countDown: {
 				bookingStart: value.bookingStart,
 				bookingEnd: value.bookingEnd,
@@ -72,14 +79,20 @@ const PackageBasicInfoForm: React.FC = () => {
 		if (submitType === 'save') {
 			savePackage({
 				variables: {
-					...packageBasicInfo,
-					...value,
-					countDown: {
-						bookingStart: value.bookingStart,
-						bookingEnd: value.bookingEnd,
+					input: {
+						...packageBasicInfo,
+						packageTitle: value.packageTitle,
+						regularPrice: value.regularPrice,
+						salePrice: value.salePrice,
+						shortDescription: value.shortDescription,
+						countDown: {
+							bookingStart: value.bookingStart,
+							bookingEnd: value.bookingEnd,
+						},
+						description: desc,
+						isPublished: false,
+						author: user?._id,
 					},
-					description: desc,
-					isPublished: false,
 				},
 			});
 		} else {

@@ -4,6 +4,7 @@ import {
 	TRANSPORTATION_FORM_DEFAULT_VALUES,
 	TRANSPORTATION_FORM_SCHEMA,
 } from '@/app/config/form.validation/packageForm/package.form.validation';
+import { useGetSession } from '@/app/config/logic/getSession';
 import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
 import {
 	ITransportation,
@@ -23,7 +24,10 @@ import { RiRoadMapLine } from 'react-icons/ri';
 import { TbMap2 } from 'react-icons/tb';
 
 const TransportationForm: React.FC = () => {
+	const { user } = useGetSession();
+
 	const [packageBasicInfo, onChangePackageInfo] = useAtom(packageBasicInfoAtom);
+
 	const [carouselImg] = useAtom(carouselThumbnailsAtom);
 	const {
 		register,
@@ -105,10 +109,13 @@ const TransportationForm: React.FC = () => {
 		});
 		savePackage({
 			variables: {
-				...packageBasicInfo,
-				carouselThumbnails: carouselImg,
-				...value,
-				isPublished: true,
+				input: {
+					...packageBasicInfo,
+					carouselThumbnails: carouselImg,
+					...value,
+					isPublished: true,
+					author: user?._id,
+				},
 			},
 		});
 	};

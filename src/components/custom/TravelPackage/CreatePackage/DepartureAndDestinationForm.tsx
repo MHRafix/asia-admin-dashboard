@@ -4,6 +4,7 @@ import {
 	DEPARTURE_DESTINATION_FORM_SCHEMA,
 	IDepartureAndDestinationFormStates,
 } from '@/app/config/form.validation/packageForm/package.form.validation';
+import { useGetSession } from '@/app/config/logic/getSession';
 import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
 import {
 	activeStep,
@@ -21,6 +22,7 @@ import { BiMapPin } from 'react-icons/bi';
 import { RiRoadMapLine } from 'react-icons/ri';
 
 const DepartureAndDestinationForm: React.FC = () => {
+	const { user } = useGetSession();
 	const [packageBasicInfo, onChangePackageInfo] = useAtom(packageBasicInfoAtom);
 	const [, onChangeStep] = useAtom(activeStep);
 	const [carouselImg] = useAtom(carouselThumbnailsAtom);
@@ -28,6 +30,7 @@ const DepartureAndDestinationForm: React.FC = () => {
 		onChangeStep((currentStep) =>
 			currentStep < 3 ? currentStep + 1 : currentStep
 		);
+
 	const [submitType, setSubmitType] = useState('');
 	const {
 		register,
@@ -68,10 +71,13 @@ const DepartureAndDestinationForm: React.FC = () => {
 		if (submitType === 'save') {
 			savePackage({
 				variables: {
-					...packageBasicInfo,
-					carouselThumbnails: carouselImg,
-					...value,
-					isPublished: false,
+					input: {
+						...packageBasicInfo,
+						carouselThumbnails: carouselImg,
+						...value,
+						isPublished: false,
+						author: user?._id,
+					},
 				},
 			});
 		} else {

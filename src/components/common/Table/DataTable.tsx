@@ -3,7 +3,7 @@ import {
 	MatchOperator,
 	SortType,
 } from '@/app/config/gql';
-import { ActionIcon, Button, Flex } from '@mantine/core';
+import { ActionIcon, Button, Flex, Loader } from '@mantine/core';
 import { IconDownload, IconRefresh } from '@tabler/icons-react';
 import cls from 'classnames';
 import { mkConfig } from 'export-to-csv';
@@ -95,7 +95,7 @@ const DataTable: React.FC<Prop> = ({
 		columnFilterDisplayMode: 'popover',
 
 		state: {
-			showProgressBars: loading,
+			// showProgressBars: loading,
 			pagination,
 			sorting,
 		},
@@ -128,21 +128,25 @@ const DataTable: React.FC<Prop> = ({
 				<div className='flex justify-between p-2'>
 					<div className='flex items-center gap-1'>
 						<MRT_GlobalFilterTextInput table={table} />
-
 						<MRT_ShowHideColumnsButton table={table} />
 						{/* <MRT_ToggleFullScreenButton table={table} /> */}
 					</div>
-					<Flex gap={'md'}>
-						<ActionIcon
-							onClick={() => refetch({ where })}
-							variant='outline'
-							radius={100}
-							size={'lg'}
-						>
-							<IconRefresh
-								className={cls({ 'animate-reverse-spin': loading })}
-							/>
-						</ActionIcon>
+
+					<Flex gap={'md'} align={'center'}>
+						{loading ? (
+							<Loader size={'md'} color='teal' />
+						) : (
+							<ActionIcon
+								onClick={() => refetch({ where })}
+								variant='outline'
+								radius={100}
+								size={'lg'}
+							>
+								<IconRefresh
+									className={cls({ 'animate-reverse-spin': loading })}
+								/>
+							</ActionIcon>
+						)}
 						<ReactToPrint
 							content={reactToPrintContent}
 							documentTitle={pathname}

@@ -3,12 +3,12 @@ import {
 	MoneyReceipt,
 	MoneyReceiptsWithPagination,
 } from '@/app/api/models/money-receipt.model';
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import DrawerWrapper from '@/components/common/Drawer/DrawerWrapper';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
 import MoneyReceiptDemo from '@/components/custom/MoneyReceipts/MoneyReceiptDemo';
 import AdminLayout from '@/components/layouts/AdminLayout';
-import { IState } from '@/pages/reception_management/attendance_activities';
 import { useQuery } from '@apollo/client';
 import { Avatar, Button, Flex, Menu, Text } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
@@ -24,7 +24,7 @@ import { NextPage } from 'next';
 import { useMemo, useState } from 'react';
 
 const MoneyReceiptPage: NextPage = () => {
-	const [state, setState] = useSetState<IState>({
+	const [state, setState] = useSetState<any>({
 		modalOpened: false,
 		operationType: 'create',
 		operationId: null,
@@ -146,56 +146,52 @@ const MoneyReceiptPage: NextPage = () => {
 				<MoneyReceiptDemo receipt={receipt!} />
 			</DrawerWrapper>
 
-			{data?.moneyReceipts?.nodes?.length && (
-				<DataTable
-					columns={columns}
-					data={data?.moneyReceipts?.nodes ?? []}
-					refetch={handleRefetch}
-					totalCount={data?.moneyReceipts?.meta?.totalCount ?? 100}
-					RowActionMenu={(row: MoneyReceipt) => (
-						<>
-							<Menu.Item
-								icon={<IconReceipt size={18} />}
-								color='teal'
-								onClick={() => {
-									setState({
-										modalOpened: true,
-									});
-									setReceipt(row);
-								}}
-							>
-								View Receipt
-							</Menu.Item>
-							<Menu.Item icon={<IconPencil size={18} />} color='orange'>
-								Edit Receipt
-							</Menu.Item>
-							<Menu.Item icon={<IconTrash size={18} />} color='red'>
-								Remove Receipt
-							</Menu.Item>
-						</>
-					)}
-					ActionArea={
-						<>
-							<Button
-								color='violet'
-								variant='light'
-								leftIcon={<IconPlus size={16} />}
-								onClick={() =>
-									setState({ modalOpened: true, operationType: 'create' })
-								}
-								size='sm'
-							>
-								Add new
-							</Button>
-						</>
-					}
-					loading={state.refetching}
-				/>
-			)}
-
-			{/* <AppSettingsForm /> */}
+			<DataTable
+				columns={columns}
+				data={data?.moneyReceipts?.nodes ?? []}
+				refetch={handleRefetch}
+				totalCount={data?.moneyReceipts?.meta?.totalCount ?? 100}
+				RowActionMenu={(row: MoneyReceipt) => (
+					<>
+						<Menu.Item
+							icon={<IconReceipt size={18} />}
+							color='teal'
+							onClick={() => {
+								setState({
+									modalOpened: true,
+								});
+								setReceipt(row);
+							}}
+						>
+							View Receipt
+						</Menu.Item>
+						<Menu.Item icon={<IconPencil size={18} />} color='orange'>
+							Edit Receipt
+						</Menu.Item>
+						<Menu.Item icon={<IconTrash size={18} />} color='red'>
+							Remove Receipt
+						</Menu.Item>
+					</>
+				)}
+				ActionArea={
+					<>
+						<Button
+							color='violet'
+							variant='light'
+							leftIcon={<IconPlus size={16} />}
+							onClick={() =>
+								setState({ modalOpened: true, operationType: 'create' })
+							}
+							size='sm'
+						>
+							Add new
+						</Button>
+					</>
+				}
+				loading={state.refetching}
+			/>
 		</AdminLayout>
 	);
 };
 
-export default MoneyReceiptPage;
+export default protectWithSession(MoneyReceiptPage);

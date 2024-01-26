@@ -1,10 +1,12 @@
+import { ITravelPackage } from './travelPackage.model';
+
 export interface IBooking {
 	_id?: string;
 	customerDetails: { name?: string; email?: string; phone?: string };
 	street?: string;
 	city?: string;
 	country?: string;
-	packageId?: string;
+	packageId?: ITravelPackage;
 	status?: string;
 	transactionId?: string;
 	paymentDetails: IPaymentDetails;

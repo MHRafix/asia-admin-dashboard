@@ -1,5 +1,6 @@
 import { Notify } from '@/app/config/alertNotification/Notification';
 import { fileUploader } from '@/app/config/logic/fileUploader';
+import { useGetSession } from '@/app/config/logic/getSession';
 import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
 import {
 	PACKAGE_STATUS,
@@ -20,6 +21,7 @@ import { FiUpload } from 'react-icons/fi';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 
 const UploadThumbnails: React.FC = () => {
+	const { user } = useGetSession();
 	const [uploading, setUploading] = useState<string>('');
 	const [step, onChangeStep] = useAtom(activeStep);
 	const [packageBasicInfo, onChangePackageBasicInfo] =
@@ -110,15 +112,18 @@ const UploadThumbnails: React.FC = () => {
 		if (submitType === 'save') {
 			createPackage({
 				variables: {
-					...packageBasicInfo,
-					thumbnail: thumbnail,
-					carouselThumbnails,
-					saleStatus:
-						packageBasicInfo?.salePrice === 0
-							? SALE_STATUS.SALE
-							: SALE_STATUS.FIXED,
-					packageStatus: PACKAGE_STATUS.UPCOMING,
-					isPublished: false,
+					input: {
+						...packageBasicInfo,
+						thumbnail: thumbnail,
+						carouselThumbnails,
+						saleStatus:
+							packageBasicInfo?.salePrice === 0
+								? SALE_STATUS.SALE
+								: SALE_STATUS.FIXED,
+						packageStatus: PACKAGE_STATUS.UPCOMING,
+						isPublished: false,
+						author: user?._id,
+					},
 				},
 			});
 		} else {

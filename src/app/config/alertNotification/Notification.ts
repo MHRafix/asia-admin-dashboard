@@ -16,7 +16,7 @@ export const Notify = ({
 }: INotification) => {
 	return {
 		onCompleted: (res: any) => {
-			action(res);
+			action?.(res);
 			showNotification({
 				title: sucTitle,
 				color: 'teal',

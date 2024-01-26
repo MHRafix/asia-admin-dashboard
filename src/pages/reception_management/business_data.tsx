@@ -88,54 +88,52 @@ const BusinessData = () => {
 
 			<Space h={30} />
 
-			{clients?.Clients?.nodes?.length && (
-				<DataTable
-					columns={columns}
-					data={clients?.Clients?.nodes ?? []}
-					// filters={[
-					// 	{
-					// 		key: 'source',
-					// 		operator: MatchOperator.Eq,
-					// 		value: 'Accounting_Transaction_Source.BalanceAdjustment',
-					// 	},
-					// ]}
-					refetch={handleRefetch}
-					totalCount={clients?.Clients?.meta?.totalCount ?? 100}
-					RowActionMenu={(row: IClient) => (
-						<>
-							{/* <Menu.Item
+			<DataTable
+				columns={columns}
+				data={clients?.Clients?.nodes ?? []}
+				// filters={[
+				// 	{
+				// 		key: 'source',
+				// 		operator: MatchOperator.Eq,
+				// 		value: 'Accounting_Transaction_Source.BalanceAdjustment',
+				// 	},
+				// ]}
+				refetch={handleRefetch}
+				totalCount={clients?.Clients?.meta?.totalCount ?? 100}
+				RowActionMenu={(row: IClient) => (
+					<>
+						{/* <Menu.Item
 							onClick={() => handleDeleteAttendance(row._id)}
 							icon={<IconTrash size={18} />}
 							color='red'
 						>
 							Delete
 						</Menu.Item> */}
-							<Menu.Item icon={<IconPencil size={18} />} color='orange'>
-								Edit
-							</Menu.Item>
-							<Menu.Item icon={<IconTrash size={18} />} color='red'>
-								Remove
-							</Menu.Item>
-						</>
-					)}
-					ActionArea={
-						<>
-							<Button
-								color='violet'
-								variant='light'
-								leftIcon={<IconPlus size={16} />}
-								onClick={() =>
-									setState({ modalOpened: true, operationType: 'create' })
-								}
-								size='sm'
-							>
-								Add new
-							</Button>
-						</>
-					}
-					loading={state.refetching}
-				/>
-			)}
+						<Menu.Item icon={<IconPencil size={18} />} color='orange'>
+							Edit
+						</Menu.Item>
+						<Menu.Item icon={<IconTrash size={18} />} color='red'>
+							Remove
+						</Menu.Item>
+					</>
+				)}
+				ActionArea={
+					<>
+						<Button
+							color='violet'
+							variant='light'
+							leftIcon={<IconPlus size={16} />}
+							onClick={() =>
+								setState({ modalOpened: true, operationType: 'create' })
+							}
+							size='sm'
+						>
+							Add new
+						</Button>
+					</>
+				}
+				loading={state.refetching}
+			/>
 
 			<Space h={30} />
 

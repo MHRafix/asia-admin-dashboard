@@ -8,7 +8,6 @@ import {
 } from '@/app/config/logic/getDateRanges';
 import DateRangePicker from '@/components/common/DateRangePicker';
 import PageTitleArea from '@/components/common/PageTitleArea';
-import TourCardSkeleton from '@/components/common/Tour/TourCardSkeleton';
 import {
 	ChartBookingAnalytics,
 	ChartTransactionAnalytics,
@@ -129,13 +128,14 @@ const Dashboard = () => {
 								/>
 							</div>
 						</div>
-
 						<div className='lg:w-5/12'>
+							{/* 
+							<TourCardSkeleton show={!packages?.length} />
+							
+						*/}
 							<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
 								Popular packages
 							</Title>
-							<TourCardSkeleton show={!packages?.length} />
-
 							<PopularPackagesCarousel packages={packages!} />
 						</div>
 					</div>

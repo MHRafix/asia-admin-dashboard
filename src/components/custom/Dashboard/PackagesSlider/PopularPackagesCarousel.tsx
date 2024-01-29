@@ -1,11 +1,7 @@
-import { useGetTravelPackages } from '@/app/api/gql-api-hooks/travelPackage.api';
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
 import TourCard from '@/components/common/Tour/TourCard';
-import TourCardSkeleton from '@/components/common/Tour/TourCardSkeleton';
-import { Carousel } from '@mantine/carousel';
 import { useMediaQuery } from '@mantine/hooks';
 import React from 'react';
-import { BiLeftArrowAlt, BiRightArrowAlt } from 'react-icons/bi';
 
 const PopularPackagesCarousel: React.FC<{ packages: ITravelPackage[] }> = ({
 	packages,
@@ -13,7 +9,7 @@ const PopularPackagesCarousel: React.FC<{ packages: ITravelPackage[] }> = ({
 	const largeScreen = useMediaQuery('(min-width: 60em)');
 	return (
 		<div>
-			<Carousel
+			{/* <Carousel
 				sx={{
 					position: 'relative',
 				}}
@@ -33,12 +29,12 @@ const PopularPackagesCarousel: React.FC<{ packages: ITravelPackage[] }> = ({
 				}
 				// slidesToScroll={1}
 			>
-				{packages?.map((TPackage: ITravelPackage, idx: number) => (
 					<Carousel.Slide key={idx}>
-						<TourCard TPackage={TPackage} />
 					</Carousel.Slide>
-				))}
-			</Carousel>
+			</Carousel> */}
+			{packages?.map((TPackage: ITravelPackage, idx: number) => (
+				<TourCard TPackage={TPackage} />
+			))}
 		</div>
 	);
 };

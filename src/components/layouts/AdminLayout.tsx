@@ -33,7 +33,9 @@ const AdminLayout: React.FC<PropsWithChildren<Props>> = ({
 				// asideOffsetBreakpoint='sm'
 				navbar={<AdminMenu opened={opened} setOpened={setOpened} />}
 			>
-				<main className='bg-[#1D1E2B] sm:pr-2 px-0'>{children}</main>
+				<main className='bg-[#1D1E2B] sm:pr-2 px-0 !overflow-x-hidden'>
+					{children}
+				</main>
 			</AppShell>
 		</div>
 	);

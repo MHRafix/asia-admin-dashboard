@@ -1,5 +1,6 @@
 import { IOverViewCardData } from '@/app/api/models/dashboard.model';
 import { Space, Text, ThemeIcon } from '@mantine/core';
+import { useRouter } from 'next/router';
 import { BsBookmarkCheck } from 'react-icons/bs';
 import { SiGotomeeting } from 'react-icons/si';
 import { TbPlaneInflight, TbTransform } from 'react-icons/tb';
@@ -8,9 +9,14 @@ import { CountUp } from 'use-count-up';
 const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 	overViewCardData,
 }) => {
+	const router = useRouter();
+
 	return (
 		<div className='grid lg:grid-cols-4 sm:grid-cols-2 gap-5'>
-			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'>
+			<div
+				onClick={() => router.push('/reception_management/appointments')}
+				className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'
+			>
 				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
 					<SiGotomeeting size={30} />
 				</ThemeIcon>
@@ -29,7 +35,10 @@ const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 					</Text>
 				</div>
 			</div>
-			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'>
+			<div
+				onClick={() => router.push('/it_sector/bookings')}
+				className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'
+			>
 				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
 					<BsBookmarkCheck size={30} />
 				</ThemeIcon>
@@ -47,7 +56,10 @@ const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 					</Text>
 				</div>
 			</div>
-			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'>
+			<div
+				onClick={() => router.push('/')}
+				className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'
+			>
 				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
 					<TbPlaneInflight size={30} />
 				</ThemeIcon>
@@ -65,7 +77,10 @@ const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 					</Text>
 				</div>
 			</div>
-			<div className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'>
+			<div
+				onClick={() => router.push('/')}
+				className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'
+			>
 				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
 					<TbTransform size={30} />
 				</ThemeIcon>

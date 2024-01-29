@@ -51,7 +51,7 @@ const TourCard: React.FC<ITourCardProp> = ({ TPackage }) => {
 					/>
 				</div>
 
-				<div className='p-3'>
+				{/* <div className='p-3'>
 					<Flex justify='space-between' align='center'>
 						<Title order={4} mt={4} mb={6} ff='Nunito Sans, sans-serif'>
 							{TPackage?.packageTitle}
@@ -87,7 +87,7 @@ const TourCard: React.FC<ITourCardProp> = ({ TPackage }) => {
 							</Text>
 						</Flex>
 					</Flex>
-				</div>
+				</div> */}
 			</Link>
 
 			<Flex color='teal' gap={10} className='p-3'>

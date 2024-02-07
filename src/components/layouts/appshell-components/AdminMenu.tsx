@@ -106,7 +106,9 @@ const AdminMenu: React.FC<Props> = ({ opened, setOpened }) => {
 						href={item.href!}
 						disabled={
 							item?.href === '/rating_&&_reviews' ||
-							item?.href === '/expenses_calculation'
+							item?.href === '/expenses_calculation' ||
+							item?.href === '/reception_management/task_review' ||
+							item?.href === '/task_management'
 						}
 						active={asPath.includes(item.href)}
 						defaultOpened={asPath.includes(item.href)}

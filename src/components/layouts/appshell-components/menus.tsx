@@ -1,4 +1,4 @@
-import { BiNotification, BiUserPlus } from 'react-icons/bi';
+import { BiUserPlus } from 'react-icons/bi';
 import { BsBookmarkCheck, BsReceipt, BsUiChecksGrid } from 'react-icons/bs';
 import { FaNetworkWired, FaTasks } from 'react-icons/fa';
 import { HiOutlineViewGrid, HiOutlineViewGridAdd } from 'react-icons/hi';
@@ -7,16 +7,12 @@ import {
 	MdOutlineCalculate,
 	MdOutlineDocumentScanner,
 	MdOutlineLocalOffer,
-	MdOutlineLockClock,
-	MdOutlineNotifications,
-	MdOutlineNotificationsActive,
 	MdOutlinePostAdd,
 	MdOutlineRateReview,
 	MdWorkspacesOutline,
 } from 'react-icons/md';
 import { SiGotomeeting } from 'react-icons/si';
 import {
-	TbActivityHeartbeat,
 	TbDeviceDesktop,
 	TbListCheck,
 	TbListDetails,
@@ -39,11 +35,11 @@ export const menus = [
 		icon: <BsReceipt size={20} />,
 		href: '/reception_management',
 		children: [
-			{
-				label: 'Attendance Activities',
-				icon: <TbActivityHeartbeat size={20} />,
-				href: '/reception_management/attendance_activities',
-			},
+			// {
+			// 	label: 'Attendance Activities',
+			// 	icon: <TbActivityHeartbeat size={20} />,
+			// 	href: '/reception_management/attendance_activities',
+			// },
 
 			{
 				label: 'Money receipt',
@@ -130,6 +126,37 @@ export const menus = [
 	},
 
 	{
+		label: 'Manage Employees',
+		icon: <MdWorkspacesOutline size={20} />,
+		href: '/manage_employee',
+		children: [
+			{
+				label: 'All Employees',
+				icon: <FaNetworkWired size={20} />,
+				href: '/manage_employee/employees',
+			},
+			{
+				label: 'New Employee',
+				icon: <BiUserPlus size={20} />,
+				href: '/manage_employee/new_employee',
+			},
+		],
+	},
+
+	{
+		label: 'Settings',
+		icon: <VscSettings />,
+		href: '/settings/',
+		children: [
+			{
+				label: 'Basic information',
+				href: '/settings/app_info/basic_info',
+				icon: <TbListDetails size={18} />,
+			},
+		],
+	},
+
+	{
 		label: 'Task Management',
 		icon: <MdOutlineRateReview size={20} />,
 		href: '/task_management',
@@ -169,24 +196,6 @@ export const menus = [
 	},
 
 	{
-		label: 'Manage Employees',
-		icon: <MdWorkspacesOutline size={20} />,
-		href: '/manage_employee',
-		children: [
-			{
-				label: 'All Employees',
-				icon: <FaNetworkWired size={20} />,
-				href: '/manage_employee/employees',
-			},
-			{
-				label: 'New Employee',
-				icon: <BiUserPlus size={20} />,
-				href: '/manage_employee/new_employee',
-			},
-		],
-	},
-
-	{
 		label: 'Rating & Reviews',
 		icon: <MdOutlineRateReview size={20} />,
 		href: '/rating_&&_reviews',
@@ -196,39 +205,21 @@ export const menus = [
 		icon: <MdOutlineCalculate size={20} />,
 		href: '/expenses_calculation',
 	},
-	{
-		label: 'Notifications',
-		icon: <MdOutlineNotifications />,
-		href: '/settings/',
-		children: [
-			{
-				label: 'New Notifications',
-				href: '/settings/app_notification/new_notification',
-				icon: <BiNotification size={18} />,
-			},
-			{
-				label: 'All Notifications',
-				href: '/settings/app_notification/all_notifications',
-				icon: <MdOutlineNotificationsActive size={18} />,
-			},
-		],
-	},
-	{
-		label: 'Settings',
-		icon: <VscSettings />,
-		href: '/settings/',
-		children: [
-			{
-				label: 'Basic information',
-				href: '/settings/app_info/basic_info',
-				icon: <TbListDetails size={18} />,
-			},
-
-			{
-				label: 'Opening hours',
-				href: '/settings/app_info/opening_hours',
-				icon: <MdOutlineLockClock size={18} />,
-			},
-		],
-	},
+	// {
+	// 	label: 'Notifications',
+	// 	icon: <MdOutlineNotifications />,
+	// 	href: '/settings/',
+	// 	children: [
+	// 		{
+	// 			label: 'New Notifications',
+	// 			href: '/settings/app_notification/new_notification',
+	// 			icon: <BiNotification size={18} />,
+	// 		},
+	// 		{
+	// 			label: 'All Notifications',
+	// 			href: '/settings/app_notification/all_notifications',
+	// 			icon: <MdOutlineNotificationsActive size={18} />,
+	// 		},
+	// 	],
+	// },
 ];

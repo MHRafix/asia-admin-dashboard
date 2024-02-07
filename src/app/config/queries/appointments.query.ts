@@ -4,16 +4,18 @@ import { gql } from '@apollo/client';
  */
 
 export const APPOINTMENTS_QUERY = gql`
-	query APPOINTMENTS_QUERY($page: Int, $limit: Int, $sortBy: String) {
-		appointments(
-			input: { page: $page, limit: $limit, sort: DESC, sortBy: $sortBy }
-		) {
+	query APPOINTMENTS_QUERY($input: AppointmentListQueryDto) {
+		appointments(input: $input) {
 			nodes {
 				_id
 				name
 				email
 				phone
-				serviceId
+				service {
+					_id
+					title
+					thumbnail
+				}
 				status
 				subService
 				profession
@@ -21,6 +23,7 @@ export const APPOINTMENTS_QUERY = gql`
 					qTitle
 					qDesc
 				}
+				createdAt
 			}
 			meta {
 				totalCount
@@ -40,14 +43,14 @@ export const UPDATE_APPOINTMENT = gql`
 	}
 `;
 
-// booking delete query
+// appointment delete query
 export const DELETE_APPOINTMENT_MUTATION = gql`
 	mutation DELETE_APPOINTMENT_MUTATION($id: String!) {
 		removeAppointment(input: { key: "_id", operator: eq, value: $id })
 	}
 `;
 
-// bulk booking query
+// bulk appointment query
 export const BULK_REMOVE_APPOINTMENT = gql`
 	mutation BULK_REMOVE_APPOINTMENT($uIds: [String!]!) {
 		bulkRemoveAppointment(uIds: $uIds)

@@ -1,74 +1,117 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IAppointment } from '@/app/api/models/appointment.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
+import { MatchOperator } from '@/app/config/gql';
+import { getBadgeColors } from '@/app/config/logic/getColors';
 import {
 	APPOINTMENTS_QUERY,
-	BULK_REMOVE_APPOINTMENT,
+	DELETE_APPOINTMENT_MUTATION,
 } from '@/app/config/queries/appointments.query';
-import {
-	TABLE_DATA_LIMITS,
-	TABLE_DEFAULT_LIMIT,
-} from '@/app/config/table_configuration';
-import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
-import CircularLoader from '@/components/common/Loader';
+import DrawerWrapper from '@/components/common/Drawer/DrawerWrapper';
 import PageTitleArea from '@/components/common/PageTitleArea';
-import Pagination from '@/components/common/Pagination';
-import { APPOINTMENT_TABLE_HEAD } from '@/components/common/TABLE_HEAD';
-import TableHead from '@/components/common/TableHead';
-import { Query_Variable } from '@/logic/queryVariables';
+import DataTable from '@/components/common/Table/DataTable';
 import { useMutation, useQuery } from '@apollo/client';
-import { Button, Input, Select, Space, Table } from '@mantine/core';
-import Router, { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { FaSearch } from 'react-icons/fa';
-import { FiTrash } from 'react-icons/fi';
-import AppointmentsTableBody from './AppointmentsTableBody';
+import { Badge, Button, Menu, Text } from '@mantine/core';
+import { useSetState } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
+import { IconMessage, IconPlus, IconTrash } from '@tabler/icons-react';
+import dayjs from 'dayjs';
+import { MRT_ColumnDef } from 'mantine-react-table';
+import { useRouter } from 'next/router';
+import React, { useMemo } from 'react';
+import ReplyDrawer from './ReplyDrawer';
 
 const AppointmentsTable: React.FC<{}> = () => {
-	const [page, setPage] = useState<number>(1);
-	const [limit, setLimit] = useState<number>(5);
-	const [appointmentIds, setAppointmentIds] = useState<string[]>([]);
+	const [state, setState] = useSetState<any>({
+		modalOpened: false,
+		operationType: 'create',
+		operationId: null,
+		operationPayload: {},
+		refetching: false,
+		appointment: null,
+	});
 
 	const { query } = useRouter();
 
 	// get booking packages
 	const {
-		data: appointmentsData,
+		data,
 		loading: fetching,
 		refetch,
 	} = useQuery<{
 		appointments: { nodes: IAppointment[]; meta: IPaginationMeta };
-	}>(
-		APPOINTMENTS_QUERY,
-		Query_Variable(
-			query.page as string,
-			query.limit as string,
-			page,
-			limit,
-			query.sort as string
-		)
+	}>(APPOINTMENTS_QUERY, {
+		variables: {},
+	});
+
+	// handle refetch
+	const handleRefetch = (variables: any) => {
+		setState({ refetching: true, operationId: '', modalOpened: false });
+		refetch(variables).finally(() => {
+			setState({ refetching: false });
+		});
+	};
+
+	// table columns
+	const columns = useMemo<MRT_ColumnDef<any>[]>(
+		() => [
+			{
+				accessorKey: 'name',
+				header: 'Name',
+			},
+			{
+				accessorKey: 'email',
+				header: 'Email',
+			},
+			{
+				accessorKey: 'phone',
+				header: 'Phone',
+			},
+			// {
+			// 	accessorKey: 'service',
+			// 	accessorFn: (originalRow: IAppointment) => (
+			// 		<ServiceCard service={originalRow?.service} />
+			// 	),
+			// 	header: 'Service',
+			// },
+			{
+				accessorKey: 'status',
+				accessorFn: (originalRow: IAppointment) => (
+					<Badge
+						color={getBadgeColors(originalRow?.status!)}
+						size='lg'
+						fw={500}
+						variant='dot'
+						radius='sm'
+					>
+						{originalRow?.status}
+					</Badge>
+				),
+				header: 'Status',
+			},
+			{
+				accessorKey: 'subService',
+				header: 'Sub Service',
+			},
+			{
+				accessorFn: (originalRow: IAppointment) =>
+					dayjs(originalRow?.createdAt ?? new Date()).format('MMMM D, YYYY'),
+				// filterVariant: "date-range",
+				accessorKey: 'createdAt',
+				header: 'Created at',
+			},
+		],
+		[]
 	);
 
-	// change booking limits
-	const handleLimitChange = (limit: string) => {
-		Router.replace({
-			query: { ...Router.query, limit, page: 1 },
-		});
-		setLimit(parseInt(limit));
-	};
-
-	const onSuccess = () => {
-		refetch();
-		setAppointmentIds([]);
-	};
-
-	// remove bulk bookings
-	const [bulkDeleteAppointments, { loading: bulkDeleting }] = useMutation(
-		BULK_REMOVE_APPOINTMENT,
+	// delete appointment api
+	const [deleteAppointment, { loading: deleting__receipt }] = useMutation(
+		DELETE_APPOINTMENT_MUTATION,
 		Notify({
-			sucTitle: 'Appointments bulk delete successfull!',
-			errMessage: 'Please try again.',
-			action: onSuccess,
+			sucTitle: 'Appointment deleted successfully!',
+			action: () => {
+				refetch();
+			},
 		})
 	);
 
@@ -77,44 +120,6 @@ const AppointmentsTable: React.FC<{}> = () => {
 			<PageTitleArea
 				title='Appointments'
 				tagline='Booked appointments'
-				actionComponent={
-					<div className='flex gap-2 mb-5'>
-						<Input
-							icon={<FaSearch />}
-							variant='unstyled'
-							className='w-[300px] !border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
-							placeholder='Search appointments...'
-						/>
-						<Button
-							loading={bulkDeleting}
-							disabled={!appointmentIds?.length}
-							color='red'
-							leftIcon={<FiTrash size={16} />}
-							onClick={() =>
-								bulkDeleteAppointments({
-									variables: {
-										uIds: appointmentIds,
-									},
-								})
-							}
-						>
-							Bulk Remove
-						</Button>
-						<Select
-							w={120}
-							placeholder='Pick one'
-							onChange={(value) => handleLimitChange(value!)}
-							data={TABLE_DATA_LIMITS}
-							variant='unstyled'
-							className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
-							defaultValue={
-								(query.limit as string)
-									? (query.limit as string)
-									: TABLE_DEFAULT_LIMIT
-							}
-						/>
-					</div>
-				}
 				currentPathName='Appointments'
 				othersPath={[
 					{
@@ -123,49 +128,93 @@ const AppointmentsTable: React.FC<{}> = () => {
 					},
 				]}
 			/>
-
-			<div className='bg-[#212231] shadow-lg rounded-md'>
-				<Table>
-					<thead>
-						<tr>
-							{APPOINTMENT_TABLE_HEAD?.map((head: string, idx: number) => (
-								<TableHead key={idx} headData={head} />
-							))}
-						</tr>
-					</thead>
-					<tbody>
-						{appointmentsData?.appointments?.nodes?.map(
-							(appointment: IAppointment, idx: number) => (
-								<AppointmentsTableBody
-									key={idx}
-									appointment={appointment}
-									refetchAppointment={refetch}
-									onStoreId={setAppointmentIds}
-								/>
-							)
-						)}
-					</tbody>
-				</Table>
-
-				<EmptyPanel
-					imgPath='/emptyAppointment.png'
-					isShow={!appointmentsData?.appointments?.nodes?.length && !fetching}
-					title='There is no appointments found!'
-				/>
-				<CircularLoader isShow={fetching} />
-				<Pagination
-					isShow={
-						(appointmentsData?.appointments?.nodes?.length! as number) &&
-						(!fetching as boolean)
-					}
-					limit={limit}
-					onPageChange={setPage}
-					page={page}
-					meta={appointmentsData?.appointments?.meta!}
-				/>
-
-				<Space h={10} />
-			</div>
+			{/*  create, & reply drawer */}
+			<DrawerWrapper
+				opened={state.modalOpened}
+				size={state.operationType === 'reply' ? '50%' : 'md'}
+				title={`Appointment ${state.operationType}`}
+				close={() => {
+					setState({
+						modalOpened: false,
+						appointment: null,
+					});
+				}}
+			>
+				{state.operationType === 'answer' ? (
+					<ReplyDrawer clientQuestions={state?.appointment?.clientQuestions} />
+				) : // <MoneyReceiptCreateForm
+				// 	operationType={state.operationType}
+				// 	receipt={receipt!}
+				// 	refetch={refetch}
+				// />
+				null}
+			</DrawerWrapper>
+			<DataTable
+				columns={columns}
+				data={data?.appointments?.nodes ?? []}
+				refetch={handleRefetch}
+				totalCount={data?.appointments?.meta?.totalCount ?? 100}
+				isExportPDF={false}
+				RowActionMenu={(row: IAppointment) => (
+					<>
+						<Menu.Item
+							icon={<IconMessage size={18} />}
+							color='teal'
+							onClick={() =>
+								setState({
+									operationType: 'answer',
+									modalOpened: true,
+									appointment: row,
+								})
+							}
+						>
+							View & Answer
+						</Menu.Item>
+						<Menu.Item
+							icon={<IconTrash size={18} />}
+							color='red'
+							onClick={() =>
+								modals.openConfirmModal({
+									title: 'Please confirm your action',
+									children: (
+										<Text size='sm'>Proceed to action that you want!</Text>
+									),
+									labels: { confirm: 'Confirm', cancel: 'Cancel' },
+									onCancel: () => {},
+									onConfirm: () =>
+										deleteAppointment({
+											variables: {
+												input: {
+													key: '_id',
+													operator: MatchOperator.Eq,
+													value: row?._id,
+												},
+											},
+										}),
+								})
+							}
+						>
+							Remove
+						</Menu.Item>
+					</>
+				)}
+				ActionArea={
+					<>
+						<Button
+							color='violet'
+							variant='light'
+							leftIcon={<IconPlus size={16} />}
+							onClick={() =>
+								setState({ modalOpened: true, operationType: 'create' })
+							}
+							size='sm'
+						>
+							Add new
+						</Button>
+					</>
+				}
+				loading={state.refetching}
+			/>{' '}
 		</>
 	);
 };

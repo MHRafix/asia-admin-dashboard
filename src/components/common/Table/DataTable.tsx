@@ -25,6 +25,7 @@ interface Prop {
 	refetch: (v: any) => void;
 	totalCount: number;
 	loading: boolean;
+	isExportPDF?: boolean;
 	ActionArea?: React.ReactNode;
 	RowActionMenu?: (row: any) => React.ReactNode;
 }
@@ -38,6 +39,7 @@ const csvConfig = mkConfig({
 const DataTable: React.FC<Prop> = ({
 	columns,
 	loading,
+	isExportPDF = false,
 	data,
 	where = [],
 	refetch,
@@ -147,13 +149,15 @@ const DataTable: React.FC<Prop> = ({
 								/>
 							</ActionIcon>
 						)}
-						<ReactToPrint
-							content={reactToPrintContent}
-							documentTitle={pathname}
-							// onAfterPrint={handleAfterPrint}
-							removeAfterPrint
-							trigger={reactToPrintTrigger}
-						/>
+						{isExportPDF && (
+							<ReactToPrint
+								content={reactToPrintContent}
+								documentTitle={pathname}
+								// onAfterPrint={handleAfterPrint}
+								removeAfterPrint
+								trigger={reactToPrintTrigger}
+							/>
+						)}
 						{ActionArea}
 					</Flex>
 				</div>

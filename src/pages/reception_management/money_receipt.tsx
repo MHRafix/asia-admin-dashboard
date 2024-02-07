@@ -1,17 +1,24 @@
-import { Money_Receipt_Query } from '@/app/api/gql-api-hooks/money-receipt.query';
+import {
+	DELETE_MONEY_RECEIPT_MUTATION,
+	Money_Receipt_Query,
+} from '@/app/api/gql-api-hooks/money-receipt.query';
 import {
 	MoneyReceipt,
 	MoneyReceiptsWithPagination,
 } from '@/app/api/models/money-receipt.model';
+import { Notify } from '@/app/config/alertNotification/Notification';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
+import { MatchOperator } from '@/app/config/gql';
 import DrawerWrapper from '@/components/common/Drawer/DrawerWrapper';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
+import MoneyReceiptCreateForm from '@/components/custom/MoneyReceipts/MoneyReceiptCreateForm';
 import MoneyReceiptDemo from '@/components/custom/MoneyReceipts/MoneyReceiptDemo';
 import AdminLayout from '@/components/layouts/AdminLayout';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { Avatar, Button, Flex, Menu, Text } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
 import {
 	IconPencil,
 	IconPlus,
@@ -24,6 +31,7 @@ import { NextPage } from 'next';
 import { useMemo, useState } from 'react';
 
 const MoneyReceiptPage: NextPage = () => {
+	const [receipt, setReceipt] = useState<MoneyReceipt | null>();
 	const [state, setState] = useSetState<any>({
 		modalOpened: false,
 		operationType: 'create',
@@ -31,8 +39,8 @@ const MoneyReceiptPage: NextPage = () => {
 		operationPayload: {},
 		refetching: false,
 	});
-	const [receipt, setReceipt] = useState<MoneyReceipt | null>();
 
+	// money receipt data api
 	const {
 		data,
 		loading: money__receipts__loading,
@@ -41,16 +49,15 @@ const MoneyReceiptPage: NextPage = () => {
 		Money_Receipt_Query
 	);
 
+	// handle refetch data
 	const handleRefetch = (variables: any) => {
 		setState({ refetching: true, operationId: '', modalOpened: false });
 		refetch(variables).finally(() => {
 			setState({ refetching: false });
 		});
 	};
-	// contactNumber
-	// passportNo
-	// paymentType
-	// serviceName
+
+	// table column
 	const columns = useMemo<MRT_ColumnDef<any>[]>(
 		() => [
 			{
@@ -125,6 +132,17 @@ const MoneyReceiptPage: NextPage = () => {
 		[]
 	);
 
+	// delete receipt api
+	const [deleteReceipt, { loading: deleting__receipt }] = useMutation(
+		DELETE_MONEY_RECEIPT_MUTATION,
+		Notify({
+			sucTitle: 'Receipt deleted successfully!',
+			action: () => {
+				refetch();
+			},
+		})
+	);
+
 	return (
 		<AdminLayout title='Money receipts'>
 			<PageTitleArea
@@ -132,10 +150,11 @@ const MoneyReceiptPage: NextPage = () => {
 				tagline='Money receipt as payment prove'
 			/>
 
+			{/*  create, update & preview drawer */}
 			<DrawerWrapper
 				opened={state.modalOpened}
-				size='75%'
-				title='Money Receipt'
+				size={state.operationType === 'demo' ? '75%' : 'md'}
+				title={`Money receipt ${state.operationType}`}
 				close={() => {
 					setState({
 						modalOpened: false,
@@ -143,7 +162,15 @@ const MoneyReceiptPage: NextPage = () => {
 					setReceipt(null);
 				}}
 			>
-				<MoneyReceiptDemo receipt={receipt!} />
+				{state.operationType === 'demo' ? (
+					<MoneyReceiptDemo receipt={receipt!} />
+				) : (
+					<MoneyReceiptCreateForm
+						operationType={state.operationType}
+						receipt={receipt!}
+						refetch={refetch}
+					/>
+				)}
 			</DrawerWrapper>
 
 			<DataTable
@@ -151,6 +178,7 @@ const MoneyReceiptPage: NextPage = () => {
 				data={data?.moneyReceipts?.nodes ?? []}
 				refetch={handleRefetch}
 				totalCount={data?.moneyReceipts?.meta?.totalCount ?? 100}
+				isExportPDF={false}
 				RowActionMenu={(row: MoneyReceipt) => (
 					<>
 						<Menu.Item
@@ -159,16 +187,50 @@ const MoneyReceiptPage: NextPage = () => {
 							onClick={() => {
 								setState({
 									modalOpened: true,
+									operationType: 'demo',
 								});
 								setReceipt(row);
 							}}
 						>
 							View Receipt
 						</Menu.Item>
-						<Menu.Item icon={<IconPencil size={18} />} color='orange'>
+						<Menu.Item
+							icon={<IconPencil size={18} />}
+							color='orange'
+							onClick={() => {
+								setState({
+									modalOpened: true,
+									operationType: 'update',
+								});
+								setReceipt(row);
+							}}
+						>
 							Edit Receipt
 						</Menu.Item>
-						<Menu.Item icon={<IconTrash size={18} />} color='red'>
+						<Menu.Item
+							icon={<IconTrash size={18} />}
+							color='red'
+							onClick={() =>
+								modals.openConfirmModal({
+									title: 'Please confirm your action',
+									children: (
+										<Text size='sm'>Proceed to action that you want!</Text>
+									),
+									labels: { confirm: 'Confirm', cancel: 'Cancel' },
+									onCancel: () => {},
+									onConfirm: () =>
+										deleteReceipt({
+											variables: {
+												input: {
+													key: '_id',
+													operator: MatchOperator.Eq,
+													value: row?._id,
+												},
+											},
+										}),
+								})
+							}
+						>
 							Remove Receipt
 						</Menu.Item>
 					</>
@@ -188,7 +250,9 @@ const MoneyReceiptPage: NextPage = () => {
 						</Button>
 					</>
 				}
-				loading={state.refetching}
+				loading={
+					state.refetching || money__receipts__loading || deleting__receipt
+				}
 			/>
 		</AdminLayout>
 	);

@@ -37,3 +37,25 @@ export const Money_Receipt_Query = gql`
 		}
 	}
 `;
+
+export const CREATE_MONEY_RECEIPT_MUTATION = gql`
+	mutation CREATE_MONEY_RECEIPT($input: CreateMoneyReceiptInput!) {
+		createMoneyReceipt(input: $input) {
+			_id
+		}
+	}
+`;
+
+export const UPDATE_MONEY_RECEIPT_MUTATION = gql`
+	mutation UPDATE_MONEY_RECEIPT($input: UpdateMoneyReceiptInput!) {
+		updateMoneyReceipt(input: $input) {
+			_id
+		}
+	}
+`;
+
+export const DELETE_MONEY_RECEIPT_MUTATION = gql`
+	mutation DELETE_MONEY_RECEIPT($input: CommonMatchInput!) {
+		removeMoneyReceipt(input: $input)
+	}
+`;

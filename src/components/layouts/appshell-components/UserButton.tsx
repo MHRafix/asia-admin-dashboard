@@ -1,24 +1,14 @@
-import { IAttendance } from '@/app/api/models/attendance.model';
-import { IMeta } from '@/app/api/models/common.model';
-import { Notify } from '@/app/config/alertNotification/Notification';
 import { useGetSession } from '@/app/config/logic/getSession';
 import { signOut } from '@/app/config/logic/signOut';
 import {
-	CHECK_IS_ELIGIBLE_FOR_ATTENDANCE,
-	CREATE_ATTENDANCE_MUTATION,
-} from '@/app/config/queries/attendance.query';
-import { useMutation, useQuery } from '@apollo/client';
-import {
 	Avatar,
-	Button,
 	Group,
 	Menu,
+	Space,
 	Text,
-	Tooltip,
 	UnstyledButton,
 } from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';
-import dayjs from 'dayjs';
 import Link from 'next/link';
 import React, { useRef } from 'react';
 import { BsGear } from 'react-icons/bs';
@@ -28,40 +18,40 @@ export const UserButton: React.FC = () => {
 	const { loading, user } = useGetSession();
 	const ref = useRef();
 
-	const { data, refetch } = useQuery<{
-		Attendances: {
-			nodes: IAttendance[];
-			meta: IMeta;
-		};
-	}>(CHECK_IS_ELIGIBLE_FOR_ATTENDANCE, {
-		variables: {
-			input: {
-				limit: 1,
-				sort: 'DESC',
-				sortBy: 'createdAt',
-				where: [
-					{
-						key: 'attendee',
-						operator: 'eq',
-						value: user?._id,
-					},
-				],
-			},
-		},
-	});
+	// const { data, refetch } = useQuery<{
+	// 	Attendances: {
+	// 		nodes: IAttendance[];
+	// 		meta: IMeta;
+	// 	};
+	// }>(CHECK_IS_ELIGIBLE_FOR_ATTENDANCE, {
+	// 	variables: {
+	// 		input: {
+	// 			limit: 1,
+	// 			sort: 'DESC',
+	// 			sortBy: 'createdAt',
+	// 			where: [
+	// 				{
+	// 					key: 'attendee',
+	// 					operator: 'eq',
+	// 					value: user?._id,
+	// 				},
+	// 			],
+	// 		},
+	// 	},
+	// });
 
-	const [createAttendance, { loading: creating }] = useMutation(
-		CREATE_ATTENDANCE_MUTATION,
-		Notify({
-			sucTitle: 'Attendance request sent successfully!',
-			sucMessage: "You'll notified after approved.",
-			action: () => refetch(),
-		})
-	);
+	// const [createAttendance, { loading: creating }] = useMutation(
+	// 	CREATE_ATTENDANCE_MUTATION,
+	// 	Notify({
+	// 		sucTitle: 'Attendance request sent successfully!',
+	// 		sucMessage: "You'll notified after approved.",
+	// 		action: () => refetch(),
+	// 	})
+	// );
 
 	return (
 		<Group position='center' bg={'#262736'}>
-			<Menu withArrow>
+			<Menu withArrow disabled={loading}>
 				<Menu.Target>
 					<UnstyledButton
 						// @ts-ignore
@@ -98,12 +88,17 @@ export const UserButton: React.FC = () => {
 						</Group>
 					</UnstyledButton>
 				</Menu.Target>
-				<Menu.Dropdown py={10} bg={'#262736'} className='!text-center'>
+				<Menu.Dropdown py={10} bg={'#262736'} className='!text-left'>
 					<Menu.Label fz={19} ff={'Nunito sans, sans-serif'}>
 						{user?.name}
+						<Text color='dimmed' size='sm'>
+							{user?.email}
+						</Text>
 					</Menu.Label>
 
-					{dayjs(data?.Attendances?.nodes?.[0]?.createdAt!).format(
+					<Space h={'xs'} />
+
+					{/* {dayjs(data?.Attendances?.nodes?.[0]?.createdAt!).format(
 						'MMMM D, YYYY'
 					) === dayjs(new Date()).format('MMMM D, YYYY') ? (
 						<Tooltip label={'Leaving from office ? Please press me!'}>
@@ -155,7 +150,7 @@ export const UserButton: React.FC = () => {
 								Attendance Request
 							</Button>
 						</Tooltip>
-					)}
+					)} */}
 
 					<Link
 						href={'/settings/my-profile/update-profile'}

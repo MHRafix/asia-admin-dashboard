@@ -1,6 +1,32 @@
-IT SECTOR ----> Package Bookings --> Done
-IT SECTOR ----> Visa Requirements --> Done
-IT SECTOR ----> Blogs --> Done
-IT SECTOR ----> Blogs --> Done
-IT SECTOR ----> Tour Packages --> Almost Done
-IT SECTOR ----> Services --> Done
+Rest Development Implementations:------
+------------------------------------------
+01. Dashboard Analysis
+02. Reception Module ---- [
+    **. Money Receipt ---- 1. Create Receipt 2. Edit 3. Print Receipt
+    **. Appointments ---- 1. Create Appointments 2. Reply
+    **. Task Review ---- 1. Full Module
+    **. Client Bookmarks ---- 1. Create 2. Edit & Delete
+]
+03. IT Sector Module ---- [
+    **. Tour Packages ---- 1. Status Filter 2. Edit & Delete
+    ** Offers ---- Full Module
+    **. Users ---- 1. Add & Delete
+]
+
+04. Task Management Module ---- Full
+
+05. Manage Employee Module ---- [
+    **. Create, Edit & Delete
+]
+
+06. Rating and Reviews Module ---- Full
+
+07. Expense Calculations Module ---- Full
+
+08. Notifications Module ---- Full
+
+09. Auth Module ---- [
+    **. Forget Password & Reset Password
+    **. My Password Change
+
+]

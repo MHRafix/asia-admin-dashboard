@@ -109,7 +109,7 @@ const AppointmentsTableBody: React.FC<IAppointmentTableBodyProps> = ({
 			<td className='text-dimmed'>{appointment?.profession}</td>
 
 			<td className='text-dimmed'>
-				<TrackServicePopover serviceId={appointment?.serviceId!} />
+				<TrackServicePopover service={appointment?.service!} />
 			</td>
 
 			<td className='flex gap-2 items-center'>

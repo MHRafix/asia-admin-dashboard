@@ -102,7 +102,7 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 							</Tooltip>
 						)}
 					</CopyButton>
-				</div> 
+				</div>
 			</td>
 			<td className='text-dimmed'>
 				<Badge
@@ -117,7 +117,7 @@ const BookingTableBody: React.FC<IBookingTableBodyProps> = ({
 			</td>
 
 			<td className='text-dimmed'>
-				<TrackPackagePopover packageId={booking?.packageId!} />
+				<TrackPackagePopover TPackage={booking?.packageId!} />
 			</td>
 
 			<td className='text-dimmed'>

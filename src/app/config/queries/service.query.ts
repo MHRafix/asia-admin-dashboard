@@ -78,3 +78,14 @@ export const DELETE_SERVICE = gql`
 		removeService(input: { key: "_id", operator: eq, value: $id })
 	}
 `;
+
+export const GET_SERVICES_FOR_INPUT = gql`
+	query {
+		services(input: { page: 1, limit: 1000 }) {
+			nodes {
+				_id
+				title
+			}
+		}
+	}
+`;

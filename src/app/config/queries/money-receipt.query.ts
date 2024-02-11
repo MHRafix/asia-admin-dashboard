@@ -11,7 +11,10 @@ export const Money_Receipt_Query = gql`
 				contactNumber
 				passportNo
 				paymentType
-				serviceName
+				service {
+					_id
+					title
+				}
 				amountInWords
 				amountInNumber
 				serialNo
@@ -39,7 +42,7 @@ export const Money_Receipt_Query = gql`
 `;
 
 export const CREATE_MONEY_RECEIPT_MUTATION = gql`
-	mutation CREATE_MONEY_RECEIPT($input: CreateMoneyReceiptInput!) {
+	mutation Create_Money_Receipt($input: CreateMoneyReceiptInput!) {
 		createMoneyReceipt(input: $input) {
 			_id
 		}

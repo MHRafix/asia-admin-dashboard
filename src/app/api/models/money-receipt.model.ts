@@ -1,4 +1,5 @@
 import { IMeta } from './common.model';
+import { IService } from './service.model';
 import { IUser } from './users.model';
 
 export interface MoneyReceiptsWithPagination {
@@ -16,7 +17,7 @@ export interface MoneyReceipt {
 	paymentType: string;
 	amountInWords: string;
 	amountInNumber: number;
-	serviceName: string;
+	service: IService;
 	serialNo: number;
 	mrNo: number;
 	quantity: number;

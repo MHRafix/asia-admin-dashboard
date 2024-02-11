@@ -3,7 +3,7 @@ import { Notify } from '@/app/config/alertNotification/Notification';
 import {
 	APP_SETTINGS_FORM_DEFAULT_VALUES,
 	APP_SETTINGS_FORM_SCHEMA,
-} from '@/app/config/form.validation/appSettingForm/appSetting.form';
+} from '@/app/config/form.validation/app-setting-form/appSetting.form';
 import { fileUploader } from '@/app/config/logic/fileUploader';
 import {
 	APP_SETTINGS_QUERY,

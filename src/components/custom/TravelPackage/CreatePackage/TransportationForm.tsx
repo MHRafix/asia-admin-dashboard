@@ -3,7 +3,7 @@ import {
 	TOURBY,
 	TRANSPORTATION_FORM_DEFAULT_VALUES,
 	TRANSPORTATION_FORM_SCHEMA,
-} from '@/app/config/form.validation/packageForm/package.form.validation';
+} from '@/app/config/form.validation/package-form/package.form.validation';
 import { useGetSession } from '@/app/config/logic/getSession';
 import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
 import {

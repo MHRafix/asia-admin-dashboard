@@ -1,14 +1,14 @@
 import {
-	DELETE_MONEY_RECEIPT_MUTATION,
-	Money_Receipt_Query,
-} from '@/app/api/gql-api-hooks/money-receipt.query';
-import {
 	MoneyReceipt,
 	MoneyReceiptsWithPagination,
 } from '@/app/api/models/money-receipt.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import { MatchOperator } from '@/app/config/gql';
+import {
+	DELETE_MONEY_RECEIPT_MUTATION,
+	Money_Receipt_Query,
+} from '@/app/config/queries/money-receipt.query';
 import DrawerWrapper from '@/components/common/Drawer/DrawerWrapper';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
@@ -74,6 +74,11 @@ const MoneyReceiptPage: NextPage = () => {
 			},
 			{
 				accessorKey: 'serviceName',
+				accessorFn: (originalRow: MoneyReceipt) => (
+					<Text color='teal' fw={700}>
+						{originalRow?.service?.title}
+					</Text>
+				),
 				header: 'Service',
 			},
 			{

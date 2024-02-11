@@ -1,4 +1,5 @@
 import { IAuthPayload } from '@/app/api/models/auth.model';
+import { yupResolver } from '@hookform/resolvers/yup';
 import {
 	Box,
 	Button,
@@ -7,19 +8,18 @@ import {
 	TextInput,
 	Title,
 } from '@mantine/core';
-import { yupResolver } from '@hookform/resolvers/yup';
 // import { useForm, yupResolver } from '@mantine/form';
-import { NextPage } from 'next';
-import { useForm } from 'react-hook-form';
-import { FiAtSign, FiLock } from 'react-icons/fi';
+import { Notify } from '@/app/config/alertNotification/Notification';
+import protectWithoutSession from '@/app/config/authProtection/potectWithoutSession';
+import { loginSchema } from '@/app/config/form.validation/service-form/service.form.validation';
+import { LOGIN_QUERY } from '@/app/config/queries/auth.query';
+import { useMutation } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import Cookies from 'js-cookie';
+import { NextPage } from 'next';
 import Router from 'next/router';
-import { useMutation } from '@apollo/client';
-import { Notify } from '@/app/config/alertNotification/Notification';
-import { LOGIN_QUERY } from '@/app/config/queries/auth.query';
-import protectWithoutSession from '@/app/config/authProtection/potectWithoutSession';
-import { loginSchema } from '@/app/config/form.validation/serviceForm/service.form.validation';
+import { useForm } from 'react-hook-form';
+import { FiAtSign, FiLock } from 'react-icons/fi';
 
 export interface IAuthResponse {
 	_id: string;

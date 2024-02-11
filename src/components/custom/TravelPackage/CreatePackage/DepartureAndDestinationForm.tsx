@@ -3,7 +3,7 @@ import {
 	DEPARTURE_DESTINATION_FORM_DEFAULT_VALUES,
 	DEPARTURE_DESTINATION_FORM_SCHEMA,
 	IDepartureAndDestinationFormStates,
-} from '@/app/config/form.validation/packageForm/package.form.validation';
+} from '@/app/config/form.validation/package-form/package.form.validation';
 import { useGetSession } from '@/app/config/logic/getSession';
 import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
 import {

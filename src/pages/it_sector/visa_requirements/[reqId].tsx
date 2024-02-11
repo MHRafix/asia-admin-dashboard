@@ -10,7 +10,7 @@ import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import {
 	UPDATE_REQ_DEFAULT_VALUES,
 	updateReqSchema,
-} from '@/app/config/form.validation/serviceForm/service.form.validation';
+} from '@/app/config/form.validation/service-form/service.form.validation';
 import { fileUploader } from '@/app/config/logic/fileUploader';
 import CircularLoader from '@/components/common/Loader';
 import NotepadEditor from '@/components/common/NotepadEditor';

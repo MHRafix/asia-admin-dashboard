@@ -8,6 +8,7 @@ import {
 	UPDATE_MONEY_RECEIPT_MUTATION,
 } from '@/app/config/queries/money-receipt.query';
 import { GET_SERVICES_FOR_INPUT } from '@/app/config/queries/service.query';
+import { generateUid } from '@/app/utils/generateUid';
 import { getSelectInputData } from '@/app/utils/getSelectInputData';
 import { useMutation, useQuery } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
@@ -88,7 +89,12 @@ const MoneyReceiptCreateForm: React.FC<{
 		if (operationType === 'create') {
 			createReceipt({
 				variables: {
-					input: { ...values, authorizeBy: user?._id },
+					input: {
+						...values,
+						authorizeBy: user?._id,
+						mrNo: generateUid(),
+						serialNo: generateUid(),
+					},
 				},
 			});
 		} else {

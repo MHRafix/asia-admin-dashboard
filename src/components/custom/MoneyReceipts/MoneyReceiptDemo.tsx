@@ -26,10 +26,10 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 const MoneyReceiptDemo: React.FC<{ receipt: MoneyReceipt }> = ({ receipt }) => {
-	const [service, setService] = useState(receipt?.serviceName);
+	const [service, setService] = useState(receipt?.service?.title);
 
 	useEffect(() => {
-		setService(receipt?.serviceName);
+		setService(receipt?.service?.title);
 	}, [receipt]);
 
 	return (

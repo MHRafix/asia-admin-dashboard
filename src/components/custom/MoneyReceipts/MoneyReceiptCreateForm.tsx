@@ -1,17 +1,20 @@
 import { Payment__Types__Input__Data } from '@/app/api/models/common.model';
 import { MoneyReceipt } from '@/app/api/models/money-receipt.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { Money_Receipt_Form_Type } from '@/app/config/form.validation/receiption-management-forms/money-receipt-form.validation';
+import {
+	Money_Receipt_Form_Schema,
+	Money_Receipt_Form_Type,
+} from '@/app/config/form.validation/receiption-management-forms/money-receipt-form.validation';
 import { useGetSession } from '@/app/config/logic/getSession';
 import {
 	CREATE_MONEY_RECEIPT_MUTATION,
 	UPDATE_MONEY_RECEIPT_MUTATION,
 } from '@/app/config/queries/money-receipt.query';
 import { GET_SERVICES_FOR_INPUT } from '@/app/config/queries/service.query';
-import { generateUid } from '@/app/utils/generateUid';
 import { getSelectInputData } from '@/app/utils/getSelectInputData';
 import { useMutation, useQuery } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Input, NumberInput, Select, Space } from '@mantine/core';
 import { DateInput } from '@mantine/dates';
 import dayjs from 'dayjs';
@@ -22,7 +25,8 @@ const MoneyReceiptCreateForm: React.FC<{
 	operationType: string;
 	receipt?: MoneyReceipt;
 	refetch: () => void;
-}> = ({ operationType, refetch, receipt }) => {
+	prevReceipts: MoneyReceipt[];
+}> = ({ operationType, refetch, receipt, prevReceipts }) => {
 	const { user } = useGetSession();
 
 	// form initiate here
@@ -37,7 +41,7 @@ const MoneyReceiptCreateForm: React.FC<{
 			deliveryDate: new Date(),
 			issueDate: new Date(),
 		},
-		// resolver: yupResolver(Money_Receipt_Form_Schema),
+		resolver: yupResolver(Money_Receipt_Form_Schema),
 		mode: 'onChange',
 	});
 
@@ -92,8 +96,8 @@ const MoneyReceiptCreateForm: React.FC<{
 					input: {
 						...values,
 						authorizeBy: user?._id,
-						mrNo: generateUid(),
-						serialNo: generateUid(),
+						mrNo: prevReceipts?.length + 1,
+						serialNo: prevReceipts?.length + 1,
 					},
 				},
 			});
@@ -109,6 +113,7 @@ const MoneyReceiptCreateForm: React.FC<{
 		<div>
 			<form onSubmit={handleSubmit(submitForm)}>
 				<Input.Wrapper
+					size='md'
 					label='Client name'
 					error={<ErrorMessage errors={errors} name='clientName' />}
 				>
@@ -118,6 +123,7 @@ const MoneyReceiptCreateForm: React.FC<{
 				<Space h={'sm'} />
 
 				<Input.Wrapper
+					size='md'
 					label='Passport no'
 					error={<ErrorMessage errors={errors} name='passportNo' />}
 				>
@@ -127,6 +133,7 @@ const MoneyReceiptCreateForm: React.FC<{
 				<Space h={'sm'} />
 
 				<Input.Wrapper
+					size='md'
 					label='Select service'
 					error={<ErrorMessage errors={errors} name='service' />}
 				>
@@ -142,6 +149,7 @@ const MoneyReceiptCreateForm: React.FC<{
 				<Space h={'sm'} />
 
 				<Input.Wrapper
+					size='md'
 					label='Quantity'
 					error={<ErrorMessage errors={errors} name='quantity' />}
 				>
@@ -156,6 +164,7 @@ const MoneyReceiptCreateForm: React.FC<{
 				<Space h={'sm'} />
 
 				<Input.Wrapper
+					size='md'
 					label='Amount In Number'
 					error={<ErrorMessage errors={errors} name='amountInNumber' />}
 				>
@@ -170,6 +179,7 @@ const MoneyReceiptCreateForm: React.FC<{
 				<Space h={'sm'} />
 
 				<Input.Wrapper
+					size='md'
 					label='Amount In Words'
 					error={<ErrorMessage errors={errors} name='amountInWords' />}
 				>
@@ -182,6 +192,7 @@ const MoneyReceiptCreateForm: React.FC<{
 				<Space h={'sm'} />
 
 				<Input.Wrapper
+					size='md'
 					label='Payment Type'
 					error={<ErrorMessage errors={errors} name='paymentType' />}
 				>
@@ -196,25 +207,27 @@ const MoneyReceiptCreateForm: React.FC<{
 				<Space h={'sm'} />
 
 				<Input.Wrapper
+					size='md'
 					label='Issue Date'
 					error={<ErrorMessage errors={errors} name='issueDate' />}
 				>
 					<DateInput
 						placeholder='Pick a Date'
 						onChange={(e) => setValue('issueDate', e!)}
-						value={dayjs(watch(`issueDate`) ?? new Date()) as any}
+						defaultValue={dayjs(watch(`issueDate`) ?? new Date()) as any}
 					/>
 				</Input.Wrapper>
 
 				<Space h={'sm'} />
 
 				<Input.Wrapper
+					size='md'
 					label='Delivery Date'
 					error={<ErrorMessage errors={errors} name='deliveryDate' />}
 				>
 					<DateInput
 						placeholder='Pick a Date'
-						value={dayjs(watch(`deliveryDate`) ?? new Date()) as any}
+						defaultValue={dayjs(watch(`deliveryDate`) ?? new Date()) as any}
 						onChange={(date) => setValue(`deliveryDate`, date!)}
 
 						// onChange={(e) => setValue('deliveryDate', e!)}

@@ -174,6 +174,7 @@ const MoneyReceiptPage: NextPage = () => {
 						operationType={state.operationType}
 						receipt={receipt!}
 						refetch={refetch}
+						prevReceipts={data?.moneyReceipts?.nodes!}
 					/>
 				)}
 			</DrawerWrapper>

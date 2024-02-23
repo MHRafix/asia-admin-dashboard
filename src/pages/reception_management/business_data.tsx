@@ -1,13 +1,21 @@
 import { ClientWithPagination, IClient } from '@/app/api/models/client.model';
+import { Notify } from '@/app/config/alertNotification/Notification';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
-import { GET_CLIENTS_QUERY } from '@/app/config/queries/clientsData.query';
+import { MatchOperator } from '@/app/config/gql';
+import {
+	GET_CLIENTS_QUERY,
+	Remove_Client_Data,
+} from '@/app/config/queries/clientsData.query';
+import DrawerWrapper from '@/components/common/Drawer/DrawerWrapper';
 import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
+import ClientDataForm from '@/components/custom/ClientData/ClientDataForm';
 import AdminLayout from '@/components/layouts/AdminLayout';
-import { useQuery } from '@apollo/client';
-import { Anchor, Button, Menu, Space } from '@mantine/core';
+import { useMutation, useQuery } from '@apollo/client';
+import { Anchor, Button, Menu, Space, Text } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
+import { modals } from '@mantine/modals';
 import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
 import { MRT_ColumnDef } from 'mantine-react-table';
 import { useMemo } from 'react';
@@ -58,18 +66,23 @@ const BusinessData = () => {
 			{
 				accessorKey: 'facebook',
 				accessorFn: (originalRow: IClient) => (
-					<Anchor
-						target='_blank'
-						href={`https://facebook.com/${originalRow?.facebook}`}
-						color='teal'
-					>
-						Visit Facebook
+					<Anchor target='_blank' href={originalRow?.facebook} color='teal'>
+						Visit
 					</Anchor>
 				),
-				header: 'Facebook url',
+				header: 'Social',
 			},
 		],
 		[]
+	);
+
+	// remove client data mutation
+	const [removeClientData, { loading: removing }] = useMutation(
+		Remove_Client_Data,
+		Notify({
+			sucTitle: 'Client data removed',
+			action: () => reFetching__clients(),
+		})
 	);
 
 	return (
@@ -85,6 +98,28 @@ const BusinessData = () => {
 					},
 				]}
 			/>
+
+			<DrawerWrapper
+				opened={state.modalOpened}
+				close={() =>
+					setState({
+						modalOpened: false,
+					})
+				}
+				title='Add new client'
+				size='md'
+			>
+				<ClientDataForm
+					onSuccess={() => {
+						reFetching__clients();
+						setState({
+							modalOpened: false,
+						});
+					}}
+					operationType={state.operationType}
+					operationPayload={state.operationPayload}
+				/>
+			</DrawerWrapper>
 
 			<Space h={30} />
 
@@ -109,10 +144,48 @@ const BusinessData = () => {
 						>
 							Delete
 						</Menu.Item> */}
-						<Menu.Item icon={<IconPencil size={18} />} color='orange'>
+						<Menu.Item
+							icon={<IconPencil size={18} />}
+							color='orange'
+							onClick={() =>
+								setState({
+									modalOpened: true,
+									operationType: 'update',
+									operationPayload: row,
+								})
+							}
+						>
 							Edit
 						</Menu.Item>
-						<Menu.Item icon={<IconTrash size={18} />} color='red'>
+						<Menu.Item
+							icon={<IconTrash size={18} />}
+							color='red'
+							onClick={() =>
+								modals.openConfirmModal({
+									title: 'Proceed to remove',
+									children: (
+										<Text size='sm'>
+											Are you sure you want to delete your data?
+										</Text>
+									),
+									labels: {
+										cancel: 'Cencel',
+										confirm: 'Yes',
+									},
+									onCancel: () => {},
+									onConfirm: () =>
+										removeClientData({
+											variables: {
+												payload: {
+													key: '_id',
+													operator: MatchOperator.Eq,
+													value: row?._id,
+												},
+											},
+										}),
+								})
+							}
+						>
 							Remove
 						</Menu.Item>
 					</>

@@ -1,5 +1,4 @@
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
-import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import TravelPackages from '@/components/custom/TravelPackage/TravelPackages';
 import AdminLayout from '@/components/layouts/AdminLayout';
@@ -35,7 +34,8 @@ const TourPackages: NextPage = () => {
 					</div>
 				}
 			/>
-			<TravelPackages skeletonCount={20} />
+
+			<TravelPackages skeletonCount={20} withFilter={true} />
 		</AdminLayout>
 	);
 };

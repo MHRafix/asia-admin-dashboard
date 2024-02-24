@@ -9,10 +9,8 @@ export const CREATE_TRAVEL_PACKAGE = gql`
 `;
 
 export const GET_TRAVEL_PACKAGES = gql`
-	query TRAVEL_PACKAGES($page: Int!, $limit: Int) {
-		travelPackages(
-			input: { page: $page, limit: $limit, sort: DESC, sortBy: "_id" }
-		) {
+	query TRAVEL_PACKAGES($input: TravelPackageListQueryDto) {
+		travelPackages(input: $input) {
 			nodes {
 				_id
 				packageTitle
@@ -85,5 +83,11 @@ export const GET_SINGLE_TRAVEL_PACKAGE = gql`
 			}
 			carouselThumbnails
 		}
+	}
+`;
+
+export const Delete_Tour_Package = gql`
+	mutation Delete_Package($payload: CommonMatchInput!) {
+		removeTravelPackage(input: $payload)
 	}
 `;

@@ -15,11 +15,12 @@ import { useMutation } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Accordion, Button, Group, Input, Select, Space } from '@mantine/core';
-import { DateInput, TimeInput } from '@mantine/dates';
+import { DatePickerInput, TimeInput } from '@mantine/dates';
 import { useAtom } from 'jotai';
 import Router from 'next/router';
 import React, { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
+import { FiCalendar } from 'react-icons/fi';
 import { RiRoadMapLine } from 'react-icons/ri';
 import { TbMap2 } from 'react-icons/tb';
 
@@ -98,7 +99,7 @@ const TransportationForm: React.FC = () => {
 		Notify({
 			sucTitle: 'Package saved successfully!',
 			errMessage: 'Failed to save package.',
-			action: () => Router.push('/tour_packages'),
+			action: () => Router.push('/it_sector/tour/tour_packages'),
 		})
 	);
 
@@ -216,16 +217,31 @@ const TransportationForm: React.FC = () => {
 												/>
 											}
 										>
-											<DateInput
-												value={watch(`transportation.${idx}.departureDate`)}
+											<DatePickerInput
+												// value={watch(`transportation.${idx}.departureDate`)}
+												// onChange={(v) =>
+												// 	setValue(`transportation.${idx}.departureDate`, v!)
+												// }
+												// placeholder='Pick a date'
+												// maw={400}
+												// variant='unstyled'
+												// size={'md'}
+												// className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
+
+												defaultValue={watch(
+													`transportation.${idx}.departureDate`
+												)}
+												valueFormat='DD MMM YYYY'
+												type='default'
+												size={'md'}
+												icon={<FiCalendar size='1.1rem' />}
+												variant='unstyled'
+												className='!border-[1px] !border-[#32344b] border-solid px-1 py-[7px] rounded-md'
 												onChange={(v) =>
 													setValue(`transportation.${idx}.departureDate`, v!)
 												}
-												placeholder='Pick a date'
+												placeholder='Pick a date '
 												maw={400}
-												variant='unstyled'
-												size={'md'}
-												className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
 											/>
 										</Input.Wrapper>
 										<Input.Wrapper
@@ -258,16 +274,22 @@ const TransportationForm: React.FC = () => {
 												/>
 											}
 										>
-											<DateInput
-												value={watch(`transportation.${idx}.arrivalDate`)}
+											<DatePickerInput
+												defaultValue={watch(
+													`transportation.${idx}.arrivalDate`
+												)}
+												valueFormat='DD MMM YYYY'
+												type='default'
+												size={'md'}
+												// defaultValue={getValues('bookingStart')}
+												icon={<FiCalendar size='1.1rem' />}
+												variant='unstyled'
+												className='!border-[1px] !border-[#32344b] border-solid px-1 py-[7px] rounded-md'
 												onChange={(v) =>
 													setValue(`transportation.${idx}.arrivalDate`, v!)
 												}
 												placeholder='Pick a date '
 												maw={400}
-												variant='unstyled'
-												size={'md'}
-												className='!border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
 											/>
 										</Input.Wrapper>
 										<Input.Wrapper

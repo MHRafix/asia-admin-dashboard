@@ -1,3 +1,4 @@
+import { SortType } from '@/app/config/gql';
 import {
 	GET_SINGLE_TRAVEL_PACKAGE,
 	GET_TRAVEL_PACKAGES,
@@ -13,8 +14,12 @@ export const useGetTravelPackages = () => {
 		GET_TRAVEL_PACKAGES,
 		{
 			variables: {
-				page: 1,
-				limit: 100,
+				input: {
+					page: 1,
+					limit: 100,
+					sort: SortType.Desc,
+					sortBy: '_id',
+				},
 			},
 		}
 	);

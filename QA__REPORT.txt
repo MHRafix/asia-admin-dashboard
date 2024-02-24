@@ -8,7 +8,7 @@ Rest Development Implementations:------
     **. Client Bookmarks ---- 1. Create 2. Edit & Delete
 ]
 03. IT Sector Module ---- [
-    **. Tour Packages ---- 1. Status Filter 2. Edit & Delete
+    **. Tour Packages ---- 1. Edit 
     ** Offers ---- Full Module
     **. Users ---- 1. Add & Delete
 ]

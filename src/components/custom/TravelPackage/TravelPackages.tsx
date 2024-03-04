@@ -1,9 +1,10 @@
-import { useGetTravelPackages } from '@/app/api/gql-api-hooks/travelPackage.api';
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
 import { MatchOperator, SortType } from '@/app/config/gql';
+import { GET_TRAVEL_PACKAGES } from '@/app/config/queries/travelPackage.query';
 import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import TourCard from '@/components/common/Tour/TourCard';
 import TourCardSkeleton from '@/components/common/Tour/TourCardSkeleton';
+import { useLazyQuery } from '@apollo/client';
 import { Group, Select, Space } from '@mantine/core';
 import React, { useEffect, useState } from 'react';
 
@@ -11,47 +12,79 @@ const TravelPackages: React.FC<{
 	skeletonCount: number;
 	withFilter?: boolean;
 }> = ({ skeletonCount, withFilter = false }) => {
-	const { packages, loading, refetchPackages } = useGetTravelPackages();
-
-	const [status, setStatus] = useState<string>('UPCOMING');
-
-	useEffect(() => {
-		if (status === 'ALL') {
-			refetchPackages({
+	const [fetchPackages, { data, loading, refetch: refetchPackages }] =
+		useLazyQuery<{
+			travelPackages: { nodes: ITravelPackage[] };
+		}>(GET_TRAVEL_PACKAGES, {
+			variables: {
 				input: {
 					page: 1,
 					limit: 100,
 					sort: SortType.Desc,
 					sortBy: '_id',
 				},
+			},
+		});
+
+	const [status, setStatus] = useState<string>('UPCOMING');
+
+	useEffect(() => {
+		if (status === 'ALL') {
+			fetchPackages({
+				variables: {
+					input: {
+						page: 1,
+						limit: 100,
+						sort: SortType.Desc,
+						sortBy: '_id',
+					},
+				},
 			});
 		} else if (status === 'PUBLISHED' || status === 'NOT-PUBLISHED') {
-			refetchPackages({
-				input: {
-					where: {
-						key: 'isPublished',
-						operator: MatchOperator.Eq,
-						value: status === 'PUBLISHED' ? 'true' : 'false',
+			fetchPackages({
+				variables: {
+					input: {
+						where: {
+							page: 1,
+							limit: 100,
+							sort: SortType.Desc,
+							sortBy: '_id',
+							key: 'isPublished',
+							operator: MatchOperator.Eq,
+							value: status === 'PUBLISHED' ? 'true' : 'false',
+						},
 					},
 				},
 			});
 		} else if (status === 'FIXED' || status === 'SALE') {
-			refetchPackages({
-				input: {
-					where: {
-						key: 'saleStatus',
-						operator: MatchOperator.Eq,
-						value: status,
+			fetchPackages({
+				variables: {
+					input: {
+						where: {
+							page: 1,
+							limit: 100,
+							sort: SortType.Desc,
+							sortBy: '_id',
+							key: 'saleStatus',
+							operator: MatchOperator.Eq,
+							value: status,
+						},
 					},
 				},
 			});
 		} else {
-			refetchPackages({
-				input: {
-					where: {
-						key: 'packageStatus',
-						operator: MatchOperator.Eq,
-						value: status,
+			fetchPackages({
+				variables: {
+					input: {
+						page: 1,
+						limit: 100,
+						sort: SortType.Desc,
+						sortBy: '_id',
+						where: {
+							key: 'packageStatus',
+							operator: MatchOperator.Eq,
+							value: status,
+						},
 					},
 				},
 			});
@@ -85,7 +118,7 @@ const TravelPackages: React.FC<{
 
 			<EmptyPanel
 				imgPath='/tourPackages.png'
-				isShow={!loading && !packages?.length}
+				isShow={!loading && !data?.travelPackages?.nodes?.length}
 				title='There is no tour packages found!'
 			/>
 
@@ -94,9 +127,15 @@ const TravelPackages: React.FC<{
 					<TourCardSkeleton key={idx} show={loading} />
 				))}
 
-				{packages?.map((TPackage: ITravelPackage, idx: number) => (
-					<TourCard key={idx} TPackage={TPackage} onRefetch={refetchPackages} />
-				))}
+				{data?.travelPackages?.nodes?.map(
+					(TPackage: ITravelPackage, idx: number) => (
+						<TourCard
+							key={idx}
+							TPackage={TPackage}
+							onRefetch={refetchPackages}
+						/>
+					)
+				)}
 			</div>
 		</div>
 	);

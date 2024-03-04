@@ -1,4 +1,5 @@
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import { GET_SINGLE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DepartureAndDestinationForm from '@/components/custom/TravelPackage/CreatePackage/DepartureAndDestinationForm';
@@ -21,7 +22,7 @@ import { MdOutlineArrowBackIos } from 'react-icons/md';
 
 const CreatePackage: NextPage = () => {
 	const [step, onChangeStep] = useAtom(activeStep);
-	const [pk, onChangePackageBasicInfo] = useAtom(packageBasicInfoAtom);
+	const [, onChangePackageBasicInfo] = useAtom(packageBasicInfoAtom);
 	const [, onChangeCarouselThumbnails] = useAtom(carouselThumbnailsAtom);
 	const { query } = useRouter();
 
@@ -30,7 +31,7 @@ const CreatePackage: NextPage = () => {
 			currentStep > 0 ? currentStep - 1 : currentStep
 		);
 
-	const [getPackageDetails, { data, loading }] = useLazyQuery<{
+	const [getPackageDetails, { data }] = useLazyQuery<{
 		travelPackage: ITravelPackage;
 	}>(GET_SINGLE_TRAVEL_PACKAGE, {
 		variables: {
@@ -54,12 +55,31 @@ const CreatePackage: NextPage = () => {
 			},
 			shortDescription: data?.travelPackage?.shortDescription,
 			thumbnail: data?.travelPackage?.thumbnail,
-			departureFrom: data?.travelPackage?.departureFrom,
+			departureFrom: {
+				lat: data?.travelPackage?.departureFrom?.lat!,
+				lng: data?.travelPackage?.departureFrom?.lng!,
+				name: data?.travelPackage?.departureFrom?.name!,
+			},
 			description: data?.travelPackage?.description,
 			isPublished: data?.travelPackage?.isPublished,
-			destination: data?.travelPackage?.destination,
+			destination: {
+				lat: data?.travelPackage?.destination?.lat!,
+				lng: data?.travelPackage?.destination?.lng!,
+				name: data?.travelPackage?.destination?.name!,
+			},
 			packageStatus: data?.travelPackage?.packageStatus as any,
-			transportation: data?.travelPackage?.transportation,
+			transportation: data?.travelPackage?.transportation?.map((transport) => ({
+				arrivalDate: transport?.arrivalDate,
+				departureDate: transport?.departureDate,
+				departureTime: transport?.departureTime,
+				destinationStation: transport?.destinationStation,
+				journeyBreak: transport?.journeyBreak,
+				arrivalTime: transport?.arrivalTime,
+				departureStation: transport?.destinationStation,
+				stops: transport?.stops,
+				tourBy: transport?.tourBy,
+				transportName: transport?.transportName,
+			}))!,
 		});
 		onChangeCarouselThumbnails(data?.travelPackage?.carouselThumbnails!);
 	}, [data]);
@@ -119,4 +139,4 @@ const CreatePackage: NextPage = () => {
 	);
 };
 
-export default CreatePackage;
+export default protectWithSession(CreatePackage);

@@ -42,7 +42,7 @@ const TransportationForm: React.FC = () => {
 		resolver: yupResolver(TRANSPORTATION_FORM_SCHEMA),
 	});
 
-	const { fields, append, remove } = useFieldArray({
+	const { fields } = useFieldArray({
 		control,
 		name: 'transportation',
 	});

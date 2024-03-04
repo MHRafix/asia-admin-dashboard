@@ -4,7 +4,10 @@ import {
 	CREATE_PACKAGE_FORM_BASIC_INFO_SCHEMA,
 } from '@/app/config/form.validation/package-form/package.form.validation';
 import { useGetSession } from '@/app/config/logic/getSession';
-import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
+import {
+	CREATE_TRAVEL_PACKAGE,
+	Update_Tour_Package,
+} from '@/app/config/queries/travelPackage.query';
 import NotepadEditor from '@/components/common/NotepadEditor';
 import { activeStep, packageBasicInfoAtom } from '@/store/createPackgage.store';
 import { useMutation } from '@apollo/client';
@@ -13,12 +16,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Group, Input, Space, Textarea } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiCalendar } from 'react-icons/fi';
 
 const PackageBasicInfoForm: React.FC = () => {
 	const { user } = useGetSession();
+	const { query } = useRouter();
 
 	const [desc, setDesc] = useState<string>();
 	const [packageBasicInfo, onChangePackageInfo] = useAtom(packageBasicInfoAtom);
@@ -50,14 +55,26 @@ const PackageBasicInfoForm: React.FC = () => {
 			setValue('shortDescription', packageBasicInfo?.shortDescription!);
 			setValue('bookingStart', packageBasicInfo?.countDown?.bookingStart!);
 			setValue('bookingEnd', packageBasicInfo?.countDown?.bookingEnd!);
+			setDesc(packageBasicInfo?.description);
 		}
 	}, [packageBasicInfo]);
 
+	// create package mutation
 	const [savePackage, { loading: savingPackage }] = useMutation(
 		CREATE_TRAVEL_PACKAGE,
 		Notify({
 			sucTitle: 'Package saved successfully!',
-			sucMessage: 'Please refetch package list.',
+			// sucMessage: 'Please refetch package list.',
+			errMessage: 'Failed to save package.',
+		})
+	);
+
+	// update package mutation
+	const [updatePackage, { loading: updatingPackage }] = useMutation(
+		Update_Tour_Package,
+		Notify({
+			sucTitle: 'Package saved successfully!',
+			// sucMessage: 'Please refetch package list.',
 			errMessage: 'Failed to save package.',
 		})
 	);
@@ -77,24 +94,46 @@ const PackageBasicInfoForm: React.FC = () => {
 		});
 
 		if (submitType === 'save') {
-			savePackage({
-				variables: {
-					input: {
-						...packageBasicInfo,
-						packageTitle: value.packageTitle,
-						regularPrice: value.regularPrice,
-						salePrice: value.salePrice,
-						shortDescription: value.shortDescription,
-						countDown: {
-							bookingStart: value.bookingStart,
-							bookingEnd: value.bookingEnd,
+			if (query?.packageId) {
+				updatePackage({
+					variables: {
+						input: {
+							_id: query?.packageId,
+							...packageBasicInfo,
+							packageTitle: value.packageTitle,
+							regularPrice: value.regularPrice,
+							salePrice: value.salePrice,
+							shortDescription: value.shortDescription,
+							countDown: {
+								bookingStart: value.bookingStart,
+								bookingEnd: value.bookingEnd,
+							},
+							description: desc,
+							isPublished: false,
+							author: user?._id,
 						},
-						description: desc,
-						isPublished: false,
-						author: user?._id,
 					},
-				},
-			});
+				});
+			} else {
+				savePackage({
+					variables: {
+						input: {
+							...packageBasicInfo,
+							packageTitle: value.packageTitle,
+							regularPrice: value.regularPrice,
+							salePrice: value.salePrice,
+							shortDescription: value.shortDescription,
+							countDown: {
+								bookingStart: value.bookingStart,
+								bookingEnd: value.bookingEnd,
+							},
+							description: desc,
+							isPublished: false,
+							author: user?._id,
+						},
+					},
+				});
+			}
 		} else {
 			nextStep();
 		}
@@ -208,20 +247,13 @@ const PackageBasicInfoForm: React.FC = () => {
 				</div>
 				<Space h={20} />
 				<Input.Wrapper label='Description' size='md'>
-					<NotepadEditor
-						setValue={setDesc}
-						value={
-							packageBasicInfo?.description
-								? packageBasicInfo?.description
-								: desc!
-						}
-					/>
+					<NotepadEditor setValue={setDesc} value={desc!} />
 				</Input.Wrapper>
 				<Group position='right' mt={65}>
 					<Button
 						type='submit'
 						color='teal'
-						loading={savingPackage}
+						loading={savingPackage || updatingPackage}
 						onClick={() => setSubmitType('save')}
 					>
 						Save

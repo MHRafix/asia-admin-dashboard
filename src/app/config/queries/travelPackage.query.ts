@@ -86,6 +86,14 @@ export const GET_SINGLE_TRAVEL_PACKAGE = gql`
 	}
 `;
 
+export const Update_Tour_Package = gql`
+	mutation UPDATE_TRAVEL_PACKAGE_MUTATION($input: UpdateTravelPackageInput!) {
+		updateTravelPackage(input: $input) {
+			_id
+		}
+	}
+`;
+
 export const Delete_Tour_Package = gql`
 	mutation Delete_Package($payload: CommonMatchInput!) {
 		removeTravelPackage(input: $payload)

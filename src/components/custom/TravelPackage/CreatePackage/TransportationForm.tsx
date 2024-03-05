@@ -5,9 +5,13 @@ import {
 	TRANSPORTATION_FORM_SCHEMA,
 } from '@/app/config/form.validation/package-form/package.form.validation';
 import { useGetSession } from '@/app/config/logic/getSession';
-import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
+import {
+	CREATE_TRAVEL_PACKAGE,
+	Update_Tour_Package,
+} from '@/app/config/queries/travelPackage.query';
 import {
 	ITransportation,
+	activeStep,
 	carouselThumbnailsAtom,
 	packageBasicInfoAtom,
 } from '@/store/createPackgage.store';
@@ -17,7 +21,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Accordion, Button, Group, Input, Select, Space } from '@mantine/core';
 import { DatePickerInput, TimeInput } from '@mantine/dates';
 import { useAtom } from 'jotai';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { FiCalendar } from 'react-icons/fi';
@@ -26,6 +30,8 @@ import { TbMap2 } from 'react-icons/tb';
 
 const TransportationForm: React.FC = () => {
 	const { user } = useGetSession();
+	const { query } = useRouter();
+	const [, onChangeStep] = useAtom(activeStep);
 
 	const [packageBasicInfo, onChangePackageInfo] = useAtom(packageBasicInfoAtom);
 
@@ -94,12 +100,29 @@ const TransportationForm: React.FC = () => {
 		});
 	}, [packageBasicInfo?.transportation]);
 
+	// create package
 	const [savePackage, { loading: savingPackage }] = useMutation(
 		CREATE_TRAVEL_PACKAGE,
 		Notify({
 			sucTitle: 'Package saved successfully!',
 			errMessage: 'Failed to save package.',
-			action: () => Router.push('/it_sector/tour/tour_packages'),
+			action: () => {
+				Router.push(`/it_sector/tour/tour_packages`);
+				onChangeStep(0);
+			},
+		})
+	);
+
+	// update package mutation
+	const [updatePackage, { loading: updatingPackage }] = useMutation(
+		Update_Tour_Package,
+		Notify({
+			sucTitle: 'Package saved successfully!',
+			errMessage: 'Failed to save package.',
+			action: () => {
+				Router.push(`/it_sector/tour/tour_packages`);
+				onChangeStep(0);
+			},
 		})
 	);
 
@@ -108,17 +131,33 @@ const TransportationForm: React.FC = () => {
 			...packageBasicInfo,
 			transportation: value.transportation,
 		});
-		savePackage({
-			variables: {
-				input: {
-					...packageBasicInfo,
-					carouselThumbnails: carouselImg,
-					...value,
-					isPublished: true,
-					author: user?._id,
+
+		if (query?.packageId) {
+			updatePackage({
+				variables: {
+					input: {
+						_id: query?.packageId,
+						...packageBasicInfo,
+						carouselThumbnails: carouselImg,
+						...value,
+						isPublished: true,
+						author: user?._id,
+					},
 				},
-			},
-		});
+			});
+		} else {
+			savePackage({
+				variables: {
+					input: {
+						...packageBasicInfo,
+						carouselThumbnails: carouselImg,
+						...value,
+						isPublished: true,
+						author: user?._id,
+					},
+				},
+			});
+		}
 	};
 	return (
 		<div>
@@ -160,7 +199,7 @@ const TransportationForm: React.FC = () => {
 											}
 										>
 											<Select
-												defaultValue={watch(`transportation.${idx}.tourBy`)}
+												value={watch(`transportation.${idx}.tourBy`)}
 												width={400}
 												data={[
 													{
@@ -400,7 +439,11 @@ const TransportationForm: React.FC = () => {
 				))}
 
 				<Group position='right'>
-					<Button type='submit' color='teal' loading={savingPackage}>
+					<Button
+						type='submit'
+						color='teal'
+						loading={savingPackage || updatingPackage}
+					>
 						Save
 					</Button>
 				</Group>

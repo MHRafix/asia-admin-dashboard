@@ -5,7 +5,10 @@ import {
 	IDepartureAndDestinationFormStates,
 } from '@/app/config/form.validation/package-form/package.form.validation';
 import { useGetSession } from '@/app/config/logic/getSession';
-import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
+import {
+	CREATE_TRAVEL_PACKAGE,
+	Update_Tour_Package,
+} from '@/app/config/queries/travelPackage.query';
 import {
 	activeStep,
 	carouselThumbnailsAtom,
@@ -16,12 +19,14 @@ import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Accordion, Button, Group, Input, Space } from '@mantine/core';
 import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { BiMapPin } from 'react-icons/bi';
 import { RiRoadMapLine } from 'react-icons/ri';
 
 const DepartureAndDestinationForm: React.FC = () => {
+	const { query } = useRouter();
 	const { user } = useGetSession();
 	const [packageBasicInfo, onChangePackageInfo] = useAtom(packageBasicInfoAtom);
 	const [, onChangeStep] = useAtom(activeStep);
@@ -53,11 +58,23 @@ const DepartureAndDestinationForm: React.FC = () => {
 		}
 	}, [packageBasicInfo]);
 
+	// create package
 	const [savePackage, { loading: savingPackage }] = useMutation(
 		CREATE_TRAVEL_PACKAGE,
 		Notify({
 			sucTitle: 'Package saved successfully!',
 			errMessage: 'Failed to save package.',
+			// action: () => Router.push(`/it_sector/tour/tour_packages`),
+		})
+	);
+
+	// update package mutation
+	const [updatePackage, { loading: updatingPackage }] = useMutation(
+		Update_Tour_Package,
+		Notify({
+			sucTitle: 'Package saved successfully!',
+			errMessage: 'Failed to save package.',
+			// action: () => Router.push(`/it_sector/tour/tour_packages`),
 		})
 	);
 
@@ -69,17 +86,32 @@ const DepartureAndDestinationForm: React.FC = () => {
 		});
 
 		if (submitType === 'save') {
-			savePackage({
-				variables: {
-					input: {
-						...packageBasicInfo,
-						carouselThumbnails: carouselImg,
-						...value,
-						isPublished: false,
-						author: user?._id,
+			if (query?.packageId) {
+				updatePackage({
+					variables: {
+						input: {
+							_id: query.packageId,
+							...packageBasicInfo,
+							carouselThumbnails: carouselImg,
+							...value,
+							isPublished: false,
+							author: user?._id,
+						},
 					},
-				},
-			});
+				});
+			} else {
+				savePackage({
+					variables: {
+						input: {
+							...packageBasicInfo,
+							carouselThumbnails: carouselImg,
+							...value,
+							isPublished: false,
+							author: user?._id,
+						},
+					},
+				});
+			}
 		} else {
 			nextStep();
 		}
@@ -230,7 +262,7 @@ const DepartureAndDestinationForm: React.FC = () => {
 							setSubmitType('save');
 						}}
 						color='teal'
-						loading={savingPackage}
+						loading={savingPackage || updatingPackage}
 					>
 						Save
 					</Button>{' '}

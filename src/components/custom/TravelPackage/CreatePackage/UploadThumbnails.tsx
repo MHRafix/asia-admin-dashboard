@@ -1,7 +1,10 @@
 import { Notify } from '@/app/config/alertNotification/Notification';
 import { fileUploader } from '@/app/config/logic/fileUploader';
 import { useGetSession } from '@/app/config/logic/getSession';
-import { CREATE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
+import {
+	CREATE_TRAVEL_PACKAGE,
+	Update_Tour_Package,
+} from '@/app/config/queries/travelPackage.query';
 import {
 	PACKAGE_STATUS,
 	SALE_STATUS,
@@ -14,7 +17,7 @@ import { Button, FileButton, Group, Input, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { FiUpload } from 'react-icons/fi';
@@ -22,8 +25,9 @@ import { HiOutlinePhotograph } from 'react-icons/hi';
 
 const UploadThumbnails: React.FC = () => {
 	const { user } = useGetSession();
+	const { query } = useRouter();
 	const [uploading, setUploading] = useState<string>('');
-	const [step, onChangeStep] = useAtom(activeStep);
+	const [, onChangeStep] = useAtom(activeStep);
 	const [packageBasicInfo, onChangePackageBasicInfo] =
 		useAtom(packageBasicInfoAtom);
 	const [thumbnail, setThumbnail] = useState<string>(
@@ -91,13 +95,22 @@ const UploadThumbnails: React.FC = () => {
 		}
 	};
 
+	// create travel packages
 	const [createPackage, { loading: creatingPackage }] = useMutation(
 		CREATE_TRAVEL_PACKAGE,
 		Notify({
 			sucTitle: 'Package created successfully!',
 			sucMessage: 'Please refetch package list.',
 			errMessage: 'Failed to create package.',
-			action: () => Router.push(`/tour_packages`),
+		})
+	);
+
+	// update package mutation
+	const [updatePackage, { loading: updatingPackage }] = useMutation(
+		Update_Tour_Package,
+		Notify({
+			sucTitle: 'Package saved successfully!',
+			errMessage: 'Failed to save package.',
 		})
 	);
 
@@ -110,22 +123,42 @@ const UploadThumbnails: React.FC = () => {
 		onChangeCarouselThumbnails(carouselThumbnails);
 
 		if (submitType === 'save') {
-			createPackage({
-				variables: {
-					input: {
-						...packageBasicInfo,
-						thumbnail: thumbnail,
-						carouselThumbnails,
-						saleStatus:
-							packageBasicInfo?.salePrice === 0
-								? SALE_STATUS.SALE
-								: SALE_STATUS.FIXED,
-						packageStatus: PACKAGE_STATUS.UPCOMING,
-						isPublished: false,
-						author: user?._id,
+			if (query?.packageId) {
+				updatePackage({
+					variables: {
+						input: {
+							...packageBasicInfo,
+							thumbnail: thumbnail,
+							carouselThumbnails,
+							saleStatus:
+								packageBasicInfo?.salePrice === 0
+									? SALE_STATUS.SALE
+									: SALE_STATUS.FIXED,
+							packageStatus: PACKAGE_STATUS.UPCOMING,
+							isPublished: false,
+							author: user?._id,
+							_id: query?.packageId,
+						},
 					},
-				},
-			});
+				});
+			} else {
+				createPackage({
+					variables: {
+						input: {
+							...packageBasicInfo,
+							thumbnail: thumbnail,
+							carouselThumbnails,
+							saleStatus:
+								packageBasicInfo?.salePrice === 0
+									? SALE_STATUS.SALE
+									: SALE_STATUS.FIXED,
+							packageStatus: PACKAGE_STATUS.UPCOMING,
+							isPublished: false,
+							author: user?._id,
+						},
+					},
+				});
+			}
 		} else {
 			nextStep();
 		}
@@ -268,8 +301,11 @@ const UploadThumbnails: React.FC = () => {
 			<Group position='right' mt={65}>
 				<Button
 					color='teal'
-					loading={creatingPackage}
-					onClick={() => setSubmitType('save')}
+					loading={creatingPackage || updatingPackage}
+					onClick={() => {
+						onSubmit();
+						setSubmitType('save');
+					}}
 				>
 					Save
 				</Button>

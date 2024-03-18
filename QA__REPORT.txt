@@ -2,13 +2,9 @@ Rest Development Implementations:------
 ------------------------------------------
 01. Dashboard Analysis
 02. Reception Module ---- [
-    **. Money Receipt ---- 1. Create Receipt 2. Edit 3. Print Receipt
-    **. Appointments ---- 1. Create Appointments 2. Reply
     **. Task Review ---- 1. Full Module
-    **. Client Bookmarks ---- 1. Create 2. Edit & Delete
 ]
 03. IT Sector Module ---- [
-    **. Tour Packages ---- 1. Edit 
     ** Offers ---- Full Module
     **. Users ---- 1. Add & Delete
 ]

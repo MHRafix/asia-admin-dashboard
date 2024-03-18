@@ -6,7 +6,7 @@ import {
 import { ActionIcon, Button, Flex, Loader } from '@mantine/core';
 import { IconDownload, IconRefresh } from '@tabler/icons-react';
 import cls from 'classnames';
-import { mkConfig } from 'export-to-csv';
+// import { mkConfig } from 'export-to-csv';
 import {
 	MRT_ColumnDef,
 	MRT_GlobalFilterTextInput,
@@ -30,11 +30,11 @@ interface Prop {
 	RowActionMenu?: (row: any) => React.ReactNode;
 }
 
-const csvConfig = mkConfig({
-	fieldSeparator: ',',
-	decimalSeparator: '.',
-	useKeysAsHeaders: true,
-});
+// const csvConfig = mkConfig({
+// 	fieldSeparator: ',',
+// 	decimalSeparator: '.',
+// 	useKeysAsHeaders: true,
+// });
 
 const DataTable: React.FC<Prop> = ({
 	columns,

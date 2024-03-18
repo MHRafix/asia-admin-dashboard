@@ -1,5 +1,7 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IUser } from '@/app/api/models/users.model';
+import { Notify } from '@/app/config/alertNotification/Notification';
+import { CREATE_USER_MUTATION } from '@/app/config/queries/user.query';
 import {
 	BULK_REMOVE_USER,
 	USERS_QUERY,
@@ -9,16 +11,32 @@ import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
 import { IState } from '@/pages/reception_management/attendance_activities';
 import { useMutation, useQuery } from '@apollo/client';
-import { Avatar, Button, Flex, Menu, Space, Text } from '@mantine/core';
+import { ErrorMessage } from '@hookform/error-message';
+import { yupResolver } from '@hookform/resolvers/yup';
+import {
+	Avatar,
+	Badge,
+	Button,
+	Drawer,
+	Flex,
+	Input,
+	Menu,
+	PasswordInput,
+	Select,
+	Space,
+	Text,
+} from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { MRT_ColumnDef } from 'mantine-react-table';
 import React, { useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { FiTrash } from 'react-icons/fi';
 import { TbUsers } from 'react-icons/tb';
+import * as Yup from 'yup';
 
-const CustomerTable: React.FC<{}> = () => {
+const UsersTable: React.FC<{}> = () => {
 	const [state, setState] = useSetState<IState>({
 		modalOpened: false,
 		operationType: 'create',
@@ -52,6 +70,30 @@ const CustomerTable: React.FC<{}> = () => {
 		}
 	);
 
+	// form initiate
+	const {
+		register,
+		handleSubmit,
+		reset,
+		setValue,
+		formState: { errors },
+	} = useForm<{
+		name: string;
+		email: string;
+		role: string;
+		password: string;
+	}>({
+		resolver: yupResolver(
+			Yup.object().shape({
+				name: Yup.string().required().label('Name'),
+				email: Yup.string().email().required().label('Email'),
+				password: Yup.string().min(8).required().label('Password'),
+				role: Yup.string().required().label('Role'),
+			})
+		),
+	});
+
+	// handle refetch
 	const handleRefetch = (variables: any) => {
 		setState({ refetching: true, operationId: '', modalOpened: false });
 		refetch(variables).finally(() => {
@@ -79,9 +121,47 @@ const CustomerTable: React.FC<{}> = () => {
 				accessorKey: 'phone',
 				header: 'Phone Number',
 			},
+			{
+				accessorKey: 'role',
+				accessorFn: (originalRow: IUser) => (
+					<Badge
+						color={getRoleBadgeColor(originalRow?.role)}
+						size='md'
+						variant='filled'
+						radius='sm'
+					>
+						{originalRow?.role}
+					</Badge>
+				),
+				header: 'Role',
+			},
 		],
 		[]
 	);
+
+	// create user
+	const [createUser, { loading: creating__user }] = useMutation(
+		CREATE_USER_MUTATION,
+		Notify({
+			sucTitle: 'User created successfully',
+			action: () => {
+				refetch();
+				setState({
+					modalOpened: false,
+				});
+			},
+		})
+	);
+
+	// on submit user create form
+	const onSubmitUserForm = (input: any) => {
+		createUser({
+			variables: {
+				input,
+			},
+		});
+	};
+
 	return (
 		<>
 			<PageTitleArea
@@ -144,8 +224,87 @@ const CustomerTable: React.FC<{}> = () => {
 			/>
 
 			<Space h={10} />
+
+			<Drawer
+				opened={state.modalOpened}
+				onClose={() =>
+					setState({
+						modalOpened: false,
+					})
+				}
+				size='md'
+				title='Create a new user'
+				position='right'
+			>
+				<form onSubmit={handleSubmit(onSubmitUserForm)}>
+					<Input.Wrapper
+						label='Name'
+						size='md'
+						error={<ErrorMessage name='name' errors={errors} />}
+					>
+						<Input {...register('name')} placeholder='Mehedi H. Rafiz' />
+					</Input.Wrapper>
+
+					<Space h={'sm'} />
+
+					<Input.Wrapper
+						label='Email'
+						size='md'
+						error={<ErrorMessage name='email' errors={errors} />}
+					>
+						<Input {...register('email')} placeholder='example@gmail.com' />
+					</Input.Wrapper>
+
+					<Space h={'sm'} />
+
+					<Input.Wrapper
+						label='Password'
+						size='md'
+						error={<ErrorMessage name='password' errors={errors} />}
+					>
+						<PasswordInput {...register('password')} placeholder='********' />
+					</Input.Wrapper>
+
+					<Space h={'sm'} />
+
+					<Input.Wrapper
+						label='Select Role'
+						size='md'
+						error={<ErrorMessage name='role' errors={errors} />}
+					>
+						<Select
+							data={['ADMIN', 'MODERATOR', 'CUSTOMER']}
+							defaultValue={'ADMIN'}
+							onChange={(e) => setValue('role', e!)}
+							placeholder='********'
+						/>
+					</Input.Wrapper>
+
+					<Space h={'sm'} />
+
+					<Button type='submit' loading={creating__user} color='teal' fullWidth>
+						Create
+					</Button>
+				</form>
+			</Drawer>
 		</>
 	);
 };
 
-export default CustomerTable;
+export default UsersTable;
+
+const getRoleBadgeColor = (role: string) => {
+	switch (role) {
+		case 'ADMIN':
+			return 'teal';
+
+		case 'CUSTOMER':
+			return 'violet';
+
+		case 'MODERATOR':
+			return 'orange';
+
+		default:
+			break;
+	}
+};

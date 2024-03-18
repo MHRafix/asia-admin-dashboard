@@ -112,9 +112,9 @@ export const menus = [
 				],
 			},
 			{
-				label: 'Customers',
+				label: 'Users',
 				icon: <TbUsers size={20} />,
-				href: '/it_sector/customers',
+				href: '/it_sector/manage_users',
 			},
 
 			{

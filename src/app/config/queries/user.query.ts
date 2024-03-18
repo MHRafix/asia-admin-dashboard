@@ -15,6 +15,14 @@ export const UPDATE_USER_DETAILS = gql`
 	}
 `;
 
+export const MANAGE_USER_ACCESS_MUTATION = gql`
+	mutation MANAGE_USER_ACCESS($input: UpdateUserInput!) {
+		updateUser(input: $input) {
+			_id
+		}
+	}
+`;
+
 export const CREATE_USER_MUTATION = gql`
 	mutation CREATE_USER($input: CreateUserInput!) {
 		signUp(input: $input) {

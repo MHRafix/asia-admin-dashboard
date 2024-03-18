@@ -1,7 +1,10 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IUser } from '@/app/api/models/users.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { CREATE_USER_MUTATION } from '@/app/config/queries/user.query';
+import {
+	CREATE_USER_MUTATION,
+	MANAGE_USER_ACCESS_MUTATION,
+} from '@/app/config/queries/user.query';
 import {
 	BULK_REMOVE_USER,
 	USERS_QUERY,
@@ -19,18 +22,22 @@ import {
 	Button,
 	Drawer,
 	Flex,
+	Group,
 	Input,
 	Menu,
+	Modal,
 	PasswordInput,
+	Radio,
 	Select,
 	Space,
+	Stack,
 	Text,
 } from '@mantine/core';
-import { useSetState } from '@mantine/hooks';
+import { useDisclosure, useSetState } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
-import { IconPlus, IconTrash } from '@tabler/icons-react';
+import { IconAccessible, IconPlus } from '@tabler/icons-react';
 import { MRT_ColumnDef } from 'mantine-react-table';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiTrash } from 'react-icons/fi';
 import { TbUsers } from 'react-icons/tb';
@@ -44,6 +51,10 @@ const UsersTable: React.FC<{}> = () => {
 		operationPayload: {},
 		refetching: false,
 	});
+
+	const [access, setAccess] = useState<string>('');
+	const [opened, modalHandler] = useDisclosure();
+	const [user, setUser] = useState<IUser>();
 
 	// get booking packages
 	const {
@@ -162,6 +173,19 @@ const UsersTable: React.FC<{}> = () => {
 		});
 	};
 
+	// update user access
+	const [accessMutate, { loading: access__loading }] = useMutation(
+		MANAGE_USER_ACCESS_MUTATION,
+		Notify({
+			sucTitle: 'User access changed',
+			action: () => {
+				refetch();
+				setAccess('');
+				modalHandler.close();
+			},
+		})
+	);
+
 	return (
 		<>
 			<PageTitleArea
@@ -176,46 +200,86 @@ const UsersTable: React.FC<{}> = () => {
 				]}
 			/>
 
-			{data?.users?.nodes?.length && (
-				<DataTable
-					columns={columns}
-					data={data?.users?.nodes ?? []}
-					refetch={handleRefetch}
-					totalCount={data?.users?.meta?.totalCount ?? 100}
-					RowActionMenu={(row: IUser) => (
-						<>
-							<Menu.Item
-								onClick={() => {
-									setState({
-										modalOpened: true,
-										operationId: row?._id,
-									});
-								}}
-								icon={<IconTrash size={18} />}
-								color='red'
-							>
-								Remove
-							</Menu.Item>
-						</>
-					)}
-					ActionArea={
-						<>
-							<Button
-								color='violet'
-								variant='light'
-								leftIcon={<IconPlus size={16} />}
-								onClick={() =>
-									setState({ modalOpened: true, operationType: 'create' })
-								}
-								size='sm'
-							>
-								Add new
-							</Button>
-						</>
-					}
-					loading={state.refetching}
-				/>
-			)}
+			{/* access modal  */}
+			<Modal
+				title='Change user access'
+				opened={opened}
+				onClose={modalHandler.close}
+				centered
+			>
+				<div>
+					<Text size='sm'>Select an access point from dropdown</Text>
+
+					<Radio.Group
+						onChange={(e) => setAccess(() => e)}
+						defaultValue={user?.role}
+					>
+						<Stack mt='xs'>
+							<Radio color='teal' value='ADMIN' label='Admin' />
+							<Radio color='orange' value='MODERATOR' label='Moderator' />
+							<Radio color='yellow' value='CUSTOMER' label='Customer' />
+						</Stack>
+					</Radio.Group>
+					<Space h={'md'} />
+					<Group>
+						<Button
+							onClick={() =>
+								accessMutate({
+									variables: {
+										input: {
+											_id: user?._id,
+											role: access,
+										},
+									},
+								})
+							}
+							loading={access__loading}
+							size='sm'
+							color='teal'
+						>
+							Change access
+						</Button>
+					</Group>
+				</div>
+			</Modal>
+
+			{/* users data table */}
+			<DataTable
+				columns={columns}
+				data={data?.users?.nodes ?? []}
+				refetch={handleRefetch}
+				totalCount={data?.users?.meta?.totalCount ?? 100}
+				RowActionMenu={(row: IUser) => (
+					<>
+						<Menu.Item
+							onClick={() => {
+								modalHandler.open();
+								setUser(row);
+							}}
+							icon={<IconAccessible size={18} />}
+							color='teal'
+						>
+							Manage Access
+						</Menu.Item>
+					</>
+				)}
+				ActionArea={
+					<>
+						<Button
+							color='violet'
+							variant='light'
+							leftIcon={<IconPlus size={16} />}
+							onClick={() =>
+								setState({ modalOpened: true, operationType: 'create' })
+							}
+							size='sm'
+						>
+							Add new
+						</Button>
+					</>
+				}
+				loading={state.refetching}
+			/>
 
 			<EmptyPannel
 				isShow={!data?.users?.nodes?.length && !fetching}

@@ -6,7 +6,6 @@ Rest Development Implementations:------
 ]
 03. IT Sector Module ---- [
     ** Offers ---- Full Module
-    **. Users ---- 1. Add & Delete
 ]
 
 04. Task Management Module ---- Full

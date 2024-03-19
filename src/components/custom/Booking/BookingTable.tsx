@@ -1,16 +1,10 @@
 import {
 	DELETE_BOOKING_MUTATION,
 	PACKAGE_BOOKINGS_QUERY,
-	UPDATE_BOOKING_STATUS,
 } from '@/app/config/queries/bookings.query';
 
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
-import {
-	BOOKING_STATUS,
-	IBooking,
-	PAYMENT_STATUS,
-	STATUS_ARR,
-} from '@/app/api/models/bookings.model';
+import { BOOKING_STATUS, IBooking } from '@/app/api/models/bookings.model';
 import {
 	getBadgeColors,
 	getPaymentBadgeColors,
@@ -53,7 +47,6 @@ const BookingTable: React.FC<{}> = () => {
 		refetching: false,
 		status: BOOKING_STATUS.PENDING,
 	});
-	// const [status, setStatus] = useState<string>(booking?.status!);
 
 	// get booking packages
 	const {
@@ -84,18 +77,7 @@ const BookingTable: React.FC<{}> = () => {
 		},
 	});
 
-	// update booking
-	const [updateBooking] = useMutation(UPDATE_BOOKING_STATUS, {
-		onCompleted: () => {
-			refetch();
-			showNotification({
-				title: 'Booking successfully updated!',
-				color: 'teal',
-				message: '',
-			});
-		},
-	});
-
+	// handle refetching booking
 	const handleRefetch = (variables: any) => {
 		setState({ refetching: true, operationId: '', modalOpened: false });
 		refetch(variables).finally(() => {
@@ -103,6 +85,7 @@ const BookingTable: React.FC<{}> = () => {
 		});
 	};
 
+	// table column
 	const columns = useMemo<MRT_ColumnDef<any>[]>(
 		() => [
 			{
@@ -149,57 +132,30 @@ const BookingTable: React.FC<{}> = () => {
 						{row?.paymentDetails?.paymentStatus}
 					</Badge>
 				),
-				header: 'Status',
+				header: 'Payment Status',
 			},
 			{
 				accessorKey: 'packageId',
 				accessorFn: (originalRow: IBooking) => (
-					<TrackPackagePopover TPackage={originalRow?.packageId!} />
+					<TrackPackagePopover
+						bookingDetails={originalRow}
+						onRefetch={refetch}
+					/>
 				),
 				header: 'Package',
 			},
 			{
 				accessorKey: 'status',
 				accessorFn: (originalRow: IBooking) => (
-					<Menu>
-						<Menu.Target>
-							<Badge
-								color={getBadgeColors(originalRow?.status!)}
-								size='lg'
-								fw={500}
-								variant='filled'
-								radius='sm'
-							>
-								{originalRow?.status}
-							</Badge>
-						</Menu.Target>
-
-						<Menu.Dropdown className='!bg-[#1D1E2B]'>
-							{STATUS_ARR.map((STATUS: string, idx: number) => (
-								<Menu.Item
-									key={idx}
-									disabled={status === STATUS}
-									color={getBadgeColors(STATUS)}
-									onClick={() => {
-										updateBooking({
-											variables: {
-												id: originalRow._id,
-												status: STATUS,
-												paymentDetails: {
-													paymentStatus: PAYMENT_STATUS[idx],
-													totalAmount: originalRow?.paymentDetails?.totalAmount,
-												},
-											},
-										});
-									}}
-								>
-									<Text ml={15} size={'md'} fw={500}>
-										{STATUS}
-									</Text>
-								</Menu.Item>
-							))}
-						</Menu.Dropdown>
-					</Menu>
+					<Badge
+						color={getBadgeColors(originalRow?.status!)}
+						size='lg'
+						fw={500}
+						variant='dot'
+						radius='sm'
+					>
+						{originalRow?.status}
+					</Badge>
 				),
 				header: 'Track',
 			},

@@ -23,9 +23,14 @@ export const PACKAGE_BOOKINGS_QUERY = gql`
 					destination {
 						name
 					}
+					isPublished
 				}
 				transactionId
 				bookingId
+				travelerDetails {
+					adult
+					child
+				}
 				paymentDetails {
 					paymentStatus
 					totalAmount

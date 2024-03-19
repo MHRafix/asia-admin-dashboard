@@ -22,9 +22,14 @@ import { MdLocationPin } from 'react-icons/md';
 interface ITourCardProp {
 	TPackage: ITravelPackage;
 	onRefetch?: () => void;
+	actionBtn?: boolean;
 }
 
-const TourCard: React.FC<ITourCardProp> = ({ TPackage, onRefetch }) => {
+const TourCard: React.FC<ITourCardProp> = ({
+	TPackage,
+	onRefetch,
+	actionBtn = true,
+}) => {
 	const [deletePackage, { loading: deletingPackage }] = useMutation(
 		Delete_Tour_Package,
 		Notify({
@@ -70,9 +75,7 @@ const TourCard: React.FC<ITourCardProp> = ({ TPackage, onRefetch }) => {
 							{TPackage?.packageTitle}
 						</Title>
 
-						<div className='text-sm font-semibold'>
-							$ {TPackage?.regularPrice}
-						</div>
+						<div className='text-sm font-semibold'>$ {TPackage?.salePrice}</div>
 					</Flex>
 					<Flex justify='space-between' align='center'>
 						{TPackage?.destination?.name ? (
@@ -103,55 +106,57 @@ const TourCard: React.FC<ITourCardProp> = ({ TPackage, onRefetch }) => {
 				</div>
 			</Link>
 
-			<Flex color='teal' gap={10} className='p-3'>
-				<Button
-					fullWidth
-					component={Link}
-					href={`/it_sector/tour/tour_packages/createPackage?packageId=${TPackage?._id}`}
-					variant='filled'
-					color='violet'
-					size='sm'
-					className='rounded-sm'
-					leftIcon={<FiEdit size={16} />}
-				>
-					Edit
-				</Button>
-				<Button
-					fullWidth
-					className='rounded-sm'
-					loading={deletingPackage}
-					variant='filled'
-					color='red'
-					size='sm'
-					onClick={() =>
-						openConfirmModal({
-							title: 'Please confirm your action',
-							children: (
-								<Text size='sm'>
-									Are you really want to delete this? Please click one of these
-									buttons to proceed.
-								</Text>
-							),
-							labels: { confirm: 'Yes', cancel: 'Cancel' },
-							confirmProps: { color: 'red' },
-							onCancel: () => {},
-							onConfirm: () =>
-								deletePackage({
-									variables: {
-										payload: {
-											key: '_id',
-											operator: MatchOperator.Eq,
-											value: TPackage?._id,
+			{actionBtn && (
+				<Flex color='teal' gap={10} className='p-3'>
+					<Button
+						fullWidth
+						component={Link}
+						href={`/it_sector/tour/tour_packages/createPackage?packageId=${TPackage?._id}`}
+						variant='filled'
+						color='violet'
+						size='sm'
+						className='rounded-sm'
+						leftIcon={<FiEdit size={16} />}
+					>
+						Edit
+					</Button>
+					<Button
+						fullWidth
+						className='rounded-sm'
+						loading={deletingPackage}
+						variant='filled'
+						color='red'
+						size='sm'
+						onClick={() =>
+							openConfirmModal({
+								title: 'Please confirm your action',
+								children: (
+									<Text size='sm'>
+										Are you really want to delete this? Please click one of
+										these buttons to proceed.
+									</Text>
+								),
+								labels: { confirm: 'Yes', cancel: 'Cancel' },
+								confirmProps: { color: 'red' },
+								onCancel: () => {},
+								onConfirm: () =>
+									deletePackage({
+										variables: {
+											payload: {
+												key: '_id',
+												operator: MatchOperator.Eq,
+												value: TPackage?._id,
+											},
 										},
-									},
-								}),
-						})
-					}
-					leftIcon={<FiTrash size={16} />}
-				>
-					Remove
-				</Button>
-			</Flex>
+									}),
+							})
+						}
+						leftIcon={<FiTrash size={16} />}
+					>
+						Remove
+					</Button>
+				</Flex>
+			)}
 		</Box>
 	);
 };

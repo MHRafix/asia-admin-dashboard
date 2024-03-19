@@ -1,15 +1,21 @@
 import { ITravelPackage } from './travelPackage.model';
+import { IUser } from './users.model';
 
 export interface IBooking {
 	_id?: string;
-	customerDetails: { name?: string; email?: string; phone?: string };
+	customerDetails: IUser;
+	paymentDetails: IPaymentDetails;
+	travelerDetails: {
+		adult: number;
+		child: number;
+	};
 	street?: string;
 	city?: string;
 	country?: string;
 	packageId?: ITravelPackage;
 	status?: string;
 	transactionId?: string;
-	paymentDetails: IPaymentDetails;
+	bookingId?: string;
 }
 
 export interface IPaymentDetails {

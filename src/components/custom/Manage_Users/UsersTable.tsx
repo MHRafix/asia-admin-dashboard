@@ -139,7 +139,7 @@ const UsersTable: React.FC<{}> = () => {
 						color={getRoleBadgeColor(originalRow?.role)}
 						size='md'
 						variant='filled'
-						radius='sm'
+						radius={100}
 					>
 						{originalRow?.role}
 					</Badge>

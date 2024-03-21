@@ -1,27 +1,27 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IEmployees } from '@/app/api/models/employees.model';
-import { Notify } from '@/app/config/alertNotification/Notification';
-import {
-	BULK_REMOVE_EMPLOYEE,
-	EMPLOYEES_QUERY,
-} from '@/app/config/queries/employees.query';
+import { MatchOperator } from '@/app/config/gql';
+import { EMPLOYEES_QUERY } from '@/app/config/queries/employees.query';
 import { BOOKING_TABLE_DEFAULT_SORTBY } from '@/app/config/table_configuration';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import PageTitleArea from '@/components/common/PageTitleArea';
-import { useMutation, useQuery } from '@apollo/client';
-import { Button, Input, Space } from '@mantine/core';
+import { useQuery } from '@apollo/client';
+import { Button, Drawer, Input, Space } from '@mantine/core';
+import { useDebouncedState, useDisclosure } from '@mantine/hooks';
+import { IconPlus } from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
-import { FiTrash } from 'react-icons/fi';
 import { RiTeamLine } from 'react-icons/ri';
 import EmployeeCard from './EmployeeCard';
 import EmployeeCardSkeleton from './EmployeeCardSkeleton';
+import EmployeeForm from './NewEmployee/EmployeeForm';
 
 const EmployeesList: React.FC<{}> = () => {
 	const [page, setPage] = useState<number>(1);
 	const [limit, setLimit] = useState<number>(50);
-	const [employeesIds, setEmployeesIds] = useState<string[]>([]);
+	const [searchKey, setSearchKey] = useDebouncedState('', 500);
+	const [opened, handler] = useDisclosure();
 
 	const router = useRouter();
 
@@ -34,26 +34,50 @@ const EmployeesList: React.FC<{}> = () => {
 		teams: { nodes: IEmployees[]; meta: IPaginationMeta };
 	}>(EMPLOYEES_QUERY, {
 		variables: {
-			page: page,
-			limit: limit,
-			sortBy: BOOKING_TABLE_DEFAULT_SORTBY,
+			input: {
+				page: page,
+				limit: limit,
+				sortBy: BOOKING_TABLE_DEFAULT_SORTBY,
+				// where: {
+				// 	key: 'name',
+				// 	operator: MatchOperator.Eq,
+				// 	value: searchKey,
+				// },
+			},
 		},
 	});
 
+	useEffect(() => {
+		if (searchKey) {
+			refetch({
+				input: {
+					page: page,
+					limit: limit,
+					sortBy: BOOKING_TABLE_DEFAULT_SORTBY,
+					where: {
+						key: 'name',
+						operator: MatchOperator.Contains,
+						value: searchKey,
+					},
+				},
+			});
+		} else {
+			refetch({
+				input: {
+					page: page,
+					limit: limit,
+					sortBy: BOOKING_TABLE_DEFAULT_SORTBY,
+				},
+			});
+		}
+	}, [searchKey]);
+
+	// on success
 	const onSuccess = () => {
 		refetch();
-		setEmployeesIds([]);
+		handler.close();
 	};
 
-	// remove bulk employee
-	const [bulkDeleteEmployee, { loading: bulkDeleting }] = useMutation(
-		BULK_REMOVE_EMPLOYEE,
-		Notify({
-			sucTitle: 'Employee bulk delete successfully!',
-			errMessage: 'Please try again.',
-			action: onSuccess,
-		})
-	);
 	return (
 		<>
 			<PageTitleArea
@@ -73,47 +97,50 @@ const EmployeesList: React.FC<{}> = () => {
 							variant='unstyled'
 							className='w-[300px] !border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
 							placeholder='Search employee...'
+							onChange={(e) => setSearchKey(e.target.value)}
 						/>
 						<Button
-							loading={bulkDeleting}
-							disabled={!employeesIds?.length}
-							color='red'
-							leftIcon={<FiTrash size={16} />}
-							onClick={() =>
-								bulkDeleteEmployee({
-									variables: { uIds: employeesIds },
-								})
-							}
+							leftIcon={<IconPlus />}
+							color='violet'
+							variant='light'
+							onClick={handler.open}
 						>
-							Bulk Remove
+							Add new
 						</Button>
 					</div>
 				}
 			/>
 
-			<div className='shadow-lg rounded-md'>
+			<Drawer
+				opened={opened}
+				onClose={handler.close}
+				title='Employee create or update'
+				size={'md'}
+				position='right'
+			>
+				<EmployeeForm onSuccess={onSuccess} />
+			</Drawer>
+
+			<div className='grid grid-cols-3 gap-3'>
+				{employeesData?.teams?.nodes?.map((data: IEmployees, idx: number) => (
+					<EmployeeCard key={idx} data={data} onRefetch={refetch} />
+				))}
+			</div>
+			{fetching && (
 				<div className='grid grid-cols-3 gap-3'>
-					{employeesData?.teams?.nodes?.map((data: IEmployees, idx: number) => (
-						<EmployeeCard key={idx} data={data} onRefetch={refetch} />
+					{new Array(12).fill(12).map((_, idx) => (
+						<EmployeeCardSkeleton key={idx} />
 					))}
 				</div>
+			)}
 
-				{fetching && (
-					<div className='grid grid-cols-3 gap-3'>
-						{new Array(12).fill(12).map((_, idx) => (
-							<EmployeeCardSkeleton key={idx} />
-						))}
-					</div>
-				)}
+			<EmptyPannel
+				isShow={!employeesData?.teams?.nodes?.length && !fetching}
+				title='There is no employees found!'
+				Icon={<RiTeamLine size={40} color='red' />}
+			/>
 
-				<EmptyPannel
-					isShow={!employeesData?.teams?.nodes?.length && !fetching}
-					title='There is no employees found!'
-					Icon={<RiTeamLine size={40} color='red' />}
-				/>
-
-				<Space h={10} />
-			</div>
+			<Space h={10} />
 		</>
 	);
 };

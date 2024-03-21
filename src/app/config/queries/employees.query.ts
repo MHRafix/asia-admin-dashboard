@@ -1,8 +1,16 @@
 import { gql } from '@apollo/client';
 
+export const CREATE_EMPLOYEE = gql`
+	mutation CREATE_EMPLOYEE($input: CreateTeamInput!) {
+		createTeam(input: $input) {
+			_id
+		}
+	}
+`;
+
 export const EMPLOYEES_QUERY = gql`
-	query EMPLOYEES_QUERY($page: Int, $limit: Int) {
-		teams(input: { page: $page, limit: $limit }) {
+	query EMPLOYEES_QUERY($input: TeamListQueryDto) {
+		teams(input: $input) {
 			nodes {
 				_id
 				name

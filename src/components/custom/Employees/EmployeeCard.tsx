@@ -5,7 +5,6 @@ import { useMutation } from '@apollo/client';
 import { Badge, Button, Flex, Space, Text, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import Image from 'next/image';
-import Link from 'next/link';
 import React from 'react';
 import { FaHandHoldingUsd } from 'react-icons/fa';
 import { FiEdit, FiTrash } from 'react-icons/fi';
@@ -13,9 +12,14 @@ import { FiEdit, FiTrash } from 'react-icons/fi';
 interface IEmployeeCardProps {
 	data: IEmployees;
 	onRefetch: () => void;
+	onEdit: () => void;
 }
 
-const EmployeeCard: React.FC<IEmployeeCardProps> = ({ data, onRefetch }) => {
+const EmployeeCard: React.FC<IEmployeeCardProps> = ({
+	data,
+	onRefetch,
+	onEdit,
+}) => {
 	// REMOVE_EMPLOYEE
 	const [deleteEmployee, { loading: deletingEmployee }] = useMutation(
 		REMOVE_EMPLOYEE,
@@ -38,7 +42,7 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({ data, onRefetch }) => {
 					src={data?.avatar}
 					width={150}
 					height={150}
-					className='rounded-full'
+					className='rounded-md shadow-md'
 					alt='employee'
 				/>
 			</div>
@@ -67,13 +71,14 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({ data, onRefetch }) => {
 			<Flex gap={10} align={'center'}>
 				<Button
 					fullWidth
-					component={Link}
-					href={`/manage_employee/${data?._id}`}
+					// component={Link}
+					// href={`/manage_employee/${data?._id}`}
 					variant='filled'
 					color='violet'
 					size='sm'
 					className='rounded-sm'
 					leftIcon={<FiEdit size={16} />}
+					onClick={onEdit}
 				>
 					Edit
 				</Button>
@@ -99,6 +104,7 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({ data, onRefetch }) => {
 				variant='filled'
 				color='yellow'
 				size='sm'
+				disabled
 				// onClick={() => deleteConfirmModal(deleteEmployee, data?._id!)}
 				leftIcon={<FaHandHoldingUsd size={20} />}
 			>

@@ -37,6 +37,14 @@ export const REMOVE_EMPLOYEE = gql`
 		removeTeam(input: { key: "_id", operator: eq, value: $id })
 	}
 `;
+// remove employee
+export const UPDATE_EMPLOYEE = gql`
+	mutation UPDATE_EMPLOYEE($input: UpdateTeamInput!) {
+		updateTeam(input: $input) {
+			_id
+		}
+	}
+`;
 
 // remove bulk employee
 export const BULK_REMOVE_EMPLOYEE = gql`

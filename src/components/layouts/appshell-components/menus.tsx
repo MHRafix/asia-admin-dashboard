@@ -1,4 +1,3 @@
-import { BiUserPlus } from 'react-icons/bi';
 import { BsBookmarkCheck, BsReceipt, BsUiChecksGrid } from 'react-icons/bs';
 import { FaNetworkWired, FaTasks } from 'react-icons/fa';
 import { HiOutlineViewGrid, HiOutlineViewGridAdd } from 'react-icons/hi';
@@ -135,11 +134,11 @@ export const menus = [
 				icon: <FaNetworkWired size={20} />,
 				href: '/manage_employee/employees',
 			},
-			{
-				label: 'New Employee',
-				icon: <BiUserPlus size={20} />,
-				href: '/manage_employee/new_employee',
-			},
+			// {
+			// 	label: 'New Employee',
+			// 	icon: <BiUserPlus size={20} />,
+			// 	href: '/manage_employee/new_employee',
+			// },
 		],
 	},
 

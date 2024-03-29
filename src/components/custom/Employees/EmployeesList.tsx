@@ -22,6 +22,7 @@ const EmployeesList: React.FC<{}> = () => {
 	const [limit, setLimit] = useState<number>(50);
 	const [searchKey, setSearchKey] = useDebouncedState('', 500);
 	const [opened, handler] = useDisclosure();
+	const [employee, setEmployee] = useState<IEmployees>();
 
 	const router = useRouter();
 
@@ -118,12 +119,20 @@ const EmployeesList: React.FC<{}> = () => {
 				size={'md'}
 				position='right'
 			>
-				<EmployeeForm onSuccess={onSuccess} />
+				<EmployeeForm onSuccess={onSuccess} employee={employee} />
 			</Drawer>
 
 			<div className='grid grid-cols-3 gap-3'>
 				{employeesData?.teams?.nodes?.map((data: IEmployees, idx: number) => (
-					<EmployeeCard key={idx} data={data} onRefetch={refetch} />
+					<EmployeeCard
+						key={idx}
+						data={data}
+						onRefetch={refetch}
+						onEdit={() => {
+							setEmployee(data);
+							handler.open();
+						}}
+					/>
 				))}
 			</div>
 			{fetching && (

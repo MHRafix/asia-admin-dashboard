@@ -1,21 +1,21 @@
-import { useGetTravelPackages } from '@/app/api/gql-api-hooks/travelPackage.api';
+import { ITravelPackage } from '@/app/api/models/travelPackage.model';
 import { useGetDashboardOverviewData } from '@/app/api/rest-api-hooks/rest.api';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
+import { SortType } from '@/app/config/gql';
 import { useGetDateFilteredBookings } from '@/app/config/logic/getDateFromRange';
 import {
 	getBookingsDateRange,
 	getTransactionDateRange,
 } from '@/app/config/logic/getDateRanges';
+import { GET_TRAVEL_PACKAGES } from '@/app/config/queries/travelPackage.query';
 import DateRangePicker from '@/components/common/DateRangePicker';
 import PageTitleArea from '@/components/common/PageTitleArea';
-import {
-	ChartBookingAnalytics,
-	ChartTransactionAnalytics,
-} from '@/components/custom/Dashboard/Charts/ChartAnalytics';
+import TourCard from '@/components/common/Tour/TourCard';
+import { ChartBookingAnalytics } from '@/components/custom/Dashboard/Charts/ChartAnalytics';
 import DashboardSkeleton from '@/components/custom/Dashboard/DashboardSkeleton';
 import GridOverViewCard from '@/components/custom/Dashboard/OverViewCard.tsx/GridOverViewCard';
-import PopularPackagesCarousel from '@/components/custom/Dashboard/PackagesSlider/PopularPackagesCarousel';
 import AdminLayout from '@/components/layouts/AdminLayout';
+import { useQuery as ApolloQuery } from '@apollo/client';
 import { Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useQuery } from '@tanstack/react-query';
@@ -30,8 +30,23 @@ const Dashboard = () => {
 		[Date, Date]
 	>(getBookingsDateRange());
 
-	const { packages } = useGetTravelPackages();
-
+	const {
+		data: travelPackages,
+		// loading,
+		// refetch: refetchPackages,
+	} = ApolloQuery<{ travelPackages: { nodes: ITravelPackage[] } }>(
+		GET_TRAVEL_PACKAGES,
+		{
+			variables: {
+				input: {
+					page: 1,
+					limit: 6,
+					sort: SortType.Desc,
+					sortBy: '_id',
+				},
+			},
+		}
+	);
 	// dashboard overview api
 	const { triggerApi } = useGetDashboardOverviewData();
 	const {
@@ -111,33 +126,16 @@ const Dashboard = () => {
 					</div>
 
 					{/* popular travel packages */}
-					<div className='lg:flex grid gap-8'>
-						<div className='lg:w-7/12 '>
-							<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
-								Transaction analytics
-							</Title>
-							<div className=' bg-[#212231] shadow-2xl rounded-sm'>
-								{/* <div className='mt-2'>
-								<DateRangePicker
-								dateRange={transactionDate}
-								onChangeDate={onChangeTransactionDate}
-								/>
-							</div> */}
-								<ChartTransactionAnalytics
-									transactions={dashboardOverviewData?.overViewCardData!}
-								/>
-							</div>
-						</div>
-						<div className='lg:w-5/12'>
-							{/* 
-							<TourCardSkeleton show={!packages?.length} />
-							
-						*/}
-							<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
-								Popular packages
-							</Title>
-							<PopularPackagesCarousel packages={packages!} />
-						</div>
+					<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
+						Popular packages
+					</Title>
+
+					<div className='grid grid-cols-3 gap-5'>
+						{travelPackages?.travelPackages?.nodes?.map(
+							(TPackage: ITravelPackage, idx: number) => (
+								<TourCard key={idx} TPackage={TPackage} actionBtn={false} />
+							)
+						)}
 					</div>
 				</div>
 			)}
@@ -146,3 +144,32 @@ const Dashboard = () => {
 };
 
 export default protectWithSession(Dashboard);
+/**
+ * 	<div className='lg:flex grid gap-8'>
+						<div className='lg:w-7/12 '>
+							<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
+								Transaction analytics
+							</Title>
+							<div className=' bg-[#212231] shadow-2xl rounded-sm'>
+								 <div className='mt-2'>
+								<DateRangePicker
+								dateRange={transactionDate}
+								onChangeDate={onChangeTransactionDate}
+								/>
+							</div> 
+							<ChartTransactionAnalytics
+							transactions={dashboardOverviewData?.overViewCardData!}
+						/>
+					</div>
+				</div>
+				<div className='lg:w-5/12'>
+					
+					<TourCardSkeleton show={!packages?.length} />
+					
+				
+					<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
+						Popular packages
+					</Title>
+				</div>
+			</div>
+ */

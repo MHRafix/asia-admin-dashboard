@@ -10,6 +10,7 @@ body {
 /* @tailwind base; */
 @tailwind components;
 @tailwind utilities;
+
 body {
 	font-size: 18px;
 }
@@ -51,4 +52,22 @@ body {
 	outline: none;
 	border: 1px solid #32344b;
 	background-color: transparent;
+}
+
+.task_status_area::-webkit-scrollbar {
+	width: 0.3rem;
+}
+
+.task_status_area::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.task_status_area::-webkit-scrollbar-thumb {
+	background: gray;
+	border-radius: 5rem;
+}
+
+.task_status_area {
+	height: 680px;
+	overflow-y: scroll;
 }

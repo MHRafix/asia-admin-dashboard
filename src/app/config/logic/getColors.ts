@@ -15,6 +15,26 @@ export const getBadgeColors = (status: string) => {
 	}
 };
 
+export const getTaskBadgeColors = (status: string) => {
+	switch (status) {
+		case 'PENDING':
+			return 'blue';
+		case 'IN-PROGRESS':
+			return 'violet';
+		case 'DONE':
+			return 'yellow';
+		case 'REVISION':
+			return 'orange';
+		case 'CANCELLED':
+			return 'red';
+		case 'COMPLETED':
+			return 'teal';
+
+		default:
+			return 'red';
+	}
+};
+
 export const getAttendanceStatusColor = (status: Attendance_Status) => {
 	switch (status) {
 		case 'PENDING':

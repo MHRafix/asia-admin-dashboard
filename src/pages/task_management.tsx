@@ -52,6 +52,8 @@ const TaskManagement = () => {
 				}
 			/>
 
+			<pre>{JSON.stringify({ taskList: taskList?.taskList }, null, 2)}</pre>
+
 			<div className='grid grid-cols-3 gap-x-5 gap-y-10'>
 				<LoadingOverlay overlayBlur={2} opacity={0.5} visible={__LoadingTask} />
 

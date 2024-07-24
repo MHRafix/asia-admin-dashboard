@@ -1,10 +1,29 @@
+import { Get_Task_List_Query } from '@/app/config/queries/task-management.query';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import TaskCard from '@/components/custom/TaskManagement/TaskCard';
 import AdminLayout from '@/components/layouts/AdminLayout';
-import { Box, Button, Paper, Space, Title } from '@mantine/core';
+import { useQuery } from '@apollo/client';
+import {
+	Box,
+	Button,
+	LoadingOverlay,
+	Paper,
+	Space,
+	Title,
+} from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 
 const TaskManagement = () => {
+	const {
+		data: taskList,
+		loading: __LoadingTask,
+		refetch: __refetchTaskList,
+	} = useQuery<{
+		taskList: any;
+	}>(Get_Task_List_Query);
+
+	console.log({ taskList });
+
 	return (
 		<AdminLayout title='Task Management'>
 			<PageTitleArea
@@ -28,6 +47,8 @@ const TaskManagement = () => {
 			/>
 
 			<div className='grid grid-cols-3 gap-x-5 gap-y-10'>
+				<LoadingOverlay overlayBlur={2} opacity={0.5} visible={__LoadingTask} />
+
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='blue'>
 						Pending (12)

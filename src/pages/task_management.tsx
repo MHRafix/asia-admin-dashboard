@@ -20,9 +20,15 @@ const TaskManagement = () => {
 		refetch: __refetchTaskList,
 	} = useQuery<{
 		taskList: any;
-	}>(Get_Task_List_Query);
+	}>(Get_Task_List_Query, {
+		variables: {
+			input: {
+				page: -1,
+			},
+		},
+	});
 
-	console.log({ taskList });
+	console.log({ taskList: taskList?.taskList });
 
 	return (
 		<AdminLayout title='Task Management'>

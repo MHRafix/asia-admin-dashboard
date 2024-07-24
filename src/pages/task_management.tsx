@@ -1,7 +1,8 @@
 import PageTitleArea from '@/components/common/PageTitleArea';
 import TaskCard from '@/components/custom/TaskManagement/TaskCard';
 import AdminLayout from '@/components/layouts/AdminLayout';
-import { Box, Paper, Space, Title } from '@mantine/core';
+import { Box, Button, Paper, Space, Title } from '@mantine/core';
+import { IconPlus } from '@tabler/icons-react';
 
 const TaskManagement = () => {
 	return (
@@ -16,6 +17,14 @@ const TaskManagement = () => {
 						href: '/',
 					},
 				]}
+				actionComponent={
+					<div>
+						<Button leftIcon={<IconPlus />} variant='light' color='violet'>
+							Add New
+						</Button>
+						<Space h={'sm'} />
+					</div>
+				}
 			/>
 
 			<div className='grid grid-cols-3 gap-x-5 gap-y-10'>

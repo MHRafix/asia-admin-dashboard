@@ -1,5 +1,7 @@
 import { useGetTasksByStatus } from '@/app/api/gql-api-hooks/task-management.api';
 import { PAYMENT_STATUS } from '@/app/api/models/bookings.model';
+import { IUser } from '@/app/api/models/users.model';
+import { useGetSession } from '@/app/config/logic/getSession';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import TaskCard from '@/components/custom/TaskManagement/TaskCard';
 import AdminLayout from '@/components/layouts/AdminLayout';
@@ -28,11 +30,15 @@ import { FiUpload } from 'react-icons/fi';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 
 const TaskManagement = () => {
+	// user session
+	const { loading, user } = useGetSession();
+
 	// drawer handler
 	const [taskFormOpened, taskCreateDrawerHandler] = useDisclosure();
 
+	// get task query
 	const { taskByStatus, __LoadingTask, __refetchTaskList } =
-		useGetTasksByStatus();
+		useGetTasksByStatus(user as IUser);
 
 	return (
 		<AdminLayout title='Task Management'>
@@ -48,30 +54,37 @@ const TaskManagement = () => {
 				]}
 				actionComponent={
 					<div>
-						<Button
-							onClick={taskCreateDrawerHandler.toggle}
-							leftIcon={<IconPlus />}
-							variant='light'
-							color='violet'
-						>
-							Add New
-						</Button>
+						{user?.role === 'ADMIN' && (
+							<Button
+								onClick={taskCreateDrawerHandler.toggle}
+								leftIcon={<IconPlus />}
+								variant='light'
+								color='violet'
+							>
+								Add New
+							</Button>
+						)}
 						<Space h={'sm'} />
 					</div>
 				}
 			/>
-
+			{user?.role}
 			<div className='grid grid-cols-3 gap-x-5 gap-y-10'>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='blue'>
-						Pending ({taskByStatus?.pendingTasks?.length})
+						Pending ({taskByStatus?.pendingTasks?.length ?? 0})
 					</Title>
 
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
 						{taskByStatus?.pendingTasks?.map((_task, idx) => (
-							<TaskCard _task={_task} color='blue' key={idx} />
+							<TaskCard
+								key={idx}
+								_task={_task}
+								onRefetch={__refetchTaskList}
+								color='blue'
+							/>
 						))}
 						{__LoadingTask && (
 							<>
@@ -84,13 +97,18 @@ const TaskManagement = () => {
 				</Paper>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='violet'>
-						In-Progress ({taskByStatus?.inProgressTask?.length})
+						In-Progress ({taskByStatus?.inProgressTask?.length ?? 0})
 					</Title>
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
 						{taskByStatus?.inProgressTask?.map((_task, idx) => (
-							<TaskCard _task={_task} color='violet' key={idx} />
+							<TaskCard
+								key={idx}
+								_task={_task}
+								onRefetch={__refetchTaskList}
+								color='violet'
+							/>
 						))}
 						{__LoadingTask && (
 							<>
@@ -103,13 +121,18 @@ const TaskManagement = () => {
 				</Paper>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='yellow'>
-						Done ({taskByStatus?.doneTask?.length})
+						Done ({taskByStatus?.doneTask?.length ?? 0})
 					</Title>
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
 						{taskByStatus?.doneTask?.map((_task, idx) => (
-							<TaskCard _task={_task} color='yellow' key={idx} />
+							<TaskCard
+								key={idx}
+								_task={_task}
+								onRefetch={__refetchTaskList}
+								color='yellow'
+							/>
 						))}
 						{__LoadingTask && (
 							<>
@@ -122,13 +145,18 @@ const TaskManagement = () => {
 				</Paper>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='orange'>
-						Revision ({taskByStatus?.revisionTask?.length})
+						Revision ({taskByStatus?.revisionTask?.length ?? 0})
 					</Title>
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
 						{taskByStatus?.revisionTask?.map((_task, idx) => (
-							<TaskCard _task={_task} color='orange' key={idx} />
+							<TaskCard
+								key={idx}
+								_task={_task}
+								onRefetch={__refetchTaskList}
+								color='orange'
+							/>
 						))}
 						{__LoadingTask && (
 							<>
@@ -141,13 +169,18 @@ const TaskManagement = () => {
 				</Paper>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='teal'>
-						Completed ({taskByStatus?.completedTask?.length})
+						Completed ({taskByStatus?.completedTask?.length ?? 0})
 					</Title>
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
 						{taskByStatus?.completedTask?.map((_task, idx) => (
-							<TaskCard _task={_task} color='teal' key={idx} />
+							<TaskCard
+								key={idx}
+								_task={_task}
+								onRefetch={__refetchTaskList}
+								color='teal'
+							/>
 						))}
 						{__LoadingTask && (
 							<>
@@ -160,13 +193,18 @@ const TaskManagement = () => {
 				</Paper>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='red'>
-						Cancelled ({taskByStatus?.cancelledTask?.length})
+						Cancelled ({taskByStatus?.cancelledTask?.length ?? 0})
 					</Title>
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
 						{taskByStatus?.cancelledTask?.map((_task, idx) => (
-							<TaskCard _task={_task} color='red' key={idx} />
+							<TaskCard
+								key={idx}
+								_task={_task}
+								onRefetch={__refetchTaskList}
+								color='red'
+							/>
 						))}
 						{__LoadingTask && (
 							<>

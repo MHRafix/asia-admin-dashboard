@@ -19,7 +19,7 @@ export const getTaskBadgeColors = (status: string) => {
 	switch (status) {
 		case 'PENDING':
 			return 'blue';
-		case 'IN-PROGRESS':
+		case 'IN_PROGRESS':
 			return 'violet';
 		case 'WORK_DONE':
 			return 'yellow';

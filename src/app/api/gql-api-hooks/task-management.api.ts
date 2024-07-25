@@ -1,11 +1,76 @@
 import {
+	MatchOperator,
+	SortType,
 	Task_Progress_Status,
 	TaskManagementWithPagination,
+	USER_ROLE,
 } from '@/app/config/gql';
 import { Get_Task_List_Query } from '@/app/config/queries/task-management.query';
 import { useQuery } from '@apollo/client';
+import { IUser } from '../models/users.model';
 
-export const useGetTasksByStatus = () => {
+export const useGetTasksByStatus = (user: IUser) => {
+	const variableForModerator = {
+		input: {
+			page: 1,
+			sort: SortType.Desc,
+			sortBy: '_id',
+			whereOperator: 'or',
+			where: [
+				{
+					key: 'taskCreatedBy',
+					operator: MatchOperator?.Eq,
+					value: user?._id,
+				},
+
+				{
+					key: 'taskDetails.taskAssignTo',
+					operator: MatchOperator?.Eq,
+					value: user?._id,
+				},
+			],
+		},
+	};
+
+	const variableForAdmin = {
+		input: {
+			page: 1,
+			sort: SortType.Desc,
+			sortBy: '_id',
+		},
+	};
+
+	const variableForEmployee = {
+		input: {
+			page: 1,
+			sort: SortType.Desc,
+			sortBy: '_id',
+			where: {
+				key: 'taskDetails.taskAssignTo',
+				operator: MatchOperator?.Eq,
+				value: user?._id,
+			},
+		},
+	};
+
+	// handle variable switch
+	const handleVariableForQuery = (role: USER_ROLE) => {
+		switch (role) {
+			case USER_ROLE.ADMIN:
+				return variableForAdmin;
+
+			case USER_ROLE.MODERATOR:
+				return variableForModerator;
+
+			case USER_ROLE.EMPLOYEE:
+				return variableForEmployee;
+
+			default:
+				return variableForEmployee;
+		}
+	};
+
+	// get tasks
 	const {
 		data: tasks,
 		loading: __LoadingTask,
@@ -13,11 +78,8 @@ export const useGetTasksByStatus = () => {
 	} = useQuery<{
 		taskList: TaskManagementWithPagination;
 	}>(Get_Task_List_Query, {
-		variables: {
-			input: {
-				page: 1,
-			},
-		},
+		variables: handleVariableForQuery(user?.role),
+		skip: !user?._id,
 	});
 
 	const pendingTasks = tasks?.taskList?.nodes?.filter(

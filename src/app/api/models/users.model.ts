@@ -1,3 +1,5 @@
+import { USER_ROLE } from '@/app/config/gql';
+
 export interface IUser {
 	_id: string;
 	name: string;
@@ -5,5 +7,5 @@ export interface IUser {
 	avatar: string;
 	phone: string;
 	accessToken: string;
-	role: string;
+	role: USER_ROLE;
 }

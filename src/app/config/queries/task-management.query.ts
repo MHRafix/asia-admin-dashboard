@@ -38,6 +38,7 @@ export const Get_Task_List_Query = gql`
 				progressStatus
 				paymentStatus
 				paidBillAmount
+				createdAt
 			}
 		}
 	}

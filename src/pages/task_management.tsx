@@ -1,10 +1,8 @@
+import { useGetTasksByStatus } from '@/app/api/gql-api-hooks/task-management.api';
 import { PAYMENT_STATUS } from '@/app/api/models/bookings.model';
-import { TaskManagementWithPagination } from '@/app/config/gql';
-import { Get_Task_List_Query } from '@/app/config/queries/task-management.query';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import TaskCard from '@/components/custom/TaskManagement/TaskCard';
 import AdminLayout from '@/components/layouts/AdminLayout';
-import { useQuery } from '@apollo/client';
 import {
 	Avatar,
 	Badge,
@@ -14,10 +12,10 @@ import {
 	Flex,
 	Group,
 	Input,
-	LoadingOverlay,
 	NumberInput,
 	Paper,
 	Select,
+	Skeleton,
 	Space,
 	Text,
 	Textarea,
@@ -33,19 +31,8 @@ const TaskManagement = () => {
 	// drawer handler
 	const [taskFormOpened, taskCreateDrawerHandler] = useDisclosure();
 
-	const {
-		data: taskList,
-		loading: __LoadingTask,
-		refetch: __refetchTaskList,
-	} = useQuery<{
-		taskList: TaskManagementWithPagination;
-	}>(Get_Task_List_Query, {
-		variables: {
-			input: {
-				page: -1,
-			},
-		},
-	});
+	const { taskByStatus, __LoadingTask, __refetchTaskList } =
+		useGetTasksByStatus();
 
 	return (
 		<AdminLayout title='Task Management'>
@@ -74,82 +61,120 @@ const TaskManagement = () => {
 				}
 			/>
 
-			<pre>{JSON.stringify({ taskList: taskList?.taskList }, null, 2)}</pre>
-
 			<div className='grid grid-cols-3 gap-x-5 gap-y-10'>
-				<LoadingOverlay overlayBlur={2} opacity={0.5} visible={__LoadingTask} />
-
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='blue'>
-						Pending (12)
+						Pending ({taskByStatus?.pendingTasks?.length})
 					</Title>
 
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{new Array(10).fill(10).map((_, idx) => (
-							<TaskCard key={idx} />
+						{taskByStatus?.pendingTasks?.map((_task, idx) => (
+							<TaskCard _task={_task} color='blue' key={idx} />
 						))}
+						{__LoadingTask && (
+							<>
+								{new Array(10).fill(10).map((_, idx) => (
+									<Skeleton h={110} my={5} radius={5} />
+								))}
+							</>
+						)}
 					</Box>
 				</Paper>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='violet'>
-						In-Progress (09)
+						In-Progress ({taskByStatus?.inProgressTask?.length})
 					</Title>
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{new Array(10).fill(10).map((_, idx) => (
-							<TaskCard key={idx} />
+						{taskByStatus?.inProgressTask?.map((_task, idx) => (
+							<TaskCard _task={_task} color='violet' key={idx} />
 						))}
+						{__LoadingTask && (
+							<>
+								{new Array(10).fill(10).map((_, idx) => (
+									<Skeleton h={110} my={5} radius={5} />
+								))}
+							</>
+						)}
 					</Box>
 				</Paper>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='yellow'>
-						Done (05)
+						Done ({taskByStatus?.doneTask?.length})
 					</Title>
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{new Array(10).fill(10).map((_, idx) => (
-							<TaskCard key={idx} />
+						{taskByStatus?.doneTask?.map((_task, idx) => (
+							<TaskCard _task={_task} color='yellow' key={idx} />
 						))}
+						{__LoadingTask && (
+							<>
+								{new Array(10).fill(10).map((_, idx) => (
+									<Skeleton h={110} my={5} radius={5} />
+								))}
+							</>
+						)}
 					</Box>
 				</Paper>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='orange'>
-						Revision (03)
+						Revision ({taskByStatus?.revisionTask?.length})
 					</Title>
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{new Array(10).fill(10).map((_, idx) => (
-							<TaskCard key={idx} />
+						{taskByStatus?.revisionTask?.map((_task, idx) => (
+							<TaskCard _task={_task} color='orange' key={idx} />
 						))}
+						{__LoadingTask && (
+							<>
+								{new Array(10).fill(10).map((_, idx) => (
+									<Skeleton h={110} my={5} radius={5} />
+								))}
+							</>
+						)}
 					</Box>
 				</Paper>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='teal'>
-						Completed (02)
+						Completed ({taskByStatus?.completedTask?.length})
 					</Title>
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{new Array(10).fill(10).map((_, idx) => (
-							<TaskCard key={idx} />
+						{taskByStatus?.completedTask?.map((_task, idx) => (
+							<TaskCard _task={_task} color='teal' key={idx} />
 						))}
+						{__LoadingTask && (
+							<>
+								{new Array(10).fill(10).map((_, idx) => (
+									<Skeleton h={110} my={5} radius={5} />
+								))}
+							</>
+						)}
 					</Box>
 				</Paper>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='red'>
-						Cancelled (01)
+						Cancelled ({taskByStatus?.cancelledTask?.length})
 					</Title>
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{new Array(10).fill(10).map((_, idx) => (
-							<TaskCard key={idx} />
+						{taskByStatus?.cancelledTask?.map((_task, idx) => (
+							<TaskCard _task={_task} color='red' key={idx} />
 						))}
+						{__LoadingTask && (
+							<>
+								{new Array(10).fill(10).map((_, idx) => (
+									<Skeleton h={110} my={5} radius={5} />
+								))}
+							</>
+						)}
 					</Box>
 				</Paper>
 			</div>

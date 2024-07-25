@@ -1,3 +1,4 @@
+import { Task } from '@/app/config/gql';
 import { getTaskBadgeColors } from '@/app/config/logic/getColors';
 import {
 	Avatar,
@@ -12,26 +13,35 @@ import {
 	Tooltip,
 } from '@mantine/core';
 
-const TaskCard: React.FC = () => {
+interface ITaskCardProps {
+	_task: Task;
+	color: string;
+}
+const TaskCard: React.FC<ITaskCardProps> = ({ _task, color }) => {
 	return (
 		<Paper p={10} my={5} withBorder>
 			<Text fz={18} fw={500} color='blue'>
-				#123
+				#{_task?.taskId}
 			</Text>
 
 			<Text fz={18} fw={500}>
-				Booked Air Ticket DHK - KBL
+				{_task?.taskDetails?.taskName}
 			</Text>
 			<Space h={'md'} />
 			<Flex justify={'space-between'} align={'center'}>
-				<Tooltip label='Mehedi Hasan Rafiz'>
-					<Avatar color='blue' size={'md'} radius={100} src={''}>
-						MH
+				<Tooltip label={_task?.taskDetails?.taskAssignTo?.name}>
+					<Avatar
+						color='blue'
+						size={'md'}
+						radius={100}
+						src={_task?.taskDetails?.taskAssignTo?.avatar}
+					>
+						{_task?.taskDetails?.taskAssignTo?.name?.slice(0, 1).toUpperCase()}
 					</Avatar>
 				</Tooltip>
 
 				<Group>
-					<Button color='blue' radius={5} variant='outline'>
+					<Button color={color} radius={5} variant='outline'>
 						View
 					</Button>
 					<Menu>
@@ -43,8 +53,9 @@ const TaskCard: React.FC = () => {
 								py={18}
 								px={20}
 								variant='filled'
+								color={getTaskBadgeColors(_task?.progressStatus)}
 							>
-								PENDING
+								{_task?.progressStatus}
 							</Badge>
 						</Menu.Target>
 

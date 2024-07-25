@@ -5,6 +5,7 @@ import {
 } from '@/app/config/queries/travelPackage.query';
 import { useQuery } from '@apollo/client';
 import { ITravelPackage } from '../models/travelPackage.model';
+
 export const useGetTravelPackages = () => {
 	const {
 		data,

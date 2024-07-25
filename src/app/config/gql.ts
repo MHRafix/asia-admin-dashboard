@@ -105,7 +105,7 @@ export interface Task {
 	updatedAt: Date;
 }
 
-enum Task_Progress_Status {
+export enum Task_Progress_Status {
 	PENDING = 'PENDING',
 	IN_PROGRESS = 'IN_PROGRESS',
 	WORK_DONE = 'WORK_DONE',
@@ -114,7 +114,7 @@ enum Task_Progress_Status {
 	CANCELLED = 'CANCELLED',
 }
 
-enum Payment_Status {
+export enum Payment_Status {
 	REFUNDED = 'REFUNDED',
 	PARTIALLY_PAID = 'PARTIALLY_PAID',
 	PAID = 'PAID',

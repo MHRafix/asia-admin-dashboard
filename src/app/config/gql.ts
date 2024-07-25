@@ -1,3 +1,7 @@
+import { IClient } from '../api/models/client.model';
+import { IPaginationMeta } from '../api/models/CommonPagination.model';
+import { IUser } from '../api/models/users.model';
+
 /* eslint-disable */
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -78,4 +82,47 @@ export enum Attendance_Status {
 	VERIFIED = 'VERIFIED',
 	PENDING = 'PENDING',
 	NOT_PRESENT = 'NOT_PRESENT',
+}
+
+export interface TaskManagement_TaskDetails {
+	taskName: String;
+	taskAssignTo: IUser;
+	taskDescription: String;
+	issuesDescription: String;
+}
+
+export interface Task {
+	_id: String;
+	taskCreatedBy: IUser;
+	client: IClient;
+	taskDetails: TaskManagement_TaskDetails;
+	taskId: String;
+	totalBillAmount: Number;
+	paidBillAmount: Number;
+	progressStatus: Task_Progress_Status;
+	paymentStatus: Payment_Status;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+enum Task_Progress_Status {
+	PENDING = 'PENDING',
+	IN_PROGRESS = 'IN_PROGRESS',
+	WORK_DONE = 'WORK_DONE',
+	REVISION = 'REVISION',
+	COMPLETED = 'COMPLETED',
+	CANCELLED = 'CANCELLED',
+}
+
+enum Payment_Status {
+	REFUNDED = 'REFUNDED',
+	PARTIALLY_PAID = 'PARTIALLY_PAID',
+	PAID = 'PAID',
+	DUE = 'DUE',
+	CANCELLED = 'CANCELLED',
+}
+
+export interface TaskManagementWithPagination {
+	nodes: [Task];
+	meta: IPaginationMeta;
 }

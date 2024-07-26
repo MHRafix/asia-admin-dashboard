@@ -101,6 +101,7 @@ export interface Task {
 	paidBillAmount: Number;
 	progressStatus: Task_Progress_Status;
 	paymentStatus: Payment_Status;
+	deadLine: Date;
 	createdAt: Date;
 	updatedAt: Date;
 }
@@ -112,6 +113,7 @@ export enum Task_Progress_Status {
 	REVISION = 'REVISION',
 	COMPLETED = 'COMPLETED',
 	CANCELLED = 'CANCELLED',
+	ARCHIVED = 'ARCHIVED',
 }
 
 export enum Payment_Status {

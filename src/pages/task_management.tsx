@@ -1,6 +1,7 @@
 import { useGetTasksByStatus } from '@/app/api/gql-api-hooks/task-management.api';
 import { PAYMENT_STATUS } from '@/app/api/models/bookings.model';
 import { IUser } from '@/app/api/models/users.model';
+import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import { useGetSession } from '@/app/config/logic/getSession';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import TaskCard from '@/components/custom/TaskManagement/TaskCard';
@@ -31,7 +32,7 @@ import { HiOutlinePhotograph } from 'react-icons/hi';
 
 const TaskManagement = () => {
 	// user session
-	const { loading, user } = useGetSession();
+	const { user } = useGetSession();
 
 	// drawer handler
 	const [taskFormOpened, taskCreateDrawerHandler] = useDisclosure();
@@ -68,8 +69,7 @@ const TaskManagement = () => {
 					</div>
 				}
 			/>
-			{user?.role}
-			<div className='grid grid-cols-3 gap-x-5 gap-y-10'>
+			<div className='grid lg:grid-cols-3 gap-x-5 gap-y-10'>
 				<Paper withBorder>
 					<Title className='rounded-sm' p={15} order={4} fw={500} bg='blue'>
 						Pending ({taskByStatus?.pendingTasks?.length ?? 0})
@@ -78,10 +78,10 @@ const TaskManagement = () => {
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{taskByStatus?.pendingTasks?.map((_task, idx) => (
+						{taskByStatus?.pendingTasks?.map((__task, idx) => (
 							<TaskCard
 								key={idx}
-								_task={_task}
+								__task={__task}
 								onRefetch={__refetchTaskList}
 								color='blue'
 							/>
@@ -102,10 +102,10 @@ const TaskManagement = () => {
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{taskByStatus?.inProgressTask?.map((_task, idx) => (
+						{taskByStatus?.inProgressTask?.map((__task, idx) => (
 							<TaskCard
 								key={idx}
-								_task={_task}
+								__task={__task}
 								onRefetch={__refetchTaskList}
 								color='violet'
 							/>
@@ -126,10 +126,10 @@ const TaskManagement = () => {
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{taskByStatus?.doneTask?.map((_task, idx) => (
+						{taskByStatus?.doneTask?.map((__task, idx) => (
 							<TaskCard
 								key={idx}
-								_task={_task}
+								__task={__task}
 								onRefetch={__refetchTaskList}
 								color='yellow'
 							/>
@@ -150,10 +150,10 @@ const TaskManagement = () => {
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{taskByStatus?.revisionTask?.map((_task, idx) => (
+						{taskByStatus?.revisionTask?.map((__task, idx) => (
 							<TaskCard
 								key={idx}
-								_task={_task}
+								__task={__task}
 								onRefetch={__refetchTaskList}
 								color='orange'
 							/>
@@ -174,10 +174,10 @@ const TaskManagement = () => {
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{taskByStatus?.completedTask?.map((_task, idx) => (
+						{taskByStatus?.completedTask?.map((__task, idx) => (
 							<TaskCard
 								key={idx}
-								_task={_task}
+								__task={__task}
 								onRefetch={__refetchTaskList}
 								color='teal'
 							/>
@@ -198,10 +198,10 @@ const TaskManagement = () => {
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{taskByStatus?.cancelledTask?.map((_task, idx) => (
+						{taskByStatus?.cancelledTask?.map((__task, idx) => (
 							<TaskCard
 								key={idx}
-								_task={_task}
+								__task={__task}
 								onRefetch={__refetchTaskList}
 								color='red'
 							/>
@@ -366,4 +366,4 @@ const TaskManagement = () => {
 	);
 };
 
-export default TaskManagement;
+export default protectWithSession(TaskManagement);

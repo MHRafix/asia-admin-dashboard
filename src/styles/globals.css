@@ -11,6 +11,27 @@ body {
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+	.rest_time_wrapper {
+		width: 180px;
+		/* padding: 10px 12px; */
+		text-align: center;
+	}
+
+	.rest_time_wrapper {
+		display: grid;
+		grid-template-columns: 22% 3% 22% 3% 22% 3% 22%;
+	}
+
+	.timer_devider {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 25px;
+		/* color: #00e1ffbb; */
+	}
+}
+
 body {
 	font-size: 18px;
 }

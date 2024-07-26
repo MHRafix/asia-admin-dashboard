@@ -52,7 +52,7 @@ const EmployeeForm: React.FC<{
 	});
 
 	// create a new employee
-	const [createEmployee, { loading: creating__employee }] = useMutation(
+	const [createEmployee, { loading: __creatingEmployee }] = useMutation(
 		CREATE_EMPLOYEE,
 		Notify({
 			sucTitle: 'Employee created successfully',
@@ -63,7 +63,7 @@ const EmployeeForm: React.FC<{
 	);
 
 	// update a employee
-	const [updateEmployee, { loading: updating__employee }] = useMutation(
+	const [updateEmployee, { loading: __updatingEmployee }] = useMutation(
 		UPDATE_EMPLOYEE,
 		Notify({
 			sucTitle: 'Employee updated successfully',
@@ -213,7 +213,12 @@ const EmployeeForm: React.FC<{
 
 			<Space h={10} />
 
-			<Button color='teal' loading={creating__employee} type='submit' fullWidth>
+			<Button
+				color='teal'
+				loading={__creatingEmployee || __updatingEmployee}
+				type='submit'
+				fullWidth
+			>
 				Save
 			</Button>
 		</form>

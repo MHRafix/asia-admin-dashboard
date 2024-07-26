@@ -34,9 +34,9 @@ export const Get_Task_List_Query = gql`
 					issuesDescription
 				}
 				taskId
-				totalBillAmount
 				progressStatus
 				paymentStatus
+				totalBillAmount
 				paidBillAmount
 				deadLine
 				createdAt

@@ -99,6 +99,7 @@ export interface Task {
 	taskId: String;
 	totalBillAmount: Number;
 	paidBillAmount: Number;
+	dueAmount: Number;
 	progressStatus: Task_Progress_Status;
 	paymentStatus: Payment_Status;
 	deadLine: Date;

@@ -1,5 +1,4 @@
-import { PAYMENT_STATUS } from '@/app/api/models/bookings.model';
-import { ClientWithPagination } from '@/app/api/models/client.model';
+import { ClientWithPagination, IClient } from '@/app/api/models/client.model';
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IEmployees } from '@/app/api/models/employees.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
@@ -12,7 +11,6 @@ import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
 	Avatar,
-	Badge,
 	Button,
 	Flex,
 	Group,
@@ -27,7 +25,7 @@ import {
 import { DateInput } from '@mantine/dates';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { IconX } from '@tabler/icons-react';
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiUpload } from 'react-icons/fi';
 import { HiOutlinePhotograph } from 'react-icons/hi';
@@ -63,8 +61,10 @@ const TaskForm: React.FC<{
 		handleSubmit,
 		reset,
 		formState: { errors },
+		watch,
 	} = useForm<ITaskFormType>({
 		resolver: yupResolver(Task_Form_Validation_Schema),
+		mode: 'onChange',
 	});
 
 	// create task mutation
@@ -92,6 +92,14 @@ const TaskForm: React.FC<{
 		});
 	};
 	// 🚀Task management role permissions check and complete the task ✅
+
+	// client data
+	// const clientData = ?.map(
+	// 	(client: any) => `<div>
+	// 			<Avatar>${client?.label}</Avatar>
+	// 		</div>`
+	// );
+
 	return (
 		<div>
 			<form onSubmit={handleSubmit(onSubmit)} className='grid gap-y-3'>
@@ -114,7 +122,9 @@ const TaskForm: React.FC<{
 				>
 					<Select
 						size='lg'
-						data={['2327sdhgdhgshdgshdg', '2563sghdgshdgh']}
+						data={getSelectInputData(clients?.Clients?.nodes)}
+						itemComponent={SelectItem}
+						searchable
 						onChange={(e) => setValue('client', e as string)}
 						placeholder='Pick a client'
 					/>
@@ -129,7 +139,9 @@ const TaskForm: React.FC<{
 				>
 					<Select
 						size='lg'
-						data={['2327sdhgdhgshdgshdg', '2563sghdgshdgh']}
+						data={getSelectInputData(employeesData?.teams?.nodes)}
+						itemComponent={SelectItem}
+						searchable
 						onChange={(e) => setValue('taskDetails.taskAssignTo', e as string)}
 						placeholder='Pick a  employee to assign'
 					/>
@@ -144,6 +156,7 @@ const TaskForm: React.FC<{
 						onChange={(e) => setValue('totalBillAmount', parseInt(e as string))}
 						size='lg'
 						placeholder='Total amount'
+						min={1}
 					/>
 				</Input.Wrapper>
 
@@ -156,6 +169,7 @@ const TaskForm: React.FC<{
 						size='lg'
 						onChange={(e) => setValue('paidBillAmount', parseInt(e as string))}
 						placeholder='Paid amount'
+						min={0}
 					/>
 				</Input.Wrapper>
 
@@ -253,47 +267,104 @@ const TaskForm: React.FC<{
 
 				{/* summaries */}
 				<div className='grid grid-cols-3 gap-3'>
-					<Paper p={10} withBorder>
-						<Text fw={700} fz={18}>
-							Client
-						</Text>
-						<Space h={'sm'} />
+					{watch('client') && (
+						<Paper p={10} withBorder>
+							<Text fw={700} fz={18}>
+								Client
+							</Text>
+							<Space h={'sm'} />
 
-						<Flex justify={'start'} gap={5} align={'center'}>
-							<Avatar color='teal' radius={100} size={'md'}>
-								MH
-							</Avatar>
-							<Text>Mehedi H. Rafiz</Text>
-						</Flex>
-					</Paper>
-					<Paper p={10} withBorder>
-						<Text fw={700} fz={18}>
-							Assign to
-						</Text>
+							<Flex justify={'start'} gap={15} align={'center'}>
+								<Avatar color='teal' radius={100} size={'lg'}>
+									{findUserById(
+										watch('client'),
+										clients?.Clients?.nodes!
+									)?.name?.slice(0, 1)}
+								</Avatar>
 
-						<Space h={'sm'} />
+								<div>
+									<Text fw={500}>
+										{
+											findUserById(watch('client'), clients?.Clients?.nodes!)
+												?.name
+										}
+									</Text>
+									<Text size={'sm'} color='dimmed'>
+										{
+											findUserById(watch('client'), clients?.Clients?.nodes!)
+												?.phone
+										}
+									</Text>
+								</div>
+							</Flex>
+						</Paper>
+					)}
+					{watch('taskDetails.taskAssignTo') && (
+						<Paper p={10} withBorder>
+							<Text fw={700} fz={18}>
+								Assign to
+							</Text>
 
-						<Flex justify={'start'} gap={5} align={'center'}>
-							<Avatar color='teal' radius={100} size={'md'}>
-								MH
-							</Avatar>
-							<Text>Mehedi H. Rafiz</Text>
-						</Flex>
-					</Paper>
-					<Paper p={10} withBorder>
-						<Text fw={700} fz={18}>
-							Payment
-						</Text>
-						<Space h={'sm'} />
-						<Text>Due: {1233 - 234} BDT</Text>
-						<Space h={4} />
-						<Text>
-							Payment Status: &nbsp;{' '}
-							<Badge size='md' radius={3}>
-								{PAYMENT_STATUS[0]}
-							</Badge>
-						</Text>
-					</Paper>
+							<Space h={'sm'} />
+
+							<Flex justify={'start'} gap={15} align={'center'}>
+								<Avatar
+									src={
+										findUserById(
+											watch('taskDetails.taskAssignTo'),
+											employeesData?.teams?.nodes!
+										)?.avatar
+									}
+									color='teal'
+									radius={100}
+									size={'lg'}
+								>
+									{findUserById(
+										watch('taskDetails.taskAssignTo'),
+										employeesData?.teams?.nodes!
+									)?.name?.slice(0, 1)}
+								</Avatar>
+								<div>
+									<Text fw={500}>
+										{
+											findUserById(
+												watch('taskDetails.taskAssignTo'),
+												employeesData?.teams?.nodes!
+											)?.name
+										}
+									</Text>
+									<Text size={'sm'} color='dimmed'>
+										{
+											findUserById(
+												watch('taskDetails.taskAssignTo'),
+												employeesData?.teams?.nodes!
+											)?.phone
+										}
+									</Text>
+								</div>
+							</Flex>
+						</Paper>
+					)}
+					{watch('totalBillAmount') && watch('paidBillAmount') ? (
+						<Paper p={10} withBorder>
+							<Text fw={700} fz={18}>
+								Payment
+							</Text>
+							<Space h={'sm'} />
+							<Text>
+								Due:{' '}
+								{watch('totalBillAmount') ?? 0 - watch('paidBillAmount') ?? 0}{' '}
+								BDT
+							</Text>
+							{/* <Space h={4} />
+							<Text>
+								Payment Status: &nbsp;{' '}
+								<Badge size='md' radius={3}>
+									{PAYMENT_STATUS[0]}
+								</Badge>
+							</Text> */}
+						</Paper>
+					) : null}
 				</div>
 				<Space h={'xs'} />
 
@@ -335,3 +406,51 @@ export const Task_Form_Validation_Schema = Yup.object().shape({
 });
 
 export type ITaskFormType = Yup.InferType<typeof Task_Form_Validation_Schema>;
+
+// make select input data from api response
+const getSelectInputData = (data: any) => {
+	let result: any = [];
+	data?.map((d: any) =>
+		result.push({
+			label: d.name,
+			value: d._id,
+			phone: d.phone ?? 'N/A',
+			avatar: d?.avatar ?? 'N/A',
+		})
+	);
+
+	return result;
+};
+
+// find client and employee
+const findUserById = (id: string, dataArray: IClient[] | IEmployees[]) => {
+	const user: any = dataArray?.find((data: any) => data?._id === id);
+	return user;
+};
+
+// input item type
+interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+	label: string;
+	value: string;
+	avatar: string;
+	phone: string;
+}
+
+// custom select input style
+export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+	({ avatar, label, value, phone, ...others }: ItemProps, ref) => (
+		<div ref={ref} {...others}>
+			<Group noWrap>
+				<Avatar color='teal' radius={100} src={avatar}>
+					{label?.slice(0, 1).toUpperCase()}
+				</Avatar>
+				<div>
+					<Text size='sm'>{label}</Text>
+					<Text size='xs' opacity={0.65}>
+						{phone}
+					</Text>
+				</div>
+			</Group>
+		</div>
+	)
+);

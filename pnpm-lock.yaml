@@ -148,6 +148,9 @@ dependencies:
   react-apexcharts:
     specifier: ^1.4.0
     version: 1.4.0(apexcharts@3.40.0)(react@18.2.0)
+  react-currency-format:
+    specifier: ^1.1.0
+    version: 1.1.0(react-dom@18.2.0)(react@18.2.0)
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
@@ -2901,6 +2904,17 @@ packages:
       apexcharts: 3.40.0
       prop-types: 15.8.1
       react: 18.2.0
+    dev: false
+
+  /react-currency-format@1.1.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-WWrEOIp/3GbDSk1wlhFXaBc7IHGT3IwL306DHbGP3GVr4YFa0iS5hHPbKjHa0haruGL4Ly+WG4/5jBHpUtgqZg==}
+    peerDependencies:
+      react: ^0.14 || ^15.0.0-rc || ^15.0.0 || ^16.0.0-rc || ^16.0.0 || ^17.0.0
+      react-dom: ^0.14 || ^15.0.0-rc || ^15.0.0 || ^16.0.0-rc || ^16.0.0 || ^17.0.0
+    dependencies:
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-dom@18.2.0(react@18.2.0):

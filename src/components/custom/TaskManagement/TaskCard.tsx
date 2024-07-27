@@ -18,6 +18,7 @@ import {
 } from '@mantine/core';
 import { format } from 'date-fns';
 import { useState } from 'react';
+import * as CurrencyFormat from 'react-currency-format';
 
 interface ITaskCardProps {
 	__task: Task;
@@ -63,6 +64,25 @@ const TaskCard: React.FC<ITaskCardProps> = ({ __task, onRefetch, color }) => {
 			<Text fz={18} fw={500}>
 				{__task?.taskDetails?.taskName}
 			</Text>
+			<Text fz={16}>
+				Net Total:{' '}
+				<CurrencyFormat
+					value={__task?.totalBillAmount}
+					displayType={'text'}
+					thousandSeparator={true}
+				/>{' '}
+				BDT
+			</Text>
+			<Text fz={16} color='yellow'>
+				Due:{' '}
+				<CurrencyFormat
+					value={__task?.dueAmount}
+					displayType={'text'}
+					thousandSeparator={true}
+				/>{' '}
+				BDT
+			</Text>
+
 			<Text color='red' fz={16}>
 				Deadline: {format(new Date(__task?.deadLine), 'PPPPp')}
 			</Text>
@@ -178,18 +198,10 @@ const TaskCard: React.FC<ITaskCardProps> = ({ __task, onRefetch, color }) => {
 						</Menu.Dropdown>
 					</Menu>
 
-					{/* <Badge radius={5} size='lg' py={18} px={20} fz={17}>
-						{remainingTime?.days +
-							':' +
-							remainingTime?.hours +
-							':' +
-							remainingTime?.minutes +
-							':' +
-							remainingTime?.seconds}
-					</Badge> */}
 					{new Date() < new Date(__task?.deadLine) ? (
 						<>
-							{__task?.progressStatus !== Task_Progress_Status.COMPLETED ? (
+							{__task?.progressStatus !== Task_Progress_Status.COMPLETED &&
+							__task?.progressStatus !== Task_Progress_Status.CANCELLED ? (
 								<div className='rest_time_wrapper'>
 									<div className='time_title'>
 										<div className='font-semibold text-md text-white'>

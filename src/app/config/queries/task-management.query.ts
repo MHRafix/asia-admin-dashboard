@@ -38,6 +38,7 @@ export const Get_Task_List_Query = gql`
 				paymentStatus
 				totalBillAmount
 				paidBillAmount
+				dueAmount
 				deadLine
 				createdAt
 			}
@@ -64,15 +65,19 @@ export const Get_Single_Task_Query = gql`
 				taskAssignTo {
 					_id
 					name
+					avatar
 				}
 				taskDescription
 				issuesDescription
 			}
 			taskId
-			totalBillAmount
 			progressStatus
 			paymentStatus
+			totalBillAmount
 			paidBillAmount
+			dueAmount
+			deadLine
+			createdAt
 		}
 	}
 `;

@@ -1,4 +1,4 @@
-import { Drawer, Title } from '@mantine/core';
+import { Drawer } from '@mantine/core';
 import { useMediaQuery } from '@mantine/hooks';
 import React, { PropsWithChildren } from 'react';
 
@@ -20,11 +20,7 @@ const DrawerWrapper: React.FC<
 				zIndex={999}
 				opened={opened}
 				onClose={close}
-				title={
-					<Title order={4} ff={'Nunito Sans,sans-serif'}>
-						{title}
-					</Title>
-				}
+				title={title}
 				className='mt-[60px] !p-5 overflow-y-auto'
 				withCloseButton={false}
 			>

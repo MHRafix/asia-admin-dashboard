@@ -25,6 +25,7 @@ const ClientDataForm: React.FC<{
 		register,
 		handleSubmit,
 		setValue,
+		reset,
 		formState: { errors },
 	} = useForm<IClientDataFormState>({
 		resolver: yupResolver(Client_Data_Form_Validation_Schema),
@@ -35,7 +36,10 @@ const ClientDataForm: React.FC<{
 		Create_Client_Data,
 		Notify({
 			sucTitle: 'Client data created',
-			action: () => onSuccess(),
+			action: () => {
+				// reset({ name: '', address: '', email: '', phone: '' });
+				onSuccess();
+			},
 		})
 	);
 
@@ -45,6 +49,7 @@ const ClientDataForm: React.FC<{
 		Notify({
 			sucTitle: 'Client data updated',
 			action: () => {
+				// reset({ name: '', address: '', email: '', phone: '' });
 				onSuccess();
 			},
 		})
@@ -54,7 +59,6 @@ const ClientDataForm: React.FC<{
 	useEffect(() => {
 		setValue('name', operationPayload?.name as string);
 		setValue('email', operationPayload?.email as string);
-		setValue('facebook', operationPayload?.facebook as string);
 		setValue('phone', operationPayload?.phone as string);
 		setValue('address', operationPayload?.address as string);
 	}, [operationPayload]);
@@ -86,46 +90,49 @@ const ClientDataForm: React.FC<{
 		<div>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Input.Wrapper
+					size='md'
 					label='Name'
 					error={<ErrorMessage name='name' errors={errors} />}
 				>
-					<Input {...register('name')} placeholder='Type client name' />
+					<Input
+						size='lg'
+						{...register('name')}
+						placeholder='Type client name'
+					/>
 				</Input.Wrapper>
 
 				<Space h={'sm'} />
 
 				<Input.Wrapper
+					size='md'
 					label='Email'
 					error={<ErrorMessage name='email' errors={errors} />}
 				>
-					<Input {...register('email')} placeholder='Type email' />
+					<Input size='lg' {...register('email')} placeholder='Type email' />
 				</Input.Wrapper>
 
 				<Space h={'sm'} />
 
 				<Input.Wrapper
+					size='md'
 					label='Phone'
 					error={<ErrorMessage name='phone' errors={errors} />}
 				>
-					<Input {...register('phone')} placeholder='Type phone' />
+					<Input size='lg' {...register('phone')} placeholder='Type phone' />
 				</Input.Wrapper>
 
 				<Space h={'sm'} />
 
 				<Input.Wrapper
-					label='Social contact'
-					error={<ErrorMessage name='facebook' errors={errors} />}
-				>
-					<Input {...register('facebook')} placeholder='Type social contact' />
-				</Input.Wrapper>
-
-				<Space h={'sm'} />
-
-				<Input.Wrapper
+					size='md'
 					label='Address'
 					error={<ErrorMessage name='address' errors={errors} />}
 				>
-					<Input {...register('address')} placeholder='Type address' />
+					<Input
+						size='lg'
+						{...register('address')}
+						placeholder='Type address'
+					/>
 				</Input.Wrapper>
 
 				<Space h={'sm'} />

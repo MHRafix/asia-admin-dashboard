@@ -18,8 +18,7 @@ export const EMPLOYEES_QUERY = gql`
 				avatar
 				email
 				phone
-				facebook
-				linkedin
+				salary
 			}
 			meta {
 				totalCount

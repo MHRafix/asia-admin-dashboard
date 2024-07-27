@@ -6,14 +6,13 @@ import {
 	GET_CLIENTS_QUERY,
 	Remove_Client_Data,
 } from '@/app/config/queries/clientsData.query';
-import DrawerWrapper from '@/components/common/Drawer/DrawerWrapper';
 import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
 import ClientDataForm from '@/components/custom/ClientData/ClientDataForm';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { useMutation, useQuery } from '@apollo/client';
-import { Anchor, Button, Menu, Space, Text } from '@mantine/core';
+import { Button, Drawer, Menu, Space, Text } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
@@ -63,15 +62,6 @@ const BusinessData = () => {
 				accessorKey: 'address',
 				header: 'Address',
 			},
-			{
-				accessorKey: 'facebook',
-				accessorFn: (originalRow: IClient) => (
-					<Anchor target='_blank' href={originalRow?.facebook} color='teal'>
-						Visit
-					</Anchor>
-				),
-				header: 'Social',
-			},
 		],
 		[]
 	);
@@ -99,9 +89,10 @@ const BusinessData = () => {
 				]}
 			/>
 
-			<DrawerWrapper
+			<Drawer
 				opened={state.modalOpened}
-				close={() =>
+				position='right'
+				onClose={() =>
 					setState({
 						modalOpened: false,
 					})
@@ -119,31 +110,17 @@ const BusinessData = () => {
 					operationType={state.operationType}
 					operationPayload={state.operationPayload}
 				/>
-			</DrawerWrapper>
+			</Drawer>
 
 			<Space h={30} />
 
 			<DataTable
 				columns={columns}
 				data={clients?.Clients?.nodes ?? []}
-				// filters={[
-				// 	{
-				// 		key: 'source',
-				// 		operator: MatchOperator.Eq,
-				// 		value: 'Accounting_Transaction_Source.BalanceAdjustment',
-				// 	},
-				// ]}
 				refetch={handleRefetch}
 				totalCount={clients?.Clients?.meta?.totalCount ?? 100}
 				RowActionMenu={(row: IClient) => (
 					<>
-						{/* <Menu.Item
-							onClick={() => handleDeleteAttendance(row._id)}
-							icon={<IconTrash size={18} />}
-							color='red'
-						>
-							Delete
-						</Menu.Item> */}
 						<Menu.Item
 							icon={<IconPencil size={18} />}
 							color='orange'

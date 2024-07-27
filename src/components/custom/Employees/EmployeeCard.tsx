@@ -63,7 +63,7 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({
 				</Badge>
 
 				<Badge color='red' size='lg' fw={400} ff={'Nunito, sans-serif'}>
-					TK {50000}
+					TK {data?.salary ?? 0.0}
 				</Badge>
 			</Flex>
 			<Space h={10} />

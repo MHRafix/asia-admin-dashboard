@@ -87,6 +87,8 @@ const TaskForm: React.FC<{
 				input: {
 					...payload,
 					taskCreatedBy: user?._id,
+					taskId: `#TK${Date.now().toString().slice(0, 4)}`,
+					dueAmount: payload?.totalBillAmount - payload?.paidBillAmount,
 				},
 			},
 		});
@@ -345,24 +347,19 @@ const TaskForm: React.FC<{
 							</Flex>
 						</Paper>
 					)}
-					{watch('totalBillAmount') && watch('paidBillAmount') ? (
+					{watch('totalBillAmount') ? (
 						<Paper p={10} withBorder>
 							<Text fw={700} fz={18}>
 								Payment
 							</Text>
 							<Space h={'sm'} />
-							<Text>
-								Due:{' '}
-								{watch('totalBillAmount') ?? 0 - watch('paidBillAmount') ?? 0}{' '}
-								BDT
+							<Text color='blue'>
+								Payable: {watch('totalBillAmount') ?? 0} BDT
 							</Text>
-							{/* <Space h={4} />
-							<Text>
-								Payment Status: &nbsp;{' '}
-								<Badge size='md' radius={3}>
-									{PAYMENT_STATUS[0]}
-								</Badge>
-							</Text> */}
+							<Text color='teal'>Paid: {watch('paidBillAmount') ?? 0} BDT</Text>
+							<Text color='yellow'>
+								Due: {watch('totalBillAmount') - watch('paidBillAmount')} BDT
+							</Text>
 						</Paper>
 					) : null}
 				</div>

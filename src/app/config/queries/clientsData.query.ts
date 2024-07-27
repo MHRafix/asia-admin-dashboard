@@ -8,7 +8,6 @@ export const GET_CLIENTS_QUERY = gql`
 				name
 				address
 				email
-				facebook
 				phone
 			}
 		}

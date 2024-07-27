@@ -8,7 +8,7 @@ import {
 import { useMutation } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Group, Input, Space, Text } from '@mantine/core';
+import { Button, Group, Input, NumberInput, Space, Text } from '@mantine/core';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
@@ -80,7 +80,7 @@ const EmployeeForm: React.FC<{
 		setValue('email', employee?.email!);
 		setValue('post', employee?.post!);
 		setValue('phone', employee?.phone!);
-		setValue('facebook', employee?.facebook!);
+		setValue('salary', employee?.salary!);
 	}, [employee]);
 
 	const onSubmit = (input: Employee_Form_Type) => {
@@ -169,7 +169,7 @@ const EmployeeForm: React.FC<{
 				label='Name'
 				error={<ErrorMessage name='name' errors={errors} />}
 			>
-				<Input placeholder='Enter name' {...register('name')} />
+				<Input size='lg' placeholder='Enter name' {...register('name')} />
 			</Input.Wrapper>
 
 			<Space h={5} />
@@ -178,7 +178,22 @@ const EmployeeForm: React.FC<{
 				label='Post'
 				error={<ErrorMessage name='post' errors={errors} />}
 			>
-				<Input placeholder='Enter post' {...register('post')} />
+				<Input size='lg' placeholder='Enter post' {...register('post')} />
+			</Input.Wrapper>
+
+			<Space h={5} />
+
+			<Input.Wrapper
+				size='md'
+				label='Salary'
+				error={<ErrorMessage name='salary' errors={errors} />}
+			>
+				<NumberInput
+					size='lg'
+					value={watch('salary')}
+					placeholder='Enter salary'
+					onChange={(e) => setValue('salary', parseInt(e as string))}
+				/>
 			</Input.Wrapper>
 
 			<Space h={5} />
@@ -188,7 +203,7 @@ const EmployeeForm: React.FC<{
 				label='Email'
 				error={<ErrorMessage name='email' errors={errors} />}
 			>
-				<Input placeholder='Enter email' {...register('email')} />
+				<Input size='lg' placeholder='Enter email' {...register('email')} />
 			</Input.Wrapper>
 
 			<Space h={5} />
@@ -198,17 +213,7 @@ const EmployeeForm: React.FC<{
 				label='Phone'
 				error={<ErrorMessage name='phone' errors={errors} />}
 			>
-				<Input placeholder='Enter phone' {...register('phone')} />
-			</Input.Wrapper>
-
-			<Space h={5} />
-
-			<Input.Wrapper
-				size='md'
-				label='Facebook'
-				error={<ErrorMessage name='facebook' errors={errors} />}
-			>
-				<Input placeholder='Enter facebook' {...register('facebook')} />
+				<Input size='lg' placeholder='Enter phone' {...register('phone')} />
 			</Input.Wrapper>
 
 			<Space h={10} />
@@ -217,6 +222,7 @@ const EmployeeForm: React.FC<{
 				color='teal'
 				loading={__creatingEmployee || __updatingEmployee}
 				type='submit'
+				size='lg'
 				fullWidth
 			>
 				Save
@@ -231,9 +237,9 @@ const EmployeeFormValidator = Yup.object().shape({
 	name: Yup.string().required().label('Name'),
 	avatar: Yup.string().required().label('Avatar'),
 	post: Yup.string().required().label('Post'),
+	salary: Yup.number().required().label('Salary'),
 	email: Yup.string().required().label('Email'),
 	phone: Yup.string().required().label('Phone'),
-	facebook: Yup.string().required().label('Facebook'),
 });
 
 export type Employee_Form_Type = Yup.InferType<typeof EmployeeFormValidator>;

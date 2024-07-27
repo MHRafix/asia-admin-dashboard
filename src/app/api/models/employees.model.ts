@@ -4,7 +4,6 @@ export interface IEmployees {
 	post: string;
 	avatar: string;
 	email: string;
-	facebook: string;
-	linkedin: string;
+	salary: number;
 	phone: string;
 }

@@ -10,6 +10,5 @@ export interface IClient {
 	name: string;
 	address: string;
 	email: string;
-	facebook: string;
 	phone: string;
 }

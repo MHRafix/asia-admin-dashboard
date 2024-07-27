@@ -18,7 +18,6 @@ import {
 } from '@mantine/core';
 import { format } from 'date-fns';
 import { useState } from 'react';
-import * as CurrencyFormat from 'react-currency-format';
 
 interface ITaskCardProps {
 	__task: Task;
@@ -64,23 +63,12 @@ const TaskCard: React.FC<ITaskCardProps> = ({ __task, onRefetch, color }) => {
 			<Text fz={18} fw={500}>
 				{__task?.taskDetails?.taskName}
 			</Text>
-			<Text fz={16}>
-				Net Total:{' '}
-				<CurrencyFormat
-					value={__task?.totalBillAmount}
-					displayType={'text'}
-					thousandSeparator={true}
-				/>{' '}
-				BDT
-			</Text>
+
+			<Space h={'md'} />
+
+			<Text fz={16}>Net Total: {`${__task?.totalBillAmount}`} BDT</Text>
 			<Text fz={16} color='yellow'>
-				Due:{' '}
-				<CurrencyFormat
-					value={__task?.dueAmount}
-					displayType={'text'}
-					thousandSeparator={true}
-				/>{' '}
-				BDT
+				Due: {`${__task?.dueAmount}`} BDT
 			</Text>
 
 			<Text color='red' fz={16}>

@@ -1,6 +1,7 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IUser } from '@/app/api/models/users.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
+import { SortType, USER_ROLE } from '@/app/config/gql';
 import {
 	CREATE_USER_MUTATION,
 	MANAGE_USER_ACCESS_MUTATION,
@@ -41,6 +42,8 @@ import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiTrash } from 'react-icons/fi';
 import { TbUsers } from 'react-icons/tb';
+import PhoneInput from 'react-phone-number-input';
+import 'react-phone-number-input/style.css';
 import * as Yup from 'yup';
 
 const UsersTable: React.FC<{}> = () => {
@@ -54,16 +57,20 @@ const UsersTable: React.FC<{}> = () => {
 
 	const [access, setAccess] = useState<string>('');
 	const [opened, modalHandler] = useDisclosure();
-	const [user, setUser] = useState<IUser>();
+	const [user, setUser] = useState<IUser | null>();
 
-	// get booking packages
+	// get users
 	const {
 		data,
 		loading: fetching,
 		refetch,
 	} = useQuery<{
 		users: { nodes: IUser[]; meta: IPaginationMeta };
-	}>(USERS_QUERY);
+	}>(USERS_QUERY, {
+		variables: {
+			input: { limit: 10000000, page: 1, sort: SortType.Desc, sortBy: '_id' },
+		},
+	});
 
 	// remove bulk bookings
 	const [bulkDeleteCustomer, { loading: bulkDeleting }] = useMutation(
@@ -92,8 +99,12 @@ const UsersTable: React.FC<{}> = () => {
 		name: string;
 		email: string;
 		role: string;
+		phone: string;
 		password: string;
 	}>({
+		defaultValues: {
+			role: USER_ROLE.ADMIN,
+		},
 		resolver: yupResolver(
 			Yup.object().shape({
 				name: Yup.string().required().label('Name'),
@@ -157,6 +168,8 @@ const UsersTable: React.FC<{}> = () => {
 			sucTitle: 'User created successfully',
 			action: () => {
 				refetch();
+				reset({ email: '', password: '', name: '', role: USER_ROLE.ADMIN });
+				setUser(null);
 				setState({
 					modalOpened: false,
 				});
@@ -215,9 +228,18 @@ const UsersTable: React.FC<{}> = () => {
 						defaultValue={user?.role}
 					>
 						<Stack mt='xs'>
-							<Radio color='teal' value='ADMIN' label='Admin' />
-							<Radio color='orange' value='MODERATOR' label='Moderator' />
-							<Radio color='yellow' value='CUSTOMER' label='Customer' />
+							<Radio color='teal' value={USER_ROLE.ADMIN} label='Admin' />
+							<Radio
+								color='orange'
+								value={USER_ROLE.MODERATOR}
+								label='Moderator'
+							/>
+							<Radio
+								color='violet'
+								value={USER_ROLE.EMPLOYEE}
+								label='Employee'
+							/>
+							<Radio color='blue' value={USER_ROLE.CUSTOMER} label='Customer' />
 						</Stack>
 					</Radio.Group>
 					<Space h={'md'} />
@@ -306,7 +328,11 @@ const UsersTable: React.FC<{}> = () => {
 						size='md'
 						error={<ErrorMessage name='name' errors={errors} />}
 					>
-						<Input {...register('name')} placeholder='Mehedi H. Rafiz' />
+						<Input
+							size='md'
+							{...register('name')}
+							placeholder='Mehedi H. Rafiz'
+						/>
 					</Input.Wrapper>
 
 					<Space h={'sm'} />
@@ -316,7 +342,11 @@ const UsersTable: React.FC<{}> = () => {
 						size='md'
 						error={<ErrorMessage name='email' errors={errors} />}
 					>
-						<Input {...register('email')} placeholder='example@gmail.com' />
+						<Input
+							size='md'
+							{...register('email')}
+							placeholder='example@gmail.com'
+						/>
 					</Input.Wrapper>
 
 					<Space h={'sm'} />
@@ -326,7 +356,25 @@ const UsersTable: React.FC<{}> = () => {
 						size='md'
 						error={<ErrorMessage name='password' errors={errors} />}
 					>
-						<PasswordInput {...register('password')} placeholder='********' />
+						<PasswordInput
+							size='md'
+							{...register('password')}
+							placeholder='********'
+						/>
+					</Input.Wrapper>
+
+					<Space h={'sm'} />
+
+					<Input.Wrapper
+						label='Phone'
+						size='md'
+						error={<ErrorMessage name='phone' errors={errors} />}
+					>
+						<PhoneInput
+							international
+							defaultCountry='BD'
+							onChange={(e) => setValue('phone', e!)}
+						/>
 					</Input.Wrapper>
 
 					<Space h={'sm'} />
@@ -337,16 +385,28 @@ const UsersTable: React.FC<{}> = () => {
 						error={<ErrorMessage name='role' errors={errors} />}
 					>
 						<Select
-							data={['ADMIN', 'MODERATOR', 'CUSTOMER']}
-							defaultValue={'ADMIN'}
+							size='md'
+							data={[
+								USER_ROLE.ADMIN,
+								USER_ROLE.MODERATOR,
+								USER_ROLE.EMPLOYEE,
+								USER_ROLE.CUSTOMER,
+							]}
+							defaultValue={USER_ROLE.ADMIN}
 							onChange={(e) => setValue('role', e!)}
-							placeholder='********'
+							placeholder='Pick a role'
 						/>
 					</Input.Wrapper>
 
 					<Space h={'sm'} />
 
-					<Button type='submit' loading={creating__user} color='teal' fullWidth>
+					<Button
+						size='md'
+						type='submit'
+						loading={creating__user}
+						color='teal'
+						fullWidth
+					>
 						Create
 					</Button>
 				</form>
@@ -357,16 +417,19 @@ const UsersTable: React.FC<{}> = () => {
 
 export default UsersTable;
 
-const getRoleBadgeColor = (role: string) => {
+export const getRoleBadgeColor = (role: USER_ROLE) => {
 	switch (role) {
-		case 'ADMIN':
+		case USER_ROLE.ADMIN:
 			return 'teal';
 
-		case 'CUSTOMER':
-			return 'violet';
+		case USER_ROLE.CUSTOMER:
+			return 'blue';
 
-		case 'MODERATOR':
+		case USER_ROLE.MODERATOR:
 			return 'orange';
+
+		case USER_ROLE.EMPLOYEE:
+			return 'violet';
 
 		default:
 			break;

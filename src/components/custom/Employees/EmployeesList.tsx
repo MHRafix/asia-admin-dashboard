@@ -9,7 +9,6 @@ import { useQuery } from '@apollo/client';
 import { Button, Drawer, Input, Space } from '@mantine/core';
 import { useDebouncedState, useDisclosure } from '@mantine/hooks';
 import { IconPlus } from '@tabler/icons-react';
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { RiTeamLine } from 'react-icons/ri';
@@ -18,13 +17,11 @@ import EmployeeCardSkeleton from './EmployeeCardSkeleton';
 import EmployeeForm from './NewEmployee/EmployeeForm';
 
 const EmployeesList: React.FC<{}> = () => {
-	const [page, setPage] = useState<number>(1);
-	const [limit, setLimit] = useState<number>(50);
+	const [page] = useState<number>(1);
+	const [limit] = useState<number>(50);
 	const [searchKey, setSearchKey] = useDebouncedState('', 500);
 	const [opened, handler] = useDisclosure();
 	const [employee, setEmployee] = useState<IEmployees>();
-
-	const router = useRouter();
 
 	// get booking packages
 	const {

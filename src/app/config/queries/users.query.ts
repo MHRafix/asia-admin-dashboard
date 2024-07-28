@@ -6,13 +6,14 @@ import { gql } from '@apollo/client';
 
 // users query
 export const USERS_QUERY = gql`
-	query USERS_QUERY($page: Int, $limit: Int) {
-		users(input: { page: $page, limit: $limit, sort: DESC, sortBy: "_id" }) {
+	query USERS_QUERY($input: UserListQueryDto) {
+		users(input: $input) {
 			nodes {
 				_id
 				name
 				email
 				role
+				phone
 				avatar
 			}
 			meta {
@@ -20,6 +21,19 @@ export const USERS_QUERY = gql`
 				currentPage
 				hasNextPage
 				totalPages
+			}
+		}
+	}
+`;
+export const USERS_QUERY_FOR_DROPDOWN = gql`
+	query USERS_QUERY($input: UserListQueryDto) {
+		users(input: $input) {
+			nodes {
+				_id
+				name
+				email
+				role
+				avatar
 			}
 		}
 	}

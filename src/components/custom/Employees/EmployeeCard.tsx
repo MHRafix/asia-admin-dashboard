@@ -8,6 +8,7 @@ import Image from 'next/image';
 import React from 'react';
 import { FaHandHoldingUsd } from 'react-icons/fa';
 import { FiEdit, FiTrash } from 'react-icons/fi';
+import { getRoleBadgeColor } from '../Manage_Users/UsersTable';
 
 interface IEmployeeCardProps {
 	data: IEmployees;
@@ -42,7 +43,7 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({
 					src={data?.avatar}
 					width={150}
 					height={150}
-					className='rounded-md shadow-md'
+					className='rounded-full object-cover shadow-md'
 					alt='employee'
 				/>
 			</div>
@@ -60,6 +61,14 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({
 			<Flex gap={5} align={'center'}>
 				<Badge color='violet' size='lg' fw={400} ff={'Nunito, sans-serif'}>
 					{data?.post}
+				</Badge>
+				<Badge
+					color={getRoleBadgeColor(data?.role)}
+					size='lg'
+					fw={400}
+					ff={'Nunito, sans-serif'}
+				>
+					{data?.role}
 				</Badge>
 
 				<Badge color='red' size='lg' fw={400} ff={'Nunito, sans-serif'}>

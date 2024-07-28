@@ -1,46 +1,35 @@
 import { IEmployees } from '@/app/api/models/employees.model';
+import { IUser } from '@/app/api/models/users.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { fileUploader } from '@/app/config/logic/fileUploader';
+import { MatchOperator, SortType, USER_ROLE } from '@/app/config/gql';
 import {
 	CREATE_EMPLOYEE,
 	UPDATE_EMPLOYEE,
 } from '@/app/config/queries/employees.query';
-import { useMutation } from '@apollo/client';
+import { USERS_QUERY_FOR_DROPDOWN } from '@/app/config/queries/users.query';
+import { useMutation, useQuery } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Group, Input, NumberInput, Space, Text } from '@mantine/core';
-import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import {
+	Avatar,
+	Badge,
+	Button,
+	Group,
+	Input,
+	NumberInput,
+	Select,
+	Space,
+	Text,
+} from '@mantine/core';
+import React, { forwardRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { FiUpload } from 'react-icons/fi';
-import { HiOutlinePhotograph } from 'react-icons/hi';
-import { ImCross } from 'react-icons/im';
 import * as Yup from 'yup';
+import { getRoleBadgeColor } from '../../Manage_Users/UsersTable';
 
 const EmployeeForm: React.FC<{
 	onSuccess: () => void;
 	employee?: IEmployees;
 }> = ({ onSuccess, employee }) => {
-	const [url, setUrl] = useState<string>('');
-	const [uploading, setUploading] = useState<boolean>(false);
-
-	// upload avatar
-	const uploadAvatar = async (file: File) => {
-		setUploading(true);
-		const { file_upload_cloudinary } = fileUploader(file, 'ASIA_LOGO');
-		const url = await file_upload_cloudinary();
-		if (url) {
-			Notify({
-				sucTitle: 'Avatar uploaded successfully!',
-				sucMessage: 'Update team details now.',
-			});
-		}
-		setUrl(url);
-		setUploading(false);
-		setValue('avatar', url);
-	};
-
 	const {
 		register,
 		handleSubmit,
@@ -49,6 +38,29 @@ const EmployeeForm: React.FC<{
 		formState: { errors },
 	} = useForm<Employee_Form_Type>({
 		resolver: yupResolver(EmployeeFormValidator),
+	});
+
+	// get users
+	const {
+		data,
+		loading: fetching,
+		refetch,
+	} = useQuery<{
+		users: { nodes: IUser[] };
+	}>(USERS_QUERY_FOR_DROPDOWN, {
+		variables: {
+			input: {
+				limit: 10000000,
+				page: 1,
+				sort: SortType.Desc,
+				sortBy: '_id',
+				where: {
+					key: 'role',
+					operator: MatchOperator.Ne,
+					value: USER_ROLE.CUSTOMER,
+				},
+			},
+		},
 	});
 
 	// create a new employee
@@ -74,12 +86,7 @@ const EmployeeForm: React.FC<{
 	);
 
 	useEffect(() => {
-		setUrl(employee?.avatar!);
-		setValue('avatar', employee?.avatar!);
-		setValue('name', employee?.name!);
-		setValue('email', employee?.email!);
 		setValue('post', employee?.post!);
-		setValue('phone', employee?.phone!);
 		setValue('salary', employee?.salary!);
 	}, [employee]);
 
@@ -93,7 +100,14 @@ const EmployeeForm: React.FC<{
 		} else {
 			createEmployee({
 				variables: {
-					input,
+					input: {
+						post: input.post,
+						salary: input.salary,
+
+						// name: input.name,
+						// email: input.email,
+						// avatar: input.avatar,
+					},
 				},
 			});
 		}
@@ -101,78 +115,23 @@ const EmployeeForm: React.FC<{
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)}>
-			{url && (
-				<div className='text-center'>
-					<Image
-						src={url}
-						alt='Pic'
-						width={150}
-						height={150}
-						className='!w-[150px] object-cover !h-[150px] mx-auto p-1 !rounded-lg shadow-md'
-					/>
-				</div>
-			)}
-
-			<Space h={'md'} />
-
 			<Input.Wrapper
 				size='md'
-				error={<ErrorMessage name='avatar' errors={errors} />}
+				label='Employee'
+				error={<ErrorMessage name='employee' errors={errors} />}
 			>
-				<Dropzone
-					onDrop={(files) => uploadAvatar(files[0])}
-					onReject={(files) => {}}
-					loading={uploading}
-					w={150}
-					mx='auto'
-					h={150}
-					bg={'transparent'}
-					maxSize={3 * 1024 ** 2}
-					accept={IMAGE_MIME_TYPE}
-					sx={{
-						border: '1px dotted #5F3DC4',
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
-					}}
-				>
-					<Group
-						position='center'
-						spacing='xl'
-						style={{
-							minHeight: 80,
-							pointerEvents: 'none',
-						}}
-					>
-						<Dropzone.Accept>
-							<FiUpload size={50} color={'dark'} />
-						</Dropzone.Accept>
-						<Dropzone.Reject>
-							<ImCross size={50} color={'dark'} />
-						</Dropzone.Reject>
-						<Dropzone.Idle>
-							<HiOutlinePhotograph color='#5F3DC4' size={50} />
-						</Dropzone.Idle>
-
-						<div>
-							<Text size='md' inline>
-								Avatar
-							</Text>
-						</div>
-					</Group>
-				</Dropzone>
+				<Select
+					size='lg'
+					data={getSelectInputData(data?.users?.nodes)}
+					itemComponent={SelectItem}
+					searchable
+					onChange={(e) => setValue('employee', e as string)}
+					placeholder='Pick a  user'
+				/>{' '}
 			</Input.Wrapper>
 
 			<Space h={5} />
-			<Input.Wrapper
-				size='md'
-				label='Name'
-				error={<ErrorMessage name='name' errors={errors} />}
-			>
-				<Input size='lg' placeholder='Enter name' {...register('name')} />
-			</Input.Wrapper>
 
-			<Space h={5} />
 			<Input.Wrapper
 				size='md'
 				label='Post'
@@ -196,26 +155,6 @@ const EmployeeForm: React.FC<{
 				/>
 			</Input.Wrapper>
 
-			<Space h={5} />
-
-			<Input.Wrapper
-				size='md'
-				label='Email'
-				error={<ErrorMessage name='email' errors={errors} />}
-			>
-				<Input size='lg' placeholder='Enter email' {...register('email')} />
-			</Input.Wrapper>
-
-			<Space h={5} />
-
-			<Input.Wrapper
-				size='md'
-				label='Phone'
-				error={<ErrorMessage name='phone' errors={errors} />}
-			>
-				<Input size='lg' placeholder='Enter phone' {...register('phone')} />
-			</Input.Wrapper>
-
 			<Space h={10} />
 
 			<Button
@@ -234,12 +173,56 @@ const EmployeeForm: React.FC<{
 export default EmployeeForm;
 
 const EmployeeFormValidator = Yup.object().shape({
-	name: Yup.string().required().label('Name'),
-	avatar: Yup.string().required().label('Avatar'),
+	employee: Yup.string().required().label('Employee'),
 	post: Yup.string().required().label('Post'),
 	salary: Yup.number().required().label('Salary'),
-	email: Yup.string().required().label('Email'),
-	phone: Yup.string().required().label('Phone'),
 });
 
 export type Employee_Form_Type = Yup.InferType<typeof EmployeeFormValidator>;
+
+// input item type
+interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
+	label: string;
+	value: string;
+	avatar: string;
+	email: string;
+	role: string;
+}
+
+// custom select input style
+export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+	({ avatar, label, value, role, email, ...others }: ItemProps, ref) => (
+		<div ref={ref} {...others}>
+			<Group noWrap>
+				<Avatar color='teal' radius={100} src={avatar}>
+					{label?.slice(0, 1).toUpperCase()}
+				</Avatar>
+				<div>
+					<Text size='sm'>{label}</Text>
+					<Text size='xs' opacity={0.65}>
+						{email}
+					</Text>
+					<Badge color={getRoleBadgeColor(role as USER_ROLE)} size='sm'>
+						{role}
+					</Badge>
+				</div>
+			</Group>
+		</div>
+	)
+);
+
+// make select input data from api response
+const getSelectInputData = (data: any) => {
+	let result: any = [];
+	data?.map((d: any) =>
+		result.push({
+			label: d.name,
+			value: d._id,
+			role: d.role,
+			email: d.email ?? 'N/A',
+			avatar: d?.avatar ?? 'N/A',
+		})
+	);
+
+	return result;
+};

@@ -1,12 +1,12 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IAppointment } from '@/app/api/models/appointment.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { MatchOperator } from '@/app/config/gql';
-import { getBadgeColors } from '@/app/config/logic/getColors';
 import {
 	APPOINTMENTS_QUERY,
 	DELETE_APPOINTMENT_MUTATION,
-} from '@/app/config/queries/appointments.query';
+} from '@/app/config/gql-queries/appointments.query';
+import { MatchOperator } from '@/app/config/gql-types';
+import { getBadgeColors } from '@/app/config/logic/getColors';
 import DrawerWrapper from '@/components/common/Drawer/DrawerWrapper';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
@@ -17,7 +17,6 @@ import { modals } from '@mantine/modals';
 import { IconMessage, IconPlus, IconTrash } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { MRT_ColumnDef } from 'mantine-react-table';
-import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
 import ReplyDrawer from './ReplyDrawer';
 
@@ -30,8 +29,6 @@ const AppointmentsTable: React.FC<{}> = () => {
 		refetching: false,
 		appointment: null,
 	});
-
-	const { query } = useRouter();
 
 	// get booking packages
 	const {
@@ -67,13 +64,6 @@ const AppointmentsTable: React.FC<{}> = () => {
 				accessorKey: 'phone',
 				header: 'Phone',
 			},
-			// {
-			// 	accessorKey: 'service',
-			// 	accessorFn: (originalRow: IAppointment) => (
-			// 		<ServiceCard service={originalRow?.service} />
-			// 	),
-			// 	header: 'Service',
-			// },
 			{
 				accessorKey: 'status',
 				accessorFn: (originalRow: IAppointment) => (

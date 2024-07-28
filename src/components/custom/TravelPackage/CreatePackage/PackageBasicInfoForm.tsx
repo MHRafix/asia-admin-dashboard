@@ -3,11 +3,11 @@ import {
 	CREATE_PACKAGE_FORM_BASIC_INFO_DEFAULT_VALUE,
 	CREATE_PACKAGE_FORM_BASIC_INFO_SCHEMA,
 } from '@/app/config/form.validation/package-form/package.form.validation';
-import { useGetSession } from '@/app/config/logic/getSession';
 import {
 	CREATE_TRAVEL_PACKAGE,
 	Update_Tour_Package,
-} from '@/app/config/queries/travelPackage.query';
+} from '@/app/config/gql-queries/travelPackage.query';
+import { useGetSession } from '@/app/config/logic/getSession';
 import NotepadEditor from '@/components/common/NotepadEditor';
 import { activeStep, packageBasicInfoAtom } from '@/store/createPackgage.store';
 import { useMutation } from '@apollo/client';

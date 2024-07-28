@@ -7,7 +7,7 @@ import {
 import {
 	Create_Client_Data,
 	Update_Client_Data,
-} from '@/app/config/queries/clientsData.query';
+} from '@/app/config/gql-queries/clientsData.query';
 import { useMutation } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';

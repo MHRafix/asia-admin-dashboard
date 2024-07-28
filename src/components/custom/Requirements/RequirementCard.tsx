@@ -1,8 +1,8 @@
 import { IVisaReq } from '@/app/api/models/visaRequirements.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { MatchOperator } from '@/app/config/gql';
+import { REMOVE_REQUIREMENT } from '@/app/config/gql-queries/requirements.query';
+import { MatchOperator } from '@/app/config/gql-types';
 import { getTimeDistance } from '@/app/config/logic/getTimeDistance';
-import { REMOVE_REQUIREMENT } from '@/app/config/queries/requirements.query';
 import { useMutation } from '@apollo/client';
 import { Avatar, Box, Button, Flex, Space, Text } from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';

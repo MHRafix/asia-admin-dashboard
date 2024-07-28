@@ -2,10 +2,10 @@ import { Notify } from '@/app/config/alertNotification/Notification';
 import {
 	GET_SERVICE_QUERY,
 	GET_SINGLE_SERVICE,
-} from '@/app/config/queries/service.query';
+} from '@/app/config/gql-queries/service.query';
 import { useMutation, useQuery } from '@apollo/client';
+import { UPDATE_SERVICE } from '../../config/gql-queries/service.query';
 import { IService } from '../models/service.model';
-import { UPDATE_SERVICE } from '../../config/queries/service.query';
 
 export const useGetServices = () => {
 	const {

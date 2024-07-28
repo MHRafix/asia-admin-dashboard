@@ -1,11 +1,11 @@
 import { ClientWithPagination, IClient } from '@/app/api/models/client.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
-import { MatchOperator } from '@/app/config/gql';
 import {
 	GET_CLIENTS_QUERY,
 	Remove_Client_Data,
-} from '@/app/config/queries/clientsData.query';
+} from '@/app/config/gql-queries/clientsData.query';
+import { MatchOperator } from '@/app/config/gql-types';
 import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';

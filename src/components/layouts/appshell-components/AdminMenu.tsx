@@ -1,5 +1,5 @@
 import { IAppSettings } from '@/app/api/models/appSettings.model';
-import { APP_SETTINGS_QUERY } from '@/app/config/queries/appSettings.query';
+import { APP_SETTINGS_QUERY } from '@/app/config/gql-queries/appSettings.query';
 import { useQuery } from '@apollo/client';
 import { Navbar, NavLink, ScrollArea, Space, Text } from '@mantine/core';
 import Image from 'next/image';

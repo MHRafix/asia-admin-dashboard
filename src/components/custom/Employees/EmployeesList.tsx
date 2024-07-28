@@ -1,7 +1,7 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IEmployees } from '@/app/api/models/employees.model';
-import { MatchOperator } from '@/app/config/gql';
-import { EMPLOYEES_QUERY } from '@/app/config/queries/employees.query';
+import { EMPLOYEES_QUERY } from '@/app/config/gql-queries/employees.query';
+import { MatchOperator } from '@/app/config/gql-types';
 import { BOOKING_TABLE_DEFAULT_SORTBY } from '@/app/config/table_configuration';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import PageTitleArea from '@/components/common/PageTitleArea';
@@ -36,11 +36,6 @@ const EmployeesList: React.FC<{}> = () => {
 				page: page,
 				limit: limit,
 				sortBy: BOOKING_TABLE_DEFAULT_SORTBY,
-				// where: {
-				// 	key: 'name',
-				// 	operator: MatchOperator.Eq,
-				// 	value: searchKey,
-				// },
 			},
 		},
 	});

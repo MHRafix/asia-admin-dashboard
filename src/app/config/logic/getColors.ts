@@ -1,5 +1,5 @@
 import { PAYMENT_STATUS } from '@/app/api/models/bookings.model';
-import { Attendance_Status } from '../gql';
+import { Attendance_Status } from '../gql-types';
 
 export const getBadgeColors = (status: string) => {
 	switch (status) {

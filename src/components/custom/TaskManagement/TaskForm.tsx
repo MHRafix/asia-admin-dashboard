@@ -2,10 +2,10 @@ import { ClientWithPagination } from '@/app/api/models/client.model';
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IEmployees } from '@/app/api/models/employees.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
+import { GET_CLIENTS_QUERY } from '@/app/config/gql-queries/clientsData.query';
+import { EMPLOYEES_DROPDOWN_QUERY } from '@/app/config/gql-queries/employees.query';
+import { Create_Task_Mutation } from '@/app/config/gql-queries/task-management.query';
 import { useGetSession } from '@/app/config/logic/getSession';
-import { GET_CLIENTS_QUERY } from '@/app/config/queries/clientsData.query';
-import { EMPLOYEES_QUERY } from '@/app/config/queries/employees.query';
-import { Create_Task_Mutation } from '@/app/config/queries/task-management.query';
 import { useMutation, useQuery } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -46,7 +46,7 @@ const TaskForm: React.FC<{
 	// get employees
 	const { data: employeesData, loading: __employeeLoading } = useQuery<{
 		teams: { nodes: IEmployees[]; meta: IPaginationMeta };
-	}>(EMPLOYEES_QUERY, {
+	}>(EMPLOYEES_DROPDOWN_QUERY, {
 		variables: {
 			input: {
 				page: 1,
@@ -93,14 +93,6 @@ const TaskForm: React.FC<{
 			},
 		});
 	};
-	// 🚀Task management role permissions check and complete the task ✅
-
-	// client data
-	// const clientData = ?.map(
-	// 	(client: any) => `<div>
-	// 			<Avatar>${client?.label}</Avatar>
-	// 		</div>`
-	// );
 
 	return (
 		<div>
@@ -124,8 +116,8 @@ const TaskForm: React.FC<{
 				>
 					<Select
 						size='lg'
-						data={getSelectInputData(clients?.Clients?.nodes)}
-						itemComponent={SelectItem}
+						data={getEmployeeSelectInputData(clients?.Clients?.nodes)}
+						itemComponent={SelectItemEmployee}
 						searchable
 						onChange={(e) => setValue('client', e as string)}
 						placeholder='Pick a client'
@@ -141,8 +133,8 @@ const TaskForm: React.FC<{
 				>
 					<Select
 						size='lg'
-						data={getSelectInputData(employeesData?.teams?.nodes)}
-						itemComponent={SelectItem}
+						data={getEmployeeSelectInputData(employeesData?.teams?.nodes)}
+						itemComponent={SelectItemEmployee}
 						searchable
 						onChange={(e) => setValue('taskDetails.taskAssignTo', e as string)}
 						placeholder='Pick a  employee to assign'
@@ -405,13 +397,13 @@ export const Task_Form_Validation_Schema = Yup.object().shape({
 export type ITaskFormType = Yup.InferType<typeof Task_Form_Validation_Schema>;
 
 // make select input data from api response
-const getSelectInputData = (data: any) => {
+export const getEmployeeSelectInputData = (data: any) => {
 	let result: any = [];
 	data?.map((d: any) =>
 		result.push({
 			label: d.name,
 			value: d._id,
-			phone: d.phone ?? 'N/A',
+			email: d.email ?? 'N/A',
 			avatar: d?.avatar ?? 'N/A',
 		})
 	);
@@ -430,12 +422,12 @@ interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
 	label: string;
 	value: string;
 	avatar: string;
-	phone: string;
+	email: string;
 }
 
 // custom select input style
-export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
-	({ avatar, label, value, phone, ...others }: ItemProps, ref) => (
+export const SelectItemEmployee = forwardRef<HTMLDivElement, ItemProps>(
+	({ avatar, label, value, email, ...others }: ItemProps, ref) => (
 		<div ref={ref} {...others}>
 			<Group noWrap>
 				<Avatar color='teal' radius={100} src={avatar}>
@@ -444,7 +436,7 @@ export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 				<div>
 					<Text size='sm'>{label}</Text>
 					<Text size='xs' opacity={0.65}>
-						{phone}
+						{email}
 					</Text>
 				</div>
 			</Group>

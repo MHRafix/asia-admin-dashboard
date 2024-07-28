@@ -4,11 +4,11 @@ import {
 } from '@/app/api/models/money-receipt.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
-import { MatchOperator } from '@/app/config/gql';
 import {
 	DELETE_MONEY_RECEIPT_MUTATION,
 	Money_Receipt_Query,
-} from '@/app/config/queries/money-receipt.query';
+} from '@/app/config/gql-queries/money-receipt.query';
+import { MatchOperator } from '@/app/config/gql-types';
 import DrawerWrapper from '@/components/common/Drawer/DrawerWrapper';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';

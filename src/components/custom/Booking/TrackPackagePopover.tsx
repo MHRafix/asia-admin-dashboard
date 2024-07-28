@@ -1,7 +1,7 @@
 import { IBooking, STATUS_ARR } from '@/app/api/models/bookings.model';
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
+import { UPDATE_BOOKING_STATUS } from '@/app/config/gql-queries/bookings.query';
 import { getPaymentBadgeColors } from '@/app/config/logic/getColors';
-import { UPDATE_BOOKING_STATUS } from '@/app/config/queries/bookings.query';
 import TourCard from '@/components/common/Tour/TourCard';
 import { useMutation } from '@apollo/client';
 import {

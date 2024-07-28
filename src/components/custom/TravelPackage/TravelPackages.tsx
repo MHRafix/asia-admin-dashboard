@@ -1,6 +1,6 @@
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
-import { MatchOperator, SortType } from '@/app/config/gql';
-import { GET_TRAVEL_PACKAGES } from '@/app/config/queries/travelPackage.query';
+import { GET_TRAVEL_PACKAGES } from '@/app/config/gql-queries/travelPackage.query';
+import { MatchOperator, SortType } from '@/app/config/gql-types';
 import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 import TourCard from '@/components/common/Tour/TourCard';
 import TourCardSkeleton from '@/components/common/Tour/TourCardSkeleton';

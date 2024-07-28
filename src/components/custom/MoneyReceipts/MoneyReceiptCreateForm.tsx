@@ -5,12 +5,12 @@ import {
 	Money_Receipt_Form_Schema,
 	Money_Receipt_Form_Type,
 } from '@/app/config/form.validation/receiption-management-forms/money-receipt-form.validation';
-import { useGetSession } from '@/app/config/logic/getSession';
 import {
 	CREATE_MONEY_RECEIPT_MUTATION,
 	UPDATE_MONEY_RECEIPT_MUTATION,
-} from '@/app/config/queries/money-receipt.query';
-import { GET_SERVICES_FOR_INPUT } from '@/app/config/queries/service.query';
+} from '@/app/config/gql-queries/money-receipt.query';
+import { GET_SERVICES_FOR_INPUT } from '@/app/config/gql-queries/service.query';
+import { useGetSession } from '@/app/config/logic/getSession';
 import { getSelectInputData } from '@/app/utils/getSelectInputData';
 import { useMutation, useQuery } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';

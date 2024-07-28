@@ -1,15 +1,15 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IUser } from '@/app/api/models/users.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { SortType, USER_ROLE } from '@/app/config/gql';
 import {
 	CREATE_USER_MUTATION,
 	MANAGE_USER_ACCESS_MUTATION,
-} from '@/app/config/queries/user.query';
+} from '@/app/config/gql-queries/user.query';
 import {
 	BULK_REMOVE_USER,
 	USERS_QUERY,
-} from '@/app/config/queries/users.query';
+} from '@/app/config/gql-queries/users.query';
+import { SortType, USER_ROLE } from '@/app/config/gql-types';
 import EmptyPannel from '@/components/common/EmptyPannel';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';

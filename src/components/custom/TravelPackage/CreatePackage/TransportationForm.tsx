@@ -4,11 +4,11 @@ import {
 	TRANSPORTATION_FORM_DEFAULT_VALUES,
 	TRANSPORTATION_FORM_SCHEMA,
 } from '@/app/config/form.validation/package-form/package.form.validation';
-import { useGetSession } from '@/app/config/logic/getSession';
 import {
 	CREATE_TRAVEL_PACKAGE,
 	Update_Tour_Package,
-} from '@/app/config/queries/travelPackage.query';
+} from '@/app/config/gql-queries/travelPackage.query';
+import { useGetSession } from '@/app/config/logic/getSession';
 import {
 	ITransportation,
 	activeStep,

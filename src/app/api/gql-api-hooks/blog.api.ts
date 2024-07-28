@@ -1,10 +1,10 @@
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { MatchOperator } from '@/app/config/gql';
 import {
 	GET_BLOGS_QUERY,
 	GET_BLOG_QUERY,
 	UPDATE_BLOG,
-} from '@/app/config/queries/blogs.query';
+} from '@/app/config/gql-queries/blogs.query';
+import { MatchOperator } from '@/app/config/gql-types';
 import { useMutation, useQuery } from '@apollo/client';
 import { IBlog } from '../models/blog.model';
 

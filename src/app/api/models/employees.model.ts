@@ -1,4 +1,4 @@
-import { USER_ROLE } from '@/app/config/gql';
+import { USER_ROLE } from '@/app/config/gql-types';
 
 export interface IEmployees {
 	_id: string;

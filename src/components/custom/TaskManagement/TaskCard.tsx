@@ -1,6 +1,6 @@
-import { Task, Task_Progress_Status } from '@/app/config/gql';
+import { Update_Task_Mutation } from '@/app/config/gql-queries/task-management.query';
+import { Task, Task_Progress_Status } from '@/app/config/gql-types';
 import { getTaskBadgeColors } from '@/app/config/logic/getColors';
-import { Update_Task_Mutation } from '@/app/config/queries/task-management.query';
 import { RestTimeCalculator } from '@/utils/dayjsTimer/restTime.calculator';
 import { useMutation } from '@apollo/client';
 import {
@@ -228,7 +228,22 @@ const TaskCard: React.FC<ITaskCardProps> = ({ __task, onRefetch, color }) => {
 									</div>
 								</div>
 							) : (
-								<Button color={'gray'} radius={5} variant='outline'>
+								<Button
+									color={'gray'}
+									radius={5}
+									variant='outline'
+									loading={__updatingTask}
+									onClick={() =>
+										updateTask({
+											variables: {
+												input: {
+													_id: __task?._id,
+													progressStatus: Task_Progress_Status.ARCHIVED,
+												},
+											},
+										})
+									}
+								>
 									Drop to Archived
 								</Button>
 							)}

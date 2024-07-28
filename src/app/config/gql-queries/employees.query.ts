@@ -31,6 +31,19 @@ export const EMPLOYEES_QUERY = gql`
 	}
 `;
 
+export const EMPLOYEES_DROPDOWN_QUERY = gql`
+	query EMPLOYEES_QUERY($input: TeamListQueryDto) {
+		teams(input: $input) {
+			nodes {
+				_id
+				name
+				avatar
+				email
+			}
+		}
+	}
+`;
+
 // remove employee
 export const REMOVE_EMPLOYEE = gql`
 	mutation REMOVE_EMPLOYEE($id: String) {

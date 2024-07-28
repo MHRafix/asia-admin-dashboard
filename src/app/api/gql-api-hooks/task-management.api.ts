@@ -1,21 +1,21 @@
+import { Get_Task_List_Query } from '@/app/config/gql-queries/task-management.query';
 import {
 	MatchOperator,
 	SortType,
 	Task_Progress_Status,
 	TaskManagementWithPagination,
 	USER_ROLE,
-} from '@/app/config/gql';
-import { Get_Task_List_Query } from '@/app/config/queries/task-management.query';
+} from '@/app/config/gql-types';
 import { useQuery } from '@apollo/client';
 import { IUser } from '../models/users.model';
 
-export const useGetTasksByStatus = (user: IUser) => {
+export const useGetTasksByStatus = (user: IUser, filterQuery: any) => {
 	const variableForModerator = {
 		input: {
 			page: 1,
 			sort: SortType.Desc,
 			sortBy: '_id',
-			whereOperator: 'or',
+			whereOperator: filterQuery?.value ? 'and' : 'or',
 			where: [
 				{
 					key: 'taskCreatedBy',
@@ -26,7 +26,7 @@ export const useGetTasksByStatus = (user: IUser) => {
 				{
 					key: 'taskDetails.taskAssignTo',
 					operator: MatchOperator?.Eq,
-					value: user?._id,
+					value: filterQuery?.value ? filterQuery?.value : user?._id,
 				},
 			],
 		},
@@ -37,6 +37,7 @@ export const useGetTasksByStatus = (user: IUser) => {
 			page: 1,
 			sort: SortType.Desc,
 			sortBy: '_id',
+			where: filterQuery,
 		},
 	};
 

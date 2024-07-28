@@ -1,10 +1,10 @@
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { fileUploader } from '@/app/config/logic/fileUploader';
-import { useGetSession } from '@/app/config/logic/getSession';
 import {
 	CREATE_TRAVEL_PACKAGE,
 	Update_Tour_Package,
-} from '@/app/config/queries/travelPackage.query';
+} from '@/app/config/gql-queries/travelPackage.query';
+import { fileUploader } from '@/app/config/logic/fileUploader';
+import { useGetSession } from '@/app/config/logic/getSession';
 import {
 	PACKAGE_STATUS,
 	SALE_STATUS,

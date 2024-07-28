@@ -1,7 +1,7 @@
+import { IUser } from '@/app/api/models/users.model';
 import { useQuery } from '@apollo/client';
 import Cookies from 'js-cookie';
-import { GET_LOGGEDIN_USER } from '../queries/auth.query';
-import { IUser } from '@/app/api/models/users.model';
+import { GET_LOGGEDIN_USER } from '../gql-queries/auth.query';
 
 export const useGetSession = () => {
 	const userInfo = Cookies.get('user') && JSON.parse(Cookies.get('user')!);

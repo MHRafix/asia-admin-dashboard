@@ -1,12 +1,12 @@
 import { IEmployees } from '@/app/api/models/employees.model';
 import { IUser } from '@/app/api/models/users.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { MatchOperator, SortType, USER_ROLE } from '@/app/config/gql';
 import {
 	CREATE_EMPLOYEE,
 	UPDATE_EMPLOYEE,
-} from '@/app/config/queries/employees.query';
-import { USERS_QUERY_FOR_DROPDOWN } from '@/app/config/queries/users.query';
+} from '@/app/config/gql-queries/employees.query';
+import { USERS_QUERY_FOR_DROPDOWN } from '@/app/config/gql-queries/users.query';
+import { MatchOperator, SortType, USER_ROLE } from '@/app/config/gql-types';
 import { useMutation, useQuery } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -128,9 +128,9 @@ const EmployeeForm: React.FC<{
 			>
 				<Select
 					size='lg'
-					data={getSelectInputData(usersData?.users?.nodes)}
+					data={getUserSelectInputData(usersData?.users?.nodes)}
 					value={watch('employee')}
-					itemComponent={SelectItem}
+					itemComponent={UserSelectItem}
 					searchable
 					disabled={__usersLoading}
 					onChange={(e) => setValue('employee', e as string)}
@@ -198,7 +198,7 @@ interface ItemProps extends React.ComponentPropsWithoutRef<'div'> {
 }
 
 // custom select input style
-export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+export const UserSelectItem = forwardRef<HTMLDivElement, ItemProps>(
 	({ avatar, label, value, role, email, ...others }: ItemProps, ref) => (
 		<div ref={ref} {...others}>
 			<Group noWrap>
@@ -237,7 +237,7 @@ const findUserByIdMakeEmployeeRestData = (
 };
 
 // make select input data from api response
-const getSelectInputData = (data: any) => {
+export const getUserSelectInputData = (data: any) => {
 	let result: any = [];
 	data?.map((d: any) =>
 		result.push({

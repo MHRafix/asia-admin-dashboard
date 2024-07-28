@@ -12,7 +12,7 @@ import {
 import { Notify } from '@/app/config/alertNotification/Notification';
 import protectWithoutSession from '@/app/config/authProtection/potectWithoutSession';
 import { loginSchema } from '@/app/config/form.validation/service-form/service.form.validation';
-import { LOGIN_QUERY } from '@/app/config/queries/auth.query';
+import { LOGIN_QUERY } from '@/app/config/gql-queries/auth.query';
 import { useMutation } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import Cookies from 'js-cookie';

@@ -1,6 +1,6 @@
 import { IService } from '@/app/api/models/service.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { DELETE_SERVICE } from '@/app/config/queries/service.query';
+import { DELETE_SERVICE } from '@/app/config/gql-queries/service.query';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import { useMutation } from '@apollo/client';
 import { Box, Button, Flex, Group, Space, Text } from '@mantine/core';

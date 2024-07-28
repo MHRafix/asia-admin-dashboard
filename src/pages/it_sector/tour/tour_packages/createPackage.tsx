@@ -1,6 +1,6 @@
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
-import { GET_SINGLE_TRAVEL_PACKAGE } from '@/app/config/queries/travelPackage.query';
+import { GET_SINGLE_TRAVEL_PACKAGE } from '@/app/config/gql-queries/travelPackage.query';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DepartureAndDestinationForm from '@/components/custom/TravelPackage/CreatePackage/DepartureAndDestinationForm';
 import PackageBasicInfoForm from '@/components/custom/TravelPackage/CreatePackage/PackageBasicInfoForm';

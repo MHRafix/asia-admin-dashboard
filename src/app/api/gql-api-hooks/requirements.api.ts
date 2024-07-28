@@ -1,10 +1,10 @@
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { MatchOperator } from '@/app/config/gql';
 import {
 	UPDATE_REQUIREMENT,
 	VISA_REQUIREMENT,
 	VISA_REQUIREMENTS,
-} from '@/app/config/queries/requirements.query';
+} from '@/app/config/gql-queries/requirements.query';
+import { MatchOperator } from '@/app/config/gql-types';
 import { useMutation, useQuery } from '@apollo/client';
 import { IVisaReq } from '../models/visaRequirements.model';
 

@@ -2,7 +2,7 @@ import {
 	CommonFindDocumentDto,
 	MatchOperator,
 	SortType,
-} from '@/app/config/gql';
+} from '@/app/config/gql-types';
 import { ActionIcon, Button, Flex, Loader } from '@mantine/core';
 import { IconDownload, IconRefresh } from '@tabler/icons-react';
 import cls from 'classnames';

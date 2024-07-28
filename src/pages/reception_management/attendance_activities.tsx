@@ -5,11 +5,11 @@
 // import { Attendance_Status } from '@/app/config/gql';
 // import { getAttendanceStatusColor } from '@/app/config/logic/getColors';
 // import { useGetSession } from '@/app/config/logic/getSession';
-// import { DELETE_APPOINTMENT_MUTATION } from '@/app/config/queries/appointments.query';
+// import { DELETE_APPOINTMENT_MUTATION } from '@/app/config/gql-queries/appointments.query';
 // import {
 // 	GET_ATTENDANCES_QUERY,
 // 	UPDATE_ATTENDANCE_MUTATION,
-// } from '@/app/config/queries/attendance.query';
+// } from '@/app/config/gql-queries/attendance.query';
 // import EmptyPanel from '@/components/common/EmptyPanels/EmptyPanel';
 // import PageTitleArea from '@/components/common/PageTitleArea';
 // import DataTable from '@/components/common/Table/DataTable';

@@ -1,7 +1,7 @@
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { MatchOperator } from '@/app/config/gql';
-import { Delete_Tour_Package } from '@/app/config/queries/travelPackage.query';
+import { Delete_Tour_Package } from '@/app/config/gql-queries/travelPackage.query';
+import { MatchOperator } from '@/app/config/gql-types';
 import { useMutation } from '@apollo/client';
 import {
 	Badge,

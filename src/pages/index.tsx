@@ -1,13 +1,13 @@
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
 import { useGetDashboardOverviewData } from '@/app/api/rest-api-hooks/rest.api';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
-import { SortType } from '@/app/config/gql';
+import { GET_TRAVEL_PACKAGES } from '@/app/config/gql-queries/travelPackage.query';
+import { SortType } from '@/app/config/gql-types';
 import { useGetDateFilteredBookings } from '@/app/config/logic/getDateFromRange';
 import {
 	getBookingsDateRange,
 	getTransactionDateRange,
 } from '@/app/config/logic/getDateRanges';
-import { GET_TRAVEL_PACKAGES } from '@/app/config/queries/travelPackage.query';
 import DateRangePicker from '@/components/common/DateRangePicker';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import TourCard from '@/components/common/Tour/TourCard';

@@ -4,11 +4,11 @@ import {
 	DEPARTURE_DESTINATION_FORM_SCHEMA,
 	IDepartureAndDestinationFormStates,
 } from '@/app/config/form.validation/package-form/package.form.validation';
-import { useGetSession } from '@/app/config/logic/getSession';
 import {
 	CREATE_TRAVEL_PACKAGE,
 	Update_Tour_Package,
-} from '@/app/config/queries/travelPackage.query';
+} from '@/app/config/gql-queries/travelPackage.query';
+import { useGetSession } from '@/app/config/logic/getSession';
 import {
 	activeStep,
 	carouselThumbnailsAtom,

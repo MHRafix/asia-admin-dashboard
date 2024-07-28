@@ -1,7 +1,7 @@
 import {
 	DELETE_BOOKING_MUTATION,
 	PACKAGE_BOOKINGS_QUERY,
-} from '@/app/config/queries/bookings.query';
+} from '@/app/config/gql-queries/bookings.query';
 
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { BOOKING_STATUS, IBooking } from '@/app/api/models/bookings.model';

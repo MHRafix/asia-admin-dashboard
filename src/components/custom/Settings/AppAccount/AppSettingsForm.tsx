@@ -4,11 +4,11 @@ import {
 	APP_SETTINGS_FORM_DEFAULT_VALUES,
 	APP_SETTINGS_FORM_SCHEMA,
 } from '@/app/config/form.validation/app-setting-form/appSetting.form';
-import { fileUploader } from '@/app/config/logic/fileUploader';
 import {
 	APP_SETTINGS_QUERY,
 	UPDATE_APP_SETTINGS,
-} from '@/app/config/queries/appSettings.query';
+} from '@/app/config/gql-queries/appSettings.query';
+import { fileUploader } from '@/app/config/logic/fileUploader';
 import { useMutation, useQuery } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';

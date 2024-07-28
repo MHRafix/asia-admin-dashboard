@@ -1,7 +1,7 @@
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
-import { DELETE_APPOINTMENT_MUTATION } from '@/app/config/queries/appointments.query';
-import { GET_TRAVEL_PACKAGES } from '@/app/config/queries/travelPackage.query';
+import { DELETE_APPOINTMENT_MUTATION } from '@/app/config/gql-queries/appointments.query';
+import { GET_TRAVEL_PACKAGES } from '@/app/config/gql-queries/travelPackage.query';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { useMutation, useQuery } from '@apollo/client';

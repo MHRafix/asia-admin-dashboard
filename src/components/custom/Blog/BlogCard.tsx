@@ -1,8 +1,8 @@
 import { IBlog } from '@/app/api/models/blog.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
-import { MatchOperator } from '@/app/config/gql';
+import { REMOVE_BLOG } from '@/app/config/gql-queries/blogs.query';
+import { MatchOperator } from '@/app/config/gql-types';
 import { getTimeDistance } from '@/app/config/logic/getTimeDistance';
-import { REMOVE_BLOG } from '@/app/config/queries/blogs.query';
 import { useMutation } from '@apollo/client';
 import { Avatar, Box, Button, Flex, Space, Text } from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';

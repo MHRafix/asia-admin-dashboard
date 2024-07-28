@@ -1,5 +1,4 @@
 import { IEmployees } from '@/app/api/models/employees.model';
-import { REMOVE_EMPLOYEE } from '@/app/config/queries/employees.query';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import { useMutation } from '@apollo/client';
 import { Badge, Button, Flex, Space, Text, Title } from '@mantine/core';
@@ -9,6 +8,7 @@ import React from 'react';
 import { FaHandHoldingUsd } from 'react-icons/fa';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import { getRoleBadgeColor } from '../Manage_Users/UsersTable';
+import { REMOVE_EMPLOYEE } from '@/app/config/gql-queries/employees.query';
 
 interface IEmployeeCardProps {
 	data: IEmployees;

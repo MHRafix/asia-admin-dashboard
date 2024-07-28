@@ -3,9 +3,9 @@ import {
 	PROFILE_DETAILS_FORM_DEFAULT_VALUE,
 	UPDATE_PROFILE_DETAILS_SCHEMA,
 } from '@/app/config/form.validation/userForm.config';
+import { UPDATE_USER_DETAILS } from '@/app/config/gql-queries/user.query';
 import { fileUploader } from '@/app/config/logic/fileUploader';
 import { useGetSession } from '@/app/config/logic/getSession';
-import { UPDATE_USER_DETAILS } from '@/app/config/queries/user.query';
 import { useMutation } from '@apollo/client';
 import {
 	Button,

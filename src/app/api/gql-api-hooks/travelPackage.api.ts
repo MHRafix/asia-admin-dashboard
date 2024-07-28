@@ -1,8 +1,8 @@
-import { SortType } from '@/app/config/gql';
 import {
 	GET_SINGLE_TRAVEL_PACKAGE,
 	GET_TRAVEL_PACKAGES,
-} from '@/app/config/queries/travelPackage.query';
+} from '@/app/config/gql-queries/travelPackage.query';
+import { SortType } from '@/app/config/gql-types';
 import { useQuery } from '@apollo/client';
 import { ITravelPackage } from '../models/travelPackage.model';
 

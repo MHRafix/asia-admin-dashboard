@@ -33,6 +33,7 @@ export const USERS_QUERY_FOR_DROPDOWN = gql`
 				name
 				email
 				role
+				phone
 				avatar
 			}
 		}

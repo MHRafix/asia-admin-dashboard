@@ -1,4 +1,4 @@
-import { ClientWithPagination, IClient } from '@/app/api/models/client.model';
+import { ClientWithPagination } from '@/app/api/models/client.model';
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
 import { IEmployees } from '@/app/api/models/employees.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
@@ -420,7 +420,7 @@ const getSelectInputData = (data: any) => {
 };
 
 // find client and employee
-const findUserById = (id: string, dataArray: IClient[] | IEmployees[]) => {
+const findUserById = (id: string, dataArray: any) => {
 	const user: any = dataArray?.find((data: any) => data?._id === id);
 	return user;
 };

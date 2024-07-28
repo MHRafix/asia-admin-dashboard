@@ -21,7 +21,7 @@ const EmployeesList: React.FC<{}> = () => {
 	const [limit] = useState<number>(50);
 	const [searchKey, setSearchKey] = useDebouncedState('', 500);
 	const [opened, handler] = useDisclosure();
-	const [employee, setEmployee] = useState<IEmployees>();
+	const [employee, setEmployee] = useState<IEmployees | null>(null);
 
 	// get booking packages
 	const {
@@ -101,7 +101,10 @@ const EmployeesList: React.FC<{}> = () => {
 							leftIcon={<IconPlus />}
 							color='violet'
 							variant='light'
-							onClick={handler.open}
+							onClick={() => {
+								handler.open();
+								setEmployee(null);
+							}}
 						>
 							Add new
 						</Button>
@@ -116,7 +119,7 @@ const EmployeesList: React.FC<{}> = () => {
 				size={'md'}
 				position='right'
 			>
-				<EmployeeForm onSuccess={onSuccess} employee={employee} />
+				<EmployeeForm onSuccess={onSuccess} employee={employee!} />
 			</Drawer>
 
 			<div className='grid grid-cols-3 gap-3'>

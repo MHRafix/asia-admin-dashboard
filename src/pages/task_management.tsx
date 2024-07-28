@@ -1,6 +1,7 @@
 import { useGetTasksByStatus } from '@/app/api/gql-api-hooks/task-management.api';
 import { IUser } from '@/app/api/models/users.model';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
+import { Task } from '@/app/config/gql';
 import { useGetSession } from '@/app/config/logic/getSession';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import TaskCard from '@/components/custom/TaskManagement/TaskCard';
@@ -77,7 +78,7 @@ const TaskManagement = () => {
 						{__LoadingTask && (
 							<>
 								{new Array(10).fill(10).map((_, idx) => (
-									<Skeleton h={110} my={5} radius={5} />
+									<Skeleton key={idx} h={110} my={5} radius={5} />
 								))}
 							</>
 						)}
@@ -90,7 +91,7 @@ const TaskManagement = () => {
 					<Space h={'md'} />
 
 					<Box p={15} className='task_status_area'>
-						{taskByStatus?.inProgressTask?.map((__task, idx) => (
+						{taskByStatus?.inProgressTask?.map((__task: Task, idx: number) => (
 							<TaskCard
 								key={idx}
 								__task={__task}
@@ -101,7 +102,7 @@ const TaskManagement = () => {
 						{__LoadingTask && (
 							<>
 								{new Array(10).fill(10).map((_, idx) => (
-									<Skeleton h={110} my={5} radius={5} />
+									<Skeleton key={idx} h={110} my={5} radius={5} />
 								))}
 							</>
 						)}
@@ -125,7 +126,7 @@ const TaskManagement = () => {
 						{__LoadingTask && (
 							<>
 								{new Array(10).fill(10).map((_, idx) => (
-									<Skeleton h={110} my={5} radius={5} />
+									<Skeleton key={idx} h={110} my={5} radius={5} />
 								))}
 							</>
 						)}
@@ -149,7 +150,7 @@ const TaskManagement = () => {
 						{__LoadingTask && (
 							<>
 								{new Array(10).fill(10).map((_, idx) => (
-									<Skeleton h={110} my={5} radius={5} />
+									<Skeleton key={idx} h={110} my={5} radius={5} />
 								))}
 							</>
 						)}
@@ -173,7 +174,7 @@ const TaskManagement = () => {
 						{__LoadingTask && (
 							<>
 								{new Array(10).fill(10).map((_, idx) => (
-									<Skeleton h={110} my={5} radius={5} />
+									<Skeleton key={idx} h={110} my={5} radius={5} />
 								))}
 							</>
 						)}
@@ -197,7 +198,7 @@ const TaskManagement = () => {
 						{__LoadingTask && (
 							<>
 								{new Array(10).fill(10).map((_, idx) => (
-									<Skeleton h={110} my={5} radius={5} />
+									<Skeleton key={idx} h={110} my={5} radius={5} />
 								))}
 							</>
 						)}

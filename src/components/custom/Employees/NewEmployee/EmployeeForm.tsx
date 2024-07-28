@@ -41,11 +41,7 @@ const EmployeeForm: React.FC<{
 	});
 
 	// get users
-	const {
-		data,
-		loading: fetching,
-		refetch,
-	} = useQuery<{
+	const { data: usersData, loading: __usersLoading } = useQuery<{
 		users: { nodes: IUser[] };
 	}>(USERS_QUERY_FOR_DROPDOWN, {
 		variables: {
@@ -85,8 +81,10 @@ const EmployeeForm: React.FC<{
 		})
 	);
 
+	// prefill form with employee data
 	useEffect(() => {
 		setValue('post', employee?.post!);
+		setValue('employee', employee?.email!);
 		setValue('salary', employee?.salary!);
 	}, [employee]);
 
@@ -94,7 +92,15 @@ const EmployeeForm: React.FC<{
 		if (employee) {
 			updateEmployee({
 				variables: {
-					input: { ...input, _id: employee?._id },
+					input: {
+						post: input.post,
+						salary: input.salary,
+						...findUserByIdMakeEmployeeRestData(
+							usersData?.users?.nodes as IUser[],
+							watch('employee')
+						),
+						_id: employee?._id,
+					},
 				},
 			});
 		} else {
@@ -103,10 +109,10 @@ const EmployeeForm: React.FC<{
 					input: {
 						post: input.post,
 						salary: input.salary,
-
-						// name: input.name,
-						// email: input.email,
-						// avatar: input.avatar,
+						...findUserByIdMakeEmployeeRestData(
+							usersData?.users?.nodes as IUser[],
+							watch('employee')
+						),
 					},
 				},
 			});
@@ -122,9 +128,11 @@ const EmployeeForm: React.FC<{
 			>
 				<Select
 					size='lg'
-					data={getSelectInputData(data?.users?.nodes)}
+					data={getSelectInputData(usersData?.users?.nodes)}
+					value={watch('employee')}
 					itemComponent={SelectItem}
 					searchable
+					disabled={__usersLoading}
 					onChange={(e) => setValue('employee', e as string)}
 					placeholder='Pick a  user'
 				/>{' '}
@@ -211,13 +219,30 @@ export const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 	)
 );
 
+// find selected user
+const findUserByIdMakeEmployeeRestData = (
+	users: IUser[],
+	__selectedUserEmail: string
+) => {
+	const __selectedUser = users.find(
+		(user: IUser) => user?.email === __selectedUserEmail
+	);
+	return {
+		name: __selectedUser?.name,
+		email: __selectedUser?.email,
+		avatar: __selectedUser?.avatar,
+		phone: __selectedUser?.phone,
+		role: __selectedUser?.role,
+	};
+};
+
 // make select input data from api response
 const getSelectInputData = (data: any) => {
 	let result: any = [];
 	data?.map((d: any) =>
 		result.push({
 			label: d.name,
-			value: d._id,
+			value: d.email,
 			role: d.role,
 			email: d.email ?? 'N/A',
 			avatar: d?.avatar ?? 'N/A',

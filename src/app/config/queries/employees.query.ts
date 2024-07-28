@@ -13,14 +13,12 @@ export const EMPLOYEES_QUERY = gql`
 		teams(input: $input) {
 			nodes {
 				_id
-				employee {
-					_id
-					name
-					email
-					avatar
-					role
-				}
+				name
 				post
+				avatar
+				email
+				phone
+				role
 				salary
 			}
 			meta {

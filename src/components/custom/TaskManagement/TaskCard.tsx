@@ -23,8 +23,16 @@ interface ITaskCardProps {
 	__task: Task;
 	color: string;
 	onRefetch: () => void;
+	onSetTaskDetails?: () => void;
+	onTaskDetailsOpen?: () => void;
 }
-const TaskCard: React.FC<ITaskCardProps> = ({ __task, onRefetch, color }) => {
+const TaskCard: React.FC<ITaskCardProps> = ({
+	__task,
+	onRefetch,
+	onSetTaskDetails,
+	color,
+	onTaskDetailsOpen,
+}) => {
 	// updating and refetching loading state
 	const [isRefetching, setRefetching] = useState<boolean>(false);
 
@@ -56,24 +64,33 @@ const TaskCard: React.FC<ITaskCardProps> = ({ __task, onRefetch, color }) => {
 				opacity={0.8}
 				bg={color}
 			/>
-			<Text fz={18} fw={500} color='blue'>
-				#{__task?.taskId}
-			</Text>
+			<div
+				onClick={() => {
+					onSetTaskDetails?.();
+					onTaskDetailsOpen?.();
+				}}
+			>
+				<Text ff={'Nunito, sans-serif'} fz={18} fw={500} color='blue'>
+					#{__task?.taskId}
+				</Text>
 
-			<Text fz={18} fw={500}>
-				{__task?.taskDetails?.taskName}
-			</Text>
+				<Text ff={'Nunito, sans-serif'} fz={21} fw={500}>
+					{__task?.taskDetails?.taskName}
+				</Text>
 
-			<Space h={'md'} />
+				<Space h={'md'} />
 
-			<Text fz={16}>Net Total: {`${__task?.totalBillAmount}`} BDT</Text>
-			<Text fz={16} color='yellow'>
-				Due: {`${__task?.dueAmount}`} BDT
-			</Text>
+				<Text ff={'Nunito, sans-serif'} fz={16}>
+					Net Total: {`${__task?.totalBillAmount}`} BDT
+				</Text>
+				<Text ff={'Nunito, sans-serif'} fz={16} color='yellow'>
+					Due: {`${__task?.dueAmount}`} BDT
+				</Text>
 
-			<Text color='red' fz={16}>
-				Deadline: {format(new Date(__task?.deadLine), 'PPPPp')}
-			</Text>
+				<Text ff={'Nunito, sans-serif'} color='red' fz={16}>
+					Deadline: {format(new Date(__task?.deadLine), 'PPPPp')}
+				</Text>
+			</div>
 			<Space h={'md'} />
 			<Flex justify={'space-between'} align={'center'}>
 				<Group>

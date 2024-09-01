@@ -7,6 +7,7 @@ import { MatchOperator, Task, USER_ROLE } from '@/app/config/gql-types';
 import { useGetSession } from '@/app/config/logic/getSession';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import TaskCard from '@/components/custom/TaskManagement/TaskCard';
+import TaskDetailsContent from '@/components/custom/TaskManagement/TaskDetailsContent';
 import TaskForm, {
 	getEmployeeSelectInputData,
 	SelectItemEmployee,
@@ -34,6 +35,7 @@ import { useState } from 'react';
 const TaskManagement = () => {
 	// user session
 	const { user } = useGetSession();
+	const [taskDetails, setTaskDetails] = useState<Task>();
 
 	// assign employee state
 	const [filterQuery, setFilterQuery] = useState<any>();
@@ -55,6 +57,7 @@ const TaskManagement = () => {
 
 	// drawer handler
 	const [taskFormOpened, taskCreateDrawerHandler] = useDisclosure();
+	const [taskDetailsOpened, taskDetailsDrawerHandler] = useDisclosure();
 
 	// get task query
 	const { taskByStatus, __LoadingTask, __refetchTaskList } =
@@ -109,7 +112,7 @@ const TaskManagement = () => {
 						/>
 					)}
 					{__LoadingTask || isRefetching ? (
-						<Loader size={'lg'} color='teal' />
+						<Loader size={'lg'} color='violet' />
 					) : (
 						<ActionIcon
 							onClick={() => {
@@ -131,8 +134,8 @@ const TaskManagement = () => {
 				<Space h={'md'} />
 
 				<div className='grid lg:grid-cols-3 gap-x-5 gap-y-10'>
-					<Paper withBorder>
-						<Title className='rounded-sm' p={15} order={4} fw={500} bg='blue'>
+					<Paper radius={0} withBorder>
+						<Title p={15} order={4} fw={500} bg='blue'>
 							Pending ({taskByStatus?.pendingTasks?.length ?? 0})
 						</Title>
 
@@ -141,6 +144,8 @@ const TaskManagement = () => {
 						<Box p={15} className='task_status_area'>
 							{taskByStatus?.pendingTasks?.map((__task, idx) => (
 								<TaskCard
+									onTaskDetailsOpen={taskDetailsDrawerHandler.open}
+									onSetTaskDetails={() => setTaskDetails(__task)}
 									key={idx}
 									__task={__task}
 									onRefetch={__refetchTaskList}
@@ -150,14 +155,14 @@ const TaskManagement = () => {
 							{__LoadingTask && (
 								<>
 									{new Array(10).fill(10).map((_, idx) => (
-										<Skeleton key={idx} h={110} my={5} radius={5} />
+										<Skeleton key={idx} h={220} my={5} radius={5} />
 									))}
 								</>
 							)}
 						</Box>
 					</Paper>
-					<Paper withBorder>
-						<Title className='rounded-sm' p={15} order={4} fw={500} bg='violet'>
+					<Paper radius={0} withBorder>
+						<Title p={15} order={4} fw={500} bg='violet'>
 							In-Progress ({taskByStatus?.inProgressTask?.length ?? 0})
 						</Title>
 						<Space h={'md'} />
@@ -166,6 +171,8 @@ const TaskManagement = () => {
 							{taskByStatus?.inProgressTask?.map(
 								(__task: Task, idx: number) => (
 									<TaskCard
+										onTaskDetailsOpen={taskDetailsDrawerHandler.open}
+										onSetTaskDetails={() => setTaskDetails(__task)}
 										key={idx}
 										__task={__task}
 										onRefetch={__refetchTaskList}
@@ -176,14 +183,14 @@ const TaskManagement = () => {
 							{__LoadingTask && (
 								<>
 									{new Array(10).fill(10).map((_, idx) => (
-										<Skeleton key={idx} h={110} my={5} radius={5} />
+										<Skeleton key={idx} h={220} my={5} radius={5} />
 									))}
 								</>
 							)}
 						</Box>
 					</Paper>
-					<Paper withBorder>
-						<Title className='rounded-sm' p={15} order={4} fw={500} bg='yellow'>
+					<Paper radius={0} withBorder>
+						<Title p={15} order={4} fw={500} bg='yellow'>
 							Done ({taskByStatus?.doneTask?.length ?? 0})
 						</Title>
 						<Space h={'md'} />
@@ -191,6 +198,8 @@ const TaskManagement = () => {
 						<Box p={15} className='task_status_area'>
 							{taskByStatus?.doneTask?.map((__task, idx) => (
 								<TaskCard
+									onTaskDetailsOpen={taskDetailsDrawerHandler.open}
+									onSetTaskDetails={() => setTaskDetails(__task)}
 									key={idx}
 									__task={__task}
 									onRefetch={__refetchTaskList}
@@ -200,14 +209,14 @@ const TaskManagement = () => {
 							{__LoadingTask && (
 								<>
 									{new Array(10).fill(10).map((_, idx) => (
-										<Skeleton key={idx} h={110} my={5} radius={5} />
+										<Skeleton key={idx} h={220} my={5} radius={5} />
 									))}
 								</>
 							)}
 						</Box>
 					</Paper>
-					<Paper withBorder>
-						<Title className='rounded-sm' p={15} order={4} fw={500} bg='orange'>
+					<Paper radius={0} withBorder>
+						<Title p={15} order={4} fw={500} bg='orange'>
 							Revision ({taskByStatus?.revisionTask?.length ?? 0})
 						</Title>
 						<Space h={'md'} />
@@ -215,6 +224,8 @@ const TaskManagement = () => {
 						<Box p={15} className='task_status_area'>
 							{taskByStatus?.revisionTask?.map((__task, idx) => (
 								<TaskCard
+									onTaskDetailsOpen={taskDetailsDrawerHandler.open}
+									onSetTaskDetails={() => setTaskDetails(__task)}
 									key={idx}
 									__task={__task}
 									onRefetch={__refetchTaskList}
@@ -224,14 +235,14 @@ const TaskManagement = () => {
 							{__LoadingTask && (
 								<>
 									{new Array(10).fill(10).map((_, idx) => (
-										<Skeleton key={idx} h={110} my={5} radius={5} />
+										<Skeleton key={idx} h={220} my={5} radius={5} />
 									))}
 								</>
 							)}
 						</Box>
 					</Paper>
-					<Paper withBorder>
-						<Title className='rounded-sm' p={15} order={4} fw={500} bg='teal'>
+					<Paper radius={0} withBorder>
+						<Title p={15} order={4} fw={500} bg='teal'>
 							Completed ({taskByStatus?.completedTask?.length ?? 0})
 						</Title>
 						<Space h={'md'} />
@@ -239,6 +250,8 @@ const TaskManagement = () => {
 						<Box p={15} className='task_status_area'>
 							{taskByStatus?.completedTask?.map((__task, idx) => (
 								<TaskCard
+									onTaskDetailsOpen={taskDetailsDrawerHandler.open}
+									onSetTaskDetails={() => setTaskDetails(__task)}
 									key={idx}
 									__task={__task}
 									onRefetch={__refetchTaskList}
@@ -248,14 +261,14 @@ const TaskManagement = () => {
 							{__LoadingTask && (
 								<>
 									{new Array(10).fill(10).map((_, idx) => (
-										<Skeleton key={idx} h={110} my={5} radius={5} />
+										<Skeleton key={idx} h={220} my={5} radius={5} />
 									))}
 								</>
 							)}
 						</Box>
 					</Paper>
-					<Paper withBorder>
-						<Title className='rounded-sm' p={15} order={4} fw={500} bg='red'>
+					<Paper radius={0} withBorder>
+						<Title p={15} order={4} fw={500} bg='red'>
 							Cancelled ({taskByStatus?.cancelledTask?.length ?? 0})
 						</Title>
 						<Space h={'md'} />
@@ -263,6 +276,8 @@ const TaskManagement = () => {
 						<Box p={15} className='task_status_area'>
 							{taskByStatus?.cancelledTask?.map((__task, idx) => (
 								<TaskCard
+									onTaskDetailsOpen={taskDetailsDrawerHandler.open}
+									onSetTaskDetails={() => setTaskDetails(__task)}
 									key={idx}
 									__task={__task}
 									onRefetch={__refetchTaskList}
@@ -272,7 +287,7 @@ const TaskManagement = () => {
 							{__LoadingTask && (
 								<>
 									{new Array(10).fill(10).map((_, idx) => (
-										<Skeleton key={idx} h={110} my={5} radius={5} />
+										<Skeleton key={idx} h={220} my={5} radius={5} />
 									))}
 								</>
 							)}
@@ -281,6 +296,18 @@ const TaskManagement = () => {
 				</div>
 			</div>
 
+			{/* Task details drawer */}
+			<Drawer
+				opened={taskDetailsOpened}
+				onClose={taskDetailsDrawerHandler.close}
+				position='right'
+				size='xl'
+				title='Task Details'
+			>
+				<TaskDetailsContent __taskDetails={taskDetails!} />
+			</Drawer>
+
+			{/* Task form drawer */}
 			<Drawer
 				opened={taskFormOpened}
 				onClose={taskCreateDrawerHandler.close}

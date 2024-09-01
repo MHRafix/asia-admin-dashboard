@@ -26,7 +26,7 @@ export type Incremental<T> =
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
 	ID: { input: string; output: string };
-	String: { input: string; output: string };
+	string: { input: string; output: string };
 	Boolean: { input: boolean; output: boolean };
 	Int: { input: number; output: number };
 	Float: { input: number; output: number };
@@ -39,10 +39,10 @@ export type Scalars = {
 
 export type CommonFindDocumentDto = {
 	and?: InputMaybe<Array<CommonFindDocumentDto>>;
-	key: Scalars['String']['input'];
+	key: Scalars['string']['input'];
 	operator: MatchOperator;
 	or?: InputMaybe<Array<CommonFindDocumentDto>>;
-	value?: InputMaybe<Scalars['String']['input']>;
+	value?: InputMaybe<Scalars['string']['input']>;
 };
 
 export enum Month_Name {
@@ -85,21 +85,21 @@ export enum Attendance_Status {
 }
 
 export interface TaskManagement_TaskDetails {
-	taskName: String;
+	taskName: string;
 	taskAssignTo: IUser;
-	taskDescription: String;
-	issuesDescription: String;
+	taskDescription: string;
+	issuesDescription: string;
 }
 
 export interface Task {
-	_id: String;
+	_id: string;
 	taskCreatedBy: IUser;
 	client: IClient;
 	taskDetails: TaskManagement_TaskDetails;
-	taskId: String;
-	totalBillAmount: Number;
-	paidBillAmount: Number;
-	dueAmount: Number;
+	taskId: string;
+	totalBillAmount: number;
+	paidBillAmount: number;
+	dueAmount: number;
 	progressStatus: Task_Progress_Status;
 	paymentStatus: Payment_Status;
 	deadLine: Date;

@@ -260,9 +260,9 @@ const TaskForm: React.FC<{
 				<Space h={'md'} />
 
 				{/* summaries */}
-				<div className='grid grid-cols-3 gap-3'>
+				<div className='grid lg:grid-cols-3 gap-3'>
 					{watch('client') && (
-						<Paper p={10} withBorder>
+						<Paper p={10} radius={0} withBorder>
 							<Text fw={700} fz={18}>
 								Client
 							</Text>
@@ -294,7 +294,7 @@ const TaskForm: React.FC<{
 						</Paper>
 					)}
 					{watch('taskDetails.taskAssignTo') && (
-						<Paper p={10} withBorder>
+						<Paper p={10} radius={0} withBorder>
 							<Text fw={700} fz={18}>
 								Assign to
 							</Text>
@@ -340,7 +340,7 @@ const TaskForm: React.FC<{
 						</Paper>
 					)}
 					{watch('totalBillAmount') ? (
-						<Paper p={10} withBorder>
+						<Paper p={10} radius={0} withBorder>
 							<Text fw={700} fz={18}>
 								Payment
 							</Text>
@@ -412,7 +412,7 @@ export const getEmployeeSelectInputData = (data: any) => {
 };
 
 // find client and employee
-const findUserById = (id: string, dataArray: any) => {
+export const findUserById = (id: string, dataArray: any) => {
 	const user: any = dataArray?.find((data: any) => data?._id === id);
 	return user;
 };

@@ -4,7 +4,11 @@ import { IEmployees } from '@/app/api/models/employees.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
 import { GET_CLIENTS_QUERY } from '@/app/config/gql-queries/clientsData.query';
 import { EMPLOYEES_DROPDOWN_QUERY } from '@/app/config/gql-queries/employees.query';
-import { Create_Task_Mutation } from '@/app/config/gql-queries/task-management.query';
+import {
+	Create_Task_Mutation,
+	Update_Task_Mutation,
+} from '@/app/config/gql-queries/task-management.query';
+import { Task } from '@/app/config/gql-types';
 import { useGetSession } from '@/app/config/logic/getSession';
 import { useMutation, useQuery } from '@apollo/client';
 import { ErrorMessage } from '@hookform/error-message';
@@ -25,7 +29,7 @@ import {
 import { DateInput } from '@mantine/dates';
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone';
 import { IconX } from '@tabler/icons-react';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { FiUpload } from 'react-icons/fi';
 import { HiOutlinePhotograph } from 'react-icons/hi';
@@ -34,7 +38,11 @@ import * as Yup from 'yup';
 const TaskForm: React.FC<{
 	onRefetch: () => void;
 	onCloseDrawer: () => void;
-}> = ({ onRefetch, onCloseDrawer }) => {
+	operationType: 'EDIT' | 'CREATE';
+	taskPayload?: Task;
+}> = ({ onRefetch, onCloseDrawer, operationType, taskPayload }) => {
+	// alert(operationType);
+
 	// user session
 	const { user } = useGetSession();
 
@@ -64,8 +72,33 @@ const TaskForm: React.FC<{
 		watch,
 	} = useForm<ITaskFormType>({
 		resolver: yupResolver(Task_Form_Validation_Schema),
-		mode: 'onChange',
 	});
+
+	// prefill the form with existing task
+	useEffect(() => {
+		if (operationType === 'EDIT') {
+			setValue('client', taskPayload?.client?._id as string);
+			setValue('deadLine', taskPayload?.deadLine as Date);
+			setValue('paidBillAmount', taskPayload?.paidBillAmount as number);
+			setValue('totalBillAmount', taskPayload?.totalBillAmount as number);
+			setValue(
+				'taskDetails.taskName',
+				taskPayload?.taskDetails?.taskName as string
+			);
+			setValue(
+				'taskDetails.taskDescription',
+				taskPayload?.taskDetails?.taskDescription as string
+			);
+			setValue(
+				'taskDetails.taskAssignTo',
+				taskPayload?.taskDetails?.taskAssignTo?._id as string
+			);
+			setValue(
+				'taskDetails.issuesDescription',
+				taskPayload?.taskDetails?.issuesDescription as string
+			);
+		}
+	}, [taskPayload]);
 
 	// create task mutation
 	const [createTask, { loading: __creatingTask }] = useMutation(
@@ -80,18 +113,42 @@ const TaskForm: React.FC<{
 		})
 	);
 
+	// update task mutation
+	const [updateTask, { loading: __updatingTask }] = useMutation(
+		Update_Task_Mutation,
+		Notify({
+			sucTitle: 'Task updated successfully!',
+			action: () => {
+				onRefetch();
+				reset({});
+				onCloseDrawer();
+			},
+		})
+	);
+
 	// submit task form
 	const onSubmit = (payload: ITaskFormType) => {
-		createTask({
-			variables: {
-				input: {
-					...payload,
-					taskCreatedBy: user?._id,
-					taskId: `#TK${Date.now().toString().slice(0, 4)}`,
-					dueAmount: payload?.totalBillAmount - payload?.paidBillAmount,
+		if (operationType === 'CREATE') {
+			createTask({
+				variables: {
+					input: {
+						...payload,
+						taskCreatedBy: user?._id,
+						taskId: `#TK${Date.now().toString().slice(0, 4)}`,
+						dueAmount: payload?.totalBillAmount - payload?.paidBillAmount,
+					},
 				},
-			},
-		});
+			});
+		} else {
+			updateTask({
+				variables: {
+					input: {
+						...payload,
+						_id: taskPayload?._id,
+					},
+				},
+			});
+		}
 	};
 
 	return (
@@ -118,6 +175,7 @@ const TaskForm: React.FC<{
 						size='lg'
 						data={getEmployeeSelectInputData(clients?.Clients?.nodes)}
 						itemComponent={SelectItemEmployee}
+						value={watch('client')}
 						searchable
 						onChange={(e) => setValue('client', e as string)}
 						placeholder='Pick a client'
@@ -135,6 +193,7 @@ const TaskForm: React.FC<{
 						size='lg'
 						data={getEmployeeSelectInputData(employeesData?.teams?.nodes)}
 						itemComponent={SelectItemEmployee}
+						value={watch('taskDetails.taskAssignTo')}
 						searchable
 						onChange={(e) => setValue('taskDetails.taskAssignTo', e as string)}
 						placeholder='Pick a  employee to assign'
@@ -148,6 +207,7 @@ const TaskForm: React.FC<{
 				>
 					<NumberInput
 						onChange={(e) => setValue('totalBillAmount', parseInt(e as string))}
+						value={watch('totalBillAmount')}
 						size='lg'
 						placeholder='Total amount'
 						min={1}
@@ -162,6 +222,7 @@ const TaskForm: React.FC<{
 					<NumberInput
 						size='lg'
 						onChange={(e) => setValue('paidBillAmount', parseInt(e as string))}
+						value={watch('paidBillAmount')}
 						placeholder='Paid amount'
 						min={0}
 					/>
@@ -209,6 +270,7 @@ const TaskForm: React.FC<{
 						size='lg'
 						placeholder='Task deadline'
 						onChange={(e) => setValue('deadLine', e!)}
+						value={new Date(watch('deadLine') || taskPayload?.deadLine)}
 					/>
 				</Input.Wrapper>
 
@@ -358,7 +420,7 @@ const TaskForm: React.FC<{
 				<Space h={'xs'} />
 
 				<Button
-					loading={__creatingTask}
+					loading={__creatingTask || __updatingTask}
 					color='teal'
 					size='lg'
 					type='submit'

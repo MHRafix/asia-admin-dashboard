@@ -26,10 +26,12 @@ import { findUserById } from './TaskForm';
 
 interface ITaskDetailsContent {
 	__taskDetails: Task;
+	onEditTask: () => void;
 }
 
 const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
 	__taskDetails,
+	onEditTask,
 }) => {
 	// task remaining time
 	const { remainingTime } = RestTimeCalculator(__taskDetails?.deadLine);
@@ -55,7 +57,7 @@ const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
 				<Text ff={'Nunito, sans-serif'} fz={18} fw={500} color='blue'>
 					#{__taskDetails?.taskId}
 				</Text>
-				<ActionIcon color='violet' size={'xl'}>
+				<ActionIcon color='violet' size={'xl'} onClick={() => onEditTask()}>
 					<IconEdit size={30} />
 				</ActionIcon>
 			</Group>

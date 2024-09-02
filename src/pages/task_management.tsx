@@ -58,6 +58,9 @@ const TaskManagement = () => {
 	// drawer handler
 	const [taskFormOpened, taskCreateDrawerHandler] = useDisclosure();
 	const [taskDetailsOpened, taskDetailsDrawerHandler] = useDisclosure();
+	const [operationType, setOperationType] = useState<'CREATE' | 'EDIT'>(
+		'CREATE'
+	);
 
 	// get task query
 	const { taskByStatus, __LoadingTask, __refetchTaskList } =
@@ -304,7 +307,14 @@ const TaskManagement = () => {
 				size='xl'
 				title='Task Details'
 			>
-				<TaskDetailsContent __taskDetails={taskDetails!} />
+				<TaskDetailsContent
+					__taskDetails={taskDetails!}
+					onEditTask={() => {
+						setOperationType('EDIT');
+						taskDetailsDrawerHandler.close();
+						taskCreateDrawerHandler.open();
+					}}
+				/>
 			</Drawer>
 
 			{/* Task form drawer */}
@@ -318,6 +328,8 @@ const TaskManagement = () => {
 				<TaskForm
 					onRefetch={__refetchTaskList}
 					onCloseDrawer={taskCreateDrawerHandler.close}
+					taskPayload={taskDetails}
+					operationType={operationType}
 				/>
 			</Drawer>
 		</AdminLayout>

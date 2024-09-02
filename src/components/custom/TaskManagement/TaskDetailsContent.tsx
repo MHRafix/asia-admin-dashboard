@@ -13,6 +13,7 @@ import {
 	Badge,
 	Flex,
 	Group,
+	LoadingOverlay,
 	Paper,
 	Space,
 	Text,
@@ -165,7 +166,9 @@ const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
 			{/* summaries */}
 			<div className='grid lg:grid-cols-3 gap-3'>
 				{__taskDetails?.client && (
-					<Paper p={10} radius={0} withBorder>
+					<Paper p={10} radius={0} className='relative' withBorder>
+						<LoadingOverlay overlayBlur={2} visible={__clientsLoading} />
+
 						<Text fw={700} fz={18}>
 							Client
 						</Text>
@@ -201,7 +204,9 @@ const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
 					</Paper>
 				)}
 				{__taskDetails?.taskDetails?.taskAssignTo?._id && (
-					<Paper p={10} radius={0} withBorder>
+					<Paper p={10} radius={0} className='relative' withBorder>
+						<LoadingOverlay overlayBlur={2} visible={__employeeLoading} />
+
 						<Text fw={700} fz={18}>
 							Assign to
 						</Text>

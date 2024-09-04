@@ -39,6 +39,7 @@ export const EMPLOYEES_DROPDOWN_QUERY = gql`
 				name
 				avatar
 				email
+				phone
 			}
 		}
 	}

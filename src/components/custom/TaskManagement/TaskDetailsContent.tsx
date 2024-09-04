@@ -1,8 +1,5 @@
 import { ClientWithPagination } from '@/app/api/models/client.model';
-import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
-import { IEmployees } from '@/app/api/models/employees.model';
 import { GET_CLIENTS_QUERY } from '@/app/config/gql-queries/clientsData.query';
-import { EMPLOYEES_DROPDOWN_QUERY } from '@/app/config/gql-queries/employees.query';
 import { Task } from '@/app/config/gql-types';
 import { getTaskBadgeColors } from '@/app/config/logic/getColors';
 import { RestTimeCalculator } from '@/utils/dayjsTimer/restTime.calculator';
@@ -41,21 +38,21 @@ const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
 		Clients: ClientWithPagination;
 	}>(GET_CLIENTS_QUERY);
 
-	// get employees
-	const { data: employeesData, loading: __employeeLoading } = useQuery<{
-		teams: { nodes: IEmployees[]; meta: IPaginationMeta };
-	}>(EMPLOYEES_DROPDOWN_QUERY, {
-		variables: {
-			input: {
-				page: 1,
-			},
-		},
-	});
+	// // get employees
+	// const { data: employeesData, loading: __employeeLoading } = useQuery<{
+	// 	teams: { nodes: IEmployees[]; meta: IPaginationMeta };
+	// }>(EMPLOYEES_DROPDOWN_QUERY, {
+	// 	variables: {
+	// 		input: {
+	// 			page: 1,
+	// 		},
+	// 	},
+	// });
 	return (
 		<div>
 			<Group position='apart'>
-				<Text ff={'Nunito, sans-serif'} fz={18} fw={500} color='blue'>
-					#{__taskDetails?.taskId}
+				<Text ff={'Nunito, sans-serif'} fz={20} fw={500} color='blue'>
+					{__taskDetails?.taskId}
 				</Text>
 				<ActionIcon color='violet' size={'xl'} onClick={() => onEditTask()}>
 					<IconEdit size={30} />
@@ -65,13 +62,13 @@ const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
 				{__taskDetails?.taskDetails?.taskName || 'N/A'}
 			</Title>
 			<Space h={'md'} />
-			<Text ff={'Nunito, sans-serif'} fz={16}>
+			<Text ff={'Nunito, sans-serif'} fz={18}>
 				Net Total: {`${__taskDetails?.totalBillAmount}`} BDT
 			</Text>
-			<Text ff={'Nunito, sans-serif'} fz={16} color='yellow'>
+			<Text ff={'Nunito, sans-serif'} fz={18} color='yellow'>
 				Due: {`${__taskDetails?.dueAmount}`} BDT
 			</Text>
-			<Text ff={'Nunito, sans-serif'} color='red' fz={16}>
+			<Text ff={'Nunito, sans-serif'} color='red' fz={18}>
 				Deadline: {format(new Date(__taskDetails?.deadLine), 'PPPPp')}
 			</Text>
 			<Space h={'sm'} />
@@ -90,37 +87,37 @@ const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
 				{new Date() < new Date(__taskDetails?.deadLine) ? (
 					<div className='rest_time_wrapper'>
 						<div className='time_title'>
-							<div className='font-semibold text-md text-white'>
+							<div className='font-semibold text-[18px] text-white'>
 								{remainingTime.days}
 							</div>
-							<div className='font-medium text-[10px] text-white uppercase'>
+							<div className='font-medium text-[12px] text-white uppercase'>
 								dys
 							</div>
 						</div>
 						<div className='timer_devider'>:</div>
 						<div className='time_title'>
-							<div className='font-semibold text-md text-white'>
+							<div className='font-semibold text-[18px] text-white'>
 								{remainingTime.hours}
 							</div>
-							<div className='font-medium text-[10px] text-white uppercase'>
+							<div className='font-medium text-[12px] text-white uppercase'>
 								hrs
 							</div>
 						</div>
 						<div className='timer_devider'>:</div>
 						<div className='time_title'>
-							<div className='font-semibold text-md text-white'>
+							<div className='font-semibold text-[18px] text-white'>
 								{remainingTime.minutes}
 							</div>
-							<div className='font-medium text-[10px] text-white uppercase'>
+							<div className='font-medium text-[12px] text-white uppercase'>
 								min
 							</div>
 						</div>
 						<div className='timer_devider'>:</div>
 						<div className='time_title'>
-							<div className='font-semibold text-md text-white'>
+							<div className='font-semibold text-[18px] text-white'>
 								{remainingTime.seconds}
 							</div>
-							<div className='font-medium text-[10px] text-white uppercase'>
+							<div className='font-medium text-[12px] text-white uppercase'>
 								sec
 							</div>
 						</div>
@@ -206,8 +203,8 @@ const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
 					</Paper>
 				)}
 				{__taskDetails?.taskDetails?.taskAssignTo?._id && (
-					<Paper p={10} radius={0} className='relative' withBorder>
-						<LoadingOverlay overlayBlur={2} visible={__employeeLoading} />
+					<Paper p={10} radius={0} className='!relative' withBorder>
+						{/* <LoadingOverlay overlayBlur={2} visible={__employeeLoading} /> */}
 
 						<Text fw={700} fz={18}>
 							Assign to
@@ -217,37 +214,25 @@ const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
 
 						<Flex justify={'start'} gap={15} align={'center'}>
 							<Avatar
-								src={
-									findUserById(
-										__taskDetails?.taskDetails?.taskAssignTo?._id,
-										employeesData?.teams?.nodes!
-									)?.avatar
-								}
+								src={__taskDetails?.taskDetails?.taskAssignTo?.avatar}
 								color='teal'
 								radius={100}
 								size={'lg'}
 							>
-								{findUserById(
-									__taskDetails?.taskDetails?.taskAssignTo?._id,
-									employeesData?.teams?.nodes!
-								)?.name?.slice(0, 1)}
+								{__taskDetails?.taskDetails?.taskAssignTo?.name?.slice(0, 1)}
 							</Avatar>
 							<div>
 								<Text fw={500}>
 									{
-										findUserById(
-											__taskDetails?.taskDetails?.taskAssignTo?._id,
-											employeesData?.teams?.nodes!
-										)?.name
+										// findUserById(
+										// 	employeesData?.teams?.nodes!
+										// )?.name
+										__taskDetails?.taskDetails?.taskAssignTo?.name
 									}
 								</Text>
 								<Text size={'sm'} color='dimmed'>
-									{
-										findUserById(
-											__taskDetails?.taskDetails?.taskAssignTo?._id,
-											employeesData?.teams?.nodes!
-										)?.phone
-									}
+									{__taskDetails?.taskDetails?.taskAssignTo?.phone ||
+										__taskDetails?.taskDetails?.taskAssignTo?.email}
 								</Text>
 							</div>
 						</Flex>

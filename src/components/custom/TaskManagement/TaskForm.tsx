@@ -390,12 +390,14 @@ const TaskForm: React.FC<{
 										}
 									</Text>
 									<Text size={'sm'} color='dimmed'>
-										{
+										{findUserById(
+											watch('taskDetails.taskAssignTo'),
+											employeesData?.teams?.nodes!
+										)?.phone ||
 											findUserById(
 												watch('taskDetails.taskAssignTo'),
 												employeesData?.teams?.nodes!
-											)?.phone
-										}
+											)?.email}
 									</Text>
 								</div>
 							</Flex>

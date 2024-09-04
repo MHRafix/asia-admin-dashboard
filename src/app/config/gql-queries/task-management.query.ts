@@ -16,6 +16,7 @@ export const Get_Task_List_Query = gql`
 				client {
 					_id
 					name
+					phone
 					email
 				}
 				taskCreatedBy {
@@ -28,6 +29,7 @@ export const Get_Task_List_Query = gql`
 					taskAssignTo {
 						_id
 						name
+						phone
 						avatar
 					}
 					taskDescription

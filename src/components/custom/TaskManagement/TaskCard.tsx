@@ -71,7 +71,7 @@ const TaskCard: React.FC<ITaskCardProps> = ({
 				}}
 			>
 				<Text ff={'Nunito, sans-serif'} fz={18} fw={500} color='blue'>
-					#{__task?.taskId}
+					{__task?.taskId}
 				</Text>
 
 				<Text ff={'Nunito, sans-serif'} fz={21} fw={500}>

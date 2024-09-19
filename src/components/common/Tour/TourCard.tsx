@@ -65,14 +65,21 @@ const TourCard: React.FC<ITourCardProp> = ({
 						alt='card image'
 						className='w-full rounded-lg mx-auto text-center'
 						// width={100}
-						height={180}
+						height={220}
 					/>
 				</div>
 
 				<div className='p-3'>
 					<Flex justify='space-between' align='center'>
-						<Title order={4} mt={4} mb={6} ff='Nunito Sans, sans-serif'>
-							{TPackage?.packageTitle}
+						<Title
+							order={4}
+							mt={4}
+							mb={6}
+							ff='Nunito Sans, sans-serif'
+							truncate={'end'}
+						>
+							{TPackage?.packageTitle.slice(0, 30)}
+							{TPackage?.packageTitle?.length > 30 ? '...' : ''}
 						</Title>
 
 						<div className='text-sm font-semibold'>$ {TPackage?.salePrice}</div>

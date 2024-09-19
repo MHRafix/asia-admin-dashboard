@@ -122,7 +122,7 @@ const TravelPackages: React.FC<{
 				title='There is no tour packages found!'
 			/>
 
-			<div className='grid lg:grid-cols-3 lg:gap-3 gap-8'>
+			<div className='grid lg:grid-cols-4 lg:gap-3 gap-8'>
 				{new Array(skeletonCount).fill(skeletonCount).map((_, idx: number) => (
 					<TourCardSkeleton key={idx} show={loading} />
 				))}

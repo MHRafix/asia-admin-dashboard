@@ -109,7 +109,7 @@ const Dashboard = () => {
 						overViewCardData={dashboardOverviewData?.overViewCardData!}
 					/>
 
-					<div className='grid'>
+					<div className='grid mt-10 mb-10'>
 						<div className='w-12/12 bg-[#212231] px-2 shadow-2xl rounded-sm'>
 							{' '}
 							<div className='mt-2'>
@@ -126,11 +126,11 @@ const Dashboard = () => {
 					</div>
 
 					{/* popular travel packages */}
-					<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
+					<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={10}>
 						Popular packages
 					</Title>
 
-					<div className='grid grid-cols-3 gap-5'>
+					<div className='grid lg:grid-cols-4 gap-5'>
 						{travelPackages?.travelPackages?.nodes?.map(
 							(TPackage: ITravelPackage, idx: number) => (
 								<TourCard key={idx} TPackage={TPackage} actionBtn={false} />

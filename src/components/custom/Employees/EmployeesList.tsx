@@ -107,17 +107,7 @@ const EmployeesList: React.FC<{}> = () => {
 				}
 			/>
 
-			<Drawer
-				opened={opened}
-				onClose={handler.close}
-				title='Employee create or update'
-				size={'md'}
-				position='right'
-			>
-				<EmployeeForm onSuccess={onSuccess} employee={employee!} />
-			</Drawer>
-
-			<div className='grid grid-cols-3 gap-3'>
+			<div className='grid lg:grid-cols-3 gap-3'>
 				{employeesData?.teams?.nodes?.map((data: IEmployees, idx: number) => (
 					<EmployeeCard
 						key={idx}
@@ -130,6 +120,7 @@ const EmployeesList: React.FC<{}> = () => {
 					/>
 				))}
 			</div>
+
 			{fetching && (
 				<div className='grid grid-cols-3 gap-3'>
 					{new Array(12).fill(12).map((_, idx) => (
@@ -143,6 +134,16 @@ const EmployeesList: React.FC<{}> = () => {
 				title='There is no employees found!'
 				Icon={<RiTeamLine size={40} color='red' />}
 			/>
+
+			<Drawer
+				opened={opened}
+				onClose={handler.close}
+				title='Employee create or update'
+				size={'md'}
+				position='right'
+			>
+				<EmployeeForm onSuccess={onSuccess} employee={employee!} />
+			</Drawer>
 
 			<Space h={10} />
 		</>

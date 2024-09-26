@@ -72,6 +72,10 @@ const TaskForm: React.FC<{
 		watch,
 	} = useForm<ITaskFormType>({
 		resolver: yupResolver(Task_Form_Validation_Schema),
+		defaultValues: {
+			deadLine: new Date(),
+		},
+		mode: 'onChange',
 	});
 
 	// prefill the form with existing task
@@ -270,7 +274,7 @@ const TaskForm: React.FC<{
 						size='lg'
 						placeholder='Task deadline'
 						onChange={(e) => setValue('deadLine', e!)}
-						value={new Date(watch('deadLine') || taskPayload?.deadLine)}
+						value={new Date(watch('deadLine'))}
 					/>
 				</Input.Wrapper>
 

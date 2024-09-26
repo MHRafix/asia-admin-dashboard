@@ -1,4 +1,5 @@
 import { IEmployees } from '@/app/api/models/employees.model';
+import { REMOVE_EMPLOYEE } from '@/app/config/gql-queries/employees.query';
 import { deleteConfirmModal } from '@/components/common/deleteConfirmModal';
 import { useMutation } from '@apollo/client';
 import { Badge, Button, Flex, Space, Text, Title } from '@mantine/core';
@@ -8,7 +9,6 @@ import React from 'react';
 import { FaHandHoldingUsd } from 'react-icons/fa';
 import { FiEdit, FiTrash } from 'react-icons/fi';
 import { getRoleBadgeColor } from '../Manage_Users/UsersTable';
-import { REMOVE_EMPLOYEE } from '@/app/config/gql-queries/employees.query';
 
 interface IEmployeeCardProps {
 	data: IEmployees;
@@ -77,7 +77,7 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({
 			</Flex>
 			<Space h={10} />
 
-			<Flex gap={10} align={'center'}>
+			<div className='lg:flex grid gap-[10px] item-center'>
 				<Button
 					fullWidth
 					// component={Link}
@@ -104,7 +104,7 @@ const EmployeeCard: React.FC<IEmployeeCardProps> = ({
 				>
 					Remove
 				</Button>
-			</Flex>
+			</div>
 			<Space h={10} />
 			<Button
 				fullWidth

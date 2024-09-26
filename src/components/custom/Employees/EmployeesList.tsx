@@ -107,7 +107,7 @@ const EmployeesList: React.FC<{}> = () => {
 				}
 			/>
 
-			<div className='grid lg:grid-cols-3 gap-3'>
+			<div className='grid lg:grid-cols-3 gap-3 overflow-hidden'>
 				{employeesData?.teams?.nodes?.map((data: IEmployees, idx: number) => (
 					<EmployeeCard
 						key={idx}
@@ -122,7 +122,7 @@ const EmployeesList: React.FC<{}> = () => {
 			</div>
 
 			{fetching && (
-				<div className='grid grid-cols-3 gap-3'>
+				<div className='grid lg:grid-cols-3 gap-3'>
 					{new Array(12).fill(12).map((_, idx) => (
 						<EmployeeCardSkeleton key={idx} />
 					))}

@@ -84,11 +84,11 @@ const EmployeesList: React.FC<{}> = () => {
 					},
 				]}
 				actionComponent={
-					<div className='flex items-center gap-2 mb-5'>
+					<div className='lg:flex grid items-center gap-2 mb-5'>
 						<Input
 							icon={<FaSearch />}
 							variant='unstyled'
-							className='w-[300px] !border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
+							className='lg:w-[300px] !border-[1px] !border-[#32344b] border-solid px-2 rounded-md'
 							placeholder='Search employee...'
 							onChange={(e) => setSearchKey(e.target.value)}
 						/>

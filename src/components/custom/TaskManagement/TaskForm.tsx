@@ -78,11 +78,7 @@ const TaskForm: React.FC<{
     resolver: yupResolver(Task_Form_Validation_Schema),
     defaultValues: {
       deadLine: new Date(),
-      files: [
-        {
-          fileUrl: "",
-        },
-      ],
+      files: [],
     },
     mode: "onChange",
   });
@@ -326,7 +322,7 @@ const TaskForm: React.FC<{
             h={150}
             bg={"transparent"}
             maxSize={3 * 1024 ** 2}
-            accept={IMAGE_MIME_TYPE}
+            draggable={true}
             sx={{
               border: "1px dotted #5F3DC4",
               display: "flex",
@@ -366,15 +362,17 @@ const TaskForm: React.FC<{
             <>
               {watch("files")?.map((file, idx: number) => (
                 <div>
-                  <Text size={"md"}>Documents lists</Text>
                   <Space h={"md"} />
                   <Paper
                     p={10}
                     radius={10}
                     withBorder
-                    className="flex justify-between items-center"
+                    className="hover:bg-slate-900 cursor-pointer flex justify-between items-center"
+                    onClick={() => window.open(file?.fileUrl)}
                   >
-                    {file?.fileUrl}
+                    <Text>
+                      {idx + 1}. {file?.fileUrl}
+                    </Text>
                     <ActionIcon
                       onClick={() => removeFile(idx)}
                       size={"sm"}

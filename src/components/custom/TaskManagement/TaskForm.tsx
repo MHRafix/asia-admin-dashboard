@@ -115,6 +115,7 @@ const TaskForm: React.FC<{
   useEffect(() => {
     if (operationType === "EDIT") {
       setValue("client", taskPayload?.client?._id as string);
+      setValue("files", taskPayload?.files);
       setValue("deadLine", taskPayload?.deadLine as Date);
       setValue("paidBillAmount", taskPayload?.paidBillAmount as number);
       setValue("totalBillAmount", taskPayload?.totalBillAmount as number);
@@ -317,7 +318,7 @@ const TaskForm: React.FC<{
             onReject={(files) => {}}
             loading={uploading}
             multiple={false}
-            w={350}
+            // w={350}
             // mx='auto'
             h={150}
             bg={"transparent"}
@@ -367,11 +368,14 @@ const TaskForm: React.FC<{
                     p={10}
                     radius={10}
                     withBorder
-                    className="hover:bg-slate-900 cursor-pointer flex justify-between items-center"
-                    onClick={() => window.open(file?.fileUrl)}
+                    className="hover:bg-slate-900 flex justify-between items-center"
                   >
-                    <Text>
-                      {idx + 1}. {file?.fileUrl}
+                    <Text
+                      className="cursor-pointer"
+                      onClick={() => window.open(file?.fileUrl)}
+                    >
+                      {idx + 1}.{" "}
+                      {file?.fileUrl.split("upload/")[1].slice(0, 100)}
                     </Text>
                     <ActionIcon
                       onClick={() => removeFile(idx)}

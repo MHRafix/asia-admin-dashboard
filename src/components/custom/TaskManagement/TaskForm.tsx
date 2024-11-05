@@ -116,7 +116,10 @@ const TaskForm: React.FC<{
     if (operationType === "EDIT") {
       setValue("client", taskPayload?.client?._id as string);
       setValue("files", taskPayload?.files);
-      setValue("deadLine", taskPayload?.deadLine as Date);
+      setValue(
+        "deadLine",
+        taskPayload?.deadLine ? taskPayload?.deadLine : (new Date() as Date)
+      );
       setValue("paidBillAmount", taskPayload?.paidBillAmount as number);
       setValue("totalBillAmount", taskPayload?.totalBillAmount as number);
       setValue(
@@ -308,7 +311,7 @@ const TaskForm: React.FC<{
             size="lg"
             placeholder="Task deadline"
             onChange={(e) => setValue("deadLine", e!)}
-            value={new Date(watch("deadLine"))}
+            value={watch("deadLine") ? new Date(watch("deadLine")) : new Date()}
           />
         </Input.Wrapper>
 
@@ -359,7 +362,7 @@ const TaskForm: React.FC<{
 
           <Space h={"md"} />
 
-          {watch("files")![0]?.fileUrl ? (
+          {watch("files")?.[0]?.fileUrl ? (
             <>
               {watch("files")?.map((file, idx: number) => (
                 <div>
@@ -492,6 +495,7 @@ const TaskForm: React.FC<{
             </Paper>
           ) : null}
         </div>
+
         <Space h={"xs"} />
 
         <Button

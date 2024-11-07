@@ -131,10 +131,18 @@ const Dashboard = () => {
               <div className="xl:w-5/12 bg-[#212231] px-2 shadow-2xl rounded-sm">
                 <ChartTransactionAnalytics
                   transactions={{
-                    newAppointments: 1233,
-                    newBookings: 122323,
-                    newFlights: 4584954,
-                    totalTransactions: 458755544,
+                    totalTransactions:
+                      dashboardOverviewData?.overViewCardData
+                        ?.totalTransactions!,
+                    newAppointments:
+                      dashboardOverviewData?.overViewCardData
+                        ?.totalTransactions!,
+                    newBookings:
+                      dashboardOverviewData?.overViewCardData
+                        ?.totalTransactions!,
+                    newFlights:
+                      dashboardOverviewData?.overViewCardData
+                        ?.totalTransactions!,
                   }}
                 />
               </div>

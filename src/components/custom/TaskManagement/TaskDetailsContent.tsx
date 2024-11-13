@@ -188,9 +188,7 @@ const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
         </>
       ) : null}
       <Space h={40} />
-      <Title order={4} ff={"Nunito, sans-serif"}>
-        Clients, Employee and Payment
-      </Title>
+      <Title order={4}>Clients, Employee and Payment</Title>
       <Space h={10} />
       {/* summaries */}
       <div className="grid lg:grid-cols-3 gap-3">

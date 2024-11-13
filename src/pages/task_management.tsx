@@ -25,6 +25,7 @@ import {
   Select,
   Skeleton,
   Space,
+  Tabs,
   Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -115,7 +116,7 @@ const TaskManagement = () => {
                   value: e,
                 })
               }
-              placeholder="Pick a  user"
+              placeholder="Filter by user"
             />
           )}
           {__LoadingTask || isRefetching ? (
@@ -140,167 +141,183 @@ const TaskManagement = () => {
 
         <Space h={"md"} />
 
-        <div className="grid lg:grid-cols-3 gap-x-5 gap-y-10">
-          <Paper radius={0} withBorder>
-            <Title p={15} order={4} fw={500} bg="blue">
-              Pending ({taskByStatus?.pendingTasks?.length ?? 0})
-            </Title>
+        <Tabs
+          color="violet"
+          orientation="horizontal"
+          defaultValue="pending_task"
+        >
+          <Tabs.List>
+            <Tabs.Tab value="pending_task">
+              Pending Task ({taskByStatus?.pendingTasks?.length ?? 0})
+            </Tabs.Tab>
+            <Tabs.Tab value="in_progress_task">
+              In-progress Task ({taskByStatus?.inProgressTask?.length ?? 0})
+            </Tabs.Tab>
+            <Tabs.Tab value="done_task">
+              Done Task ({taskByStatus?.doneTask?.length ?? 0})
+            </Tabs.Tab>
+            <Tabs.Tab value="revision_task">
+              Revision Task ({taskByStatus?.revisionTask?.length ?? 0})
+            </Tabs.Tab>
+            <Tabs.Tab value="completed_task">
+              Completed Task ({taskByStatus?.completedTask?.length ?? 0})
+            </Tabs.Tab>
+          </Tabs.List>
 
-            <Space h={"md"} />
+          <Space h={"md"} />
 
-            <Box p={15} className="task_status_area">
-              {taskByStatus?.pendingTasks?.map((__task, idx) => (
-                <TaskCard
-                  onTaskDetailsOpen={taskDetailsDrawerHandler.open}
-                  onSetTaskDetails={() => setTaskDetails(__task)}
-                  key={idx}
-                  __task={__task}
-                  onRefetch={__refetchTaskList}
-                  color="blue"
-                />
-              ))}
-              {__LoadingTask && (
-                <>
-                  {new Array(10).fill(10).map((_, idx) => (
-                    <Skeleton key={idx} h={220} my={5} radius={5} />
-                  ))}
-                </>
-              )}
-            </Box>
-          </Paper>
-          <Paper radius={0} withBorder>
-            <Title p={15} order={4} fw={500} bg="violet">
-              In-Progress ({taskByStatus?.inProgressTask?.length ?? 0})
-            </Title>
-            <Space h={"md"} />
-
-            <Box p={15} className="task_status_area">
-              {taskByStatus?.inProgressTask?.map(
-                (__task: Task, idx: number) => (
+          <Tabs.Panel value="pending_task">
+            {" "}
+            <div>
+              <Title p={15} order={4} fw={500} bg="blue">
+                Pending ({taskByStatus?.pendingTasks?.length ?? 0})
+              </Title>{" "}
+              <Box
+                p={15}
+                className="grid lg:grid-cols-3 gap-5 task_status_area"
+              >
+                {taskByStatus?.pendingTasks?.map((__task, idx) => (
                   <TaskCard
                     onTaskDetailsOpen={taskDetailsDrawerHandler.open}
                     onSetTaskDetails={() => setTaskDetails(__task)}
                     key={idx}
                     __task={__task}
                     onRefetch={__refetchTaskList}
-                    color="violet"
+                    color="blue"
                   />
-                )
-              )}
-              {__LoadingTask && (
-                <>
-                  {new Array(10).fill(10).map((_, idx) => (
-                    <Skeleton key={idx} h={220} my={5} radius={5} />
-                  ))}
-                </>
-              )}
-            </Box>
-          </Paper>
-          <Paper radius={0} withBorder>
-            <Title p={15} order={4} fw={500} bg="yellow">
-              Done ({taskByStatus?.doneTask?.length ?? 0})
-            </Title>
-            <Space h={"md"} />
+                ))}
+                {__LoadingTask && (
+                  <>
+                    {new Array(10).fill(10).map((_, idx) => (
+                      <Skeleton key={idx} h={220} my={5} radius={5} />
+                    ))}
+                  </>
+                )}
+              </Box>
+            </div>
+          </Tabs.Panel>
 
-            <Box p={15} className="task_status_area">
-              {taskByStatus?.doneTask?.map((__task, idx) => (
-                <TaskCard
-                  onTaskDetailsOpen={taskDetailsDrawerHandler.open}
-                  onSetTaskDetails={() => setTaskDetails(__task)}
-                  key={idx}
-                  __task={__task}
-                  onRefetch={__refetchTaskList}
-                  color="yellow"
-                />
-              ))}
-              {__LoadingTask && (
-                <>
-                  {new Array(10).fill(10).map((_, idx) => (
-                    <Skeleton key={idx} h={220} my={5} radius={5} />
-                  ))}
-                </>
-              )}
-            </Box>
-          </Paper>
-          <Paper radius={0} withBorder>
-            <Title p={15} order={4} fw={500} bg="orange">
-              Revision ({taskByStatus?.revisionTask?.length ?? 0})
-            </Title>
-            <Space h={"md"} />
+          <Tabs.Panel value="in_progress_task">
+            <div>
+              <Title p={15} order={4} fw={500} bg="blue">
+                In-Progress ({taskByStatus?.inProgressTask?.length ?? 0})
+              </Title>{" "}
+              <Box
+                p={15}
+                className="grid lg:grid-cols-3 gap-5 task_status_area"
+              >
+                {taskByStatus?.inProgressTask?.map((__task, idx) => (
+                  <TaskCard
+                    onTaskDetailsOpen={taskDetailsDrawerHandler.open}
+                    onSetTaskDetails={() => setTaskDetails(__task)}
+                    key={idx}
+                    __task={__task}
+                    onRefetch={__refetchTaskList}
+                    color="blue"
+                  />
+                ))}
+                {__LoadingTask && (
+                  <>
+                    {new Array(10).fill(10).map((_, idx) => (
+                      <Skeleton key={idx} h={220} my={5} radius={5} />
+                    ))}
+                  </>
+                )}
+              </Box>
+            </div>
+          </Tabs.Panel>
 
-            <Box p={15} className="task_status_area">
-              {taskByStatus?.revisionTask?.map((__task, idx) => (
-                <TaskCard
-                  onTaskDetailsOpen={taskDetailsDrawerHandler.open}
-                  onSetTaskDetails={() => setTaskDetails(__task)}
-                  key={idx}
-                  __task={__task}
-                  onRefetch={__refetchTaskList}
-                  color="orange"
-                />
-              ))}
-              {__LoadingTask && (
-                <>
-                  {new Array(10).fill(10).map((_, idx) => (
-                    <Skeleton key={idx} h={220} my={5} radius={5} />
-                  ))}
-                </>
-              )}
-            </Box>
-          </Paper>
-          <Paper radius={0} withBorder>
-            <Title p={15} order={4} fw={500} bg="teal">
-              Completed ({taskByStatus?.completedTask?.length ?? 0})
-            </Title>
-            <Space h={"md"} />
-
-            <Box p={15} className="task_status_area">
-              {taskByStatus?.completedTask?.map((__task, idx) => (
-                <TaskCard
-                  onTaskDetailsOpen={taskDetailsDrawerHandler.open}
-                  onSetTaskDetails={() => setTaskDetails(__task)}
-                  key={idx}
-                  __task={__task}
-                  onRefetch={__refetchTaskList}
-                  color="teal"
-                />
-              ))}
-              {__LoadingTask && (
-                <>
-                  {new Array(10).fill(10).map((_, idx) => (
-                    <Skeleton key={idx} h={220} my={5} radius={5} />
-                  ))}
-                </>
-              )}
-            </Box>
-          </Paper>
-          <Paper radius={0} withBorder>
-            <Title p={15} order={4} fw={500} bg="red">
-              Cancelled ({taskByStatus?.cancelledTask?.length ?? 0})
-            </Title>
-            <Space h={"md"} />
-
-            <Box p={15} className="task_status_area">
-              {taskByStatus?.cancelledTask?.map((__task, idx) => (
-                <TaskCard
-                  onTaskDetailsOpen={taskDetailsDrawerHandler.open}
-                  onSetTaskDetails={() => setTaskDetails(__task)}
-                  key={idx}
-                  __task={__task}
-                  onRefetch={__refetchTaskList}
-                  color="red"
-                />
-              ))}
-              {__LoadingTask && (
-                <>
-                  {new Array(10).fill(10).map((_, idx) => (
-                    <Skeleton key={idx} h={220} my={5} radius={5} />
-                  ))}
-                </>
-              )}
-            </Box>
-          </Paper>
-        </div>
+          <Tabs.Panel value="done_task">
+            {" "}
+            <div>
+              <Title p={15} order={4} fw={500} bg="blue">
+                Done ({taskByStatus?.doneTask?.length ?? 0})
+              </Title>{" "}
+              <Box
+                p={15}
+                className="grid lg:grid-cols-3 gap-5 task_status_area"
+              >
+                {taskByStatus?.doneTask?.map((__task, idx) => (
+                  <TaskCard
+                    onTaskDetailsOpen={taskDetailsDrawerHandler.open}
+                    onSetTaskDetails={() => setTaskDetails(__task)}
+                    key={idx}
+                    __task={__task}
+                    onRefetch={__refetchTaskList}
+                    color="blue"
+                  />
+                ))}
+                {__LoadingTask && (
+                  <>
+                    {new Array(10).fill(10).map((_, idx) => (
+                      <Skeleton key={idx} h={220} my={5} radius={5} />
+                    ))}
+                  </>
+                )}
+              </Box>
+            </div>
+          </Tabs.Panel>
+          <Tabs.Panel value="revision_task">
+            {" "}
+            <div>
+              <Title p={15} order={4} fw={500} bg="blue">
+                Revision ({taskByStatus?.revisionTask?.length ?? 0})
+              </Title>{" "}
+              <Box
+                p={15}
+                className="grid lg:grid-cols-3 gap-5 task_status_area"
+              >
+                {taskByStatus?.revisionTask?.map((__task, idx) => (
+                  <TaskCard
+                    onTaskDetailsOpen={taskDetailsDrawerHandler.open}
+                    onSetTaskDetails={() => setTaskDetails(__task)}
+                    key={idx}
+                    __task={__task}
+                    onRefetch={__refetchTaskList}
+                    color="blue"
+                  />
+                ))}
+                {__LoadingTask && (
+                  <>
+                    {new Array(10).fill(10).map((_, idx) => (
+                      <Skeleton key={idx} h={220} my={5} radius={5} />
+                    ))}
+                  </>
+                )}
+              </Box>
+            </div>
+          </Tabs.Panel>
+          <Tabs.Panel value="completed_task">
+            {" "}
+            <div>
+              <Title p={15} order={4} fw={500} bg="blue">
+                Completed ({taskByStatus?.completedTask?.length ?? 0})
+              </Title>{" "}
+              <Box
+                p={15}
+                className="grid lg:grid-cols-3 gap-5 task_status_area"
+              >
+                {taskByStatus?.completedTask?.map((__task, idx) => (
+                  <TaskCard
+                    onTaskDetailsOpen={taskDetailsDrawerHandler.open}
+                    onSetTaskDetails={() => setTaskDetails(__task)}
+                    key={idx}
+                    __task={__task}
+                    onRefetch={__refetchTaskList}
+                    color="blue"
+                  />
+                ))}
+                {__LoadingTask && (
+                  <>
+                    {new Array(10).fill(10).map((_, idx) => (
+                      <Skeleton key={idx} h={220} my={5} radius={5} />
+                    ))}
+                  </>
+                )}
+              </Box>
+            </div>
+          </Tabs.Panel>
+        </Tabs>
       </div>
 
       {/* Task details drawer */}

@@ -23,7 +23,7 @@ import {
   IconLink,
 } from "@tabler/icons-react";
 import { format } from "date-fns";
-import React from "react";
+import React, { useMemo } from "react";
 import { findUserById } from "./TaskForm";
 
 interface ITaskDetailsContent {
@@ -203,28 +203,14 @@ const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
 
             <Flex justify={"start"} gap={15} align={"center"}>
               <Avatar color="teal" radius={100} size={"lg"}>
-                {findUserById(
-                  __taskDetails?.client?._id,
-                  clients?.Clients?.nodes!
-                )?.name?.slice(0, 1)}
+                {__taskDetails?.client?.name?.slice(0, 1) ||
+                  __taskDetails?.client?.email?.slice(0, 1)}
               </Avatar>
 
               <div>
-                <Text fw={500}>
-                  {
-                    findUserById(
-                      __taskDetails?.client?._id,
-                      clients?.Clients?.nodes!
-                    )?.name
-                  }
-                </Text>
+                <Text fw={500}>{__taskDetails?.client?._id}</Text>
                 <Text size={"sm"} color="dimmed">
-                  {
-                    findUserById(
-                      __taskDetails?.client?._id,
-                      clients?.Clients?.nodes!
-                    )?.phone
-                  }
+                  {__taskDetails?.client?.phone || "N/A"}
                 </Text>
               </div>
             </Flex>
@@ -247,20 +233,17 @@ const TaskDetailsContent: React.FC<ITaskDetailsContent> = ({
                 radius={100}
                 size={"lg"}
               >
-                {__taskDetails?.taskDetails?.taskAssignTo?.name?.slice(0, 1)}
+                {__taskDetails?.taskDetails?.taskAssignTo?.name?.slice(0, 1) ||
+                  __taskDetails?.taskDetails?.taskAssignTo?.email?.slice(0, 1)}
               </Avatar>
               <div>
                 <Text fw={500}>
-                  {
-                    // findUserById(
-                    // 	employeesData?.teams?.nodes!
-                    // )?.name
-                    __taskDetails?.taskDetails?.taskAssignTo?.name
-                  }
+                  {__taskDetails?.taskDetails?.taskAssignTo?.name || "N/A"}
                 </Text>
                 <Text size={"sm"} color="dimmed">
                   {__taskDetails?.taskDetails?.taskAssignTo?.phone ||
-                    __taskDetails?.taskDetails?.taskAssignTo?.email}
+                    __taskDetails?.taskDetails?.taskAssignTo?.email ||
+                    "N/A"}
                 </Text>
               </div>
             </Flex>

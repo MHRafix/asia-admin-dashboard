@@ -32,6 +32,7 @@ export const Get_Task_List_Query = gql`
           taskAssignTo {
             _id
             name
+            email
             phone
             avatar
           }

@@ -5,6 +5,7 @@ import protectWithSession from "@/app/config/authProtection/protectWithSession";
 import { EMPLOYEES_DROPDOWN_QUERY } from "@/app/config/gql-queries/employees.query";
 import { MatchOperator, Task, USER_ROLE } from "@/app/config/gql-types";
 import { useGetSession } from "@/app/config/logic/getSession";
+import EmptyPanel from "@/components/common/EmptyPanels/EmptyPanel";
 import PageTitleArea from "@/components/common/PageTitleArea";
 import TaskCard from "@/components/custom/TaskManagement/TaskCard";
 import TaskDetailsContent from "@/components/custom/TaskManagement/TaskDetailsContent";
@@ -26,6 +27,7 @@ import {
   Skeleton,
   Space,
   Tabs,
+  Text,
   Title,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -147,20 +149,25 @@ const TaskManagement = () => {
           defaultValue="pending_task"
         >
           <Tabs.List>
-            <Tabs.Tab value="pending_task">
-              Pending Task ({taskByStatus?.pendingTasks?.length ?? 0})
+            <Tabs.Tab value="pending_task" color="blue">
+              <Text color="blue">
+                Pending Task ({taskByStatus?.pendingTasks?.length ?? 0})
+              </Text>
             </Tabs.Tab>
-            <Tabs.Tab value="in_progress_task">
-              In-progress Task ({taskByStatus?.inProgressTask?.length ?? 0})
+            <Tabs.Tab value="in_progress_task" color="violet">
+              <Text color="violet">
+                In-progress Task ({taskByStatus?.inProgressTask?.length ?? 0})
+              </Text>
             </Tabs.Tab>
-            <Tabs.Tab value="done_task">
-              Done Task ({taskByStatus?.doneTask?.length ?? 0})
+            <Tabs.Tab value="done_task" color="yellow">
+              <Text color="yellow">
+                Done Task ({taskByStatus?.doneTask?.length ?? 0})
+              </Text>
             </Tabs.Tab>
-            <Tabs.Tab value="revision_task">
-              Revision Task ({taskByStatus?.revisionTask?.length ?? 0})
-            </Tabs.Tab>
-            <Tabs.Tab value="completed_task">
-              Completed Task ({taskByStatus?.completedTask?.length ?? 0})
+            <Tabs.Tab value="revision_task" color="orange">
+              <Text color="orange">
+                Revision Task ({taskByStatus?.revisionTask?.length ?? 0})
+              </Text>
             </Tabs.Tab>
           </Tabs.List>
 
@@ -194,12 +201,17 @@ const TaskManagement = () => {
                   </>
                 )}
               </Box>
+              <EmptyPanel
+                isShow={Boolean(!taskByStatus?.pendingTasks?.length)}
+                title="No pending task"
+                imgPath="https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png"
+              />
             </div>
           </Tabs.Panel>
 
           <Tabs.Panel value="in_progress_task">
             <div>
-              <Title p={15} order={4} fw={500} bg="blue">
+              <Title p={15} order={4} fw={500} bg="violet">
                 In-Progress ({taskByStatus?.inProgressTask?.length ?? 0})
               </Title>{" "}
               <Box
@@ -224,13 +236,18 @@ const TaskManagement = () => {
                   </>
                 )}
               </Box>
+              <EmptyPanel
+                isShow={Boolean(!taskByStatus?.inProgressTask?.length)}
+                title="No in-progress task"
+                imgPath="https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png"
+              />
             </div>
           </Tabs.Panel>
 
           <Tabs.Panel value="done_task">
             {" "}
             <div>
-              <Title p={15} order={4} fw={500} bg="blue">
+              <Title p={15} order={4} fw={500} bg="yellow">
                 Done ({taskByStatus?.doneTask?.length ?? 0})
               </Title>{" "}
               <Box
@@ -255,12 +272,17 @@ const TaskManagement = () => {
                   </>
                 )}
               </Box>
+              <EmptyPanel
+                isShow={Boolean(!taskByStatus?.doneTask?.length)}
+                title="No done task"
+                imgPath="https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png"
+              />
             </div>
           </Tabs.Panel>
           <Tabs.Panel value="revision_task">
             {" "}
             <div>
-              <Title p={15} order={4} fw={500} bg="blue">
+              <Title p={15} order={4} fw={500} bg="orange">
                 Revision ({taskByStatus?.revisionTask?.length ?? 0})
               </Title>{" "}
               <Box
@@ -285,36 +307,11 @@ const TaskManagement = () => {
                   </>
                 )}
               </Box>
-            </div>
-          </Tabs.Panel>
-          <Tabs.Panel value="completed_task">
-            {" "}
-            <div>
-              <Title p={15} order={4} fw={500} bg="blue">
-                Completed ({taskByStatus?.completedTask?.length ?? 0})
-              </Title>{" "}
-              <Box
-                p={15}
-                className="grid lg:grid-cols-3 gap-5 task_status_area"
-              >
-                {taskByStatus?.completedTask?.map((__task, idx) => (
-                  <TaskCard
-                    onTaskDetailsOpen={taskDetailsDrawerHandler.open}
-                    onSetTaskDetails={() => setTaskDetails(__task)}
-                    key={idx}
-                    __task={__task}
-                    onRefetch={__refetchTaskList}
-                    color="blue"
-                  />
-                ))}
-                {__LoadingTask && (
-                  <>
-                    {new Array(10).fill(10).map((_, idx) => (
-                      <Skeleton key={idx} h={220} my={5} radius={5} />
-                    ))}
-                  </>
-                )}
-              </Box>
+              <EmptyPanel
+                isShow={Boolean(!taskByStatus?.revisionTask?.length)}
+                title="No revision task"
+                imgPath="https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png"
+              />
             </div>
           </Tabs.Panel>
         </Tabs>

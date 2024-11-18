@@ -8,7 +8,7 @@ import {
   Create_Task_Mutation,
   Update_Task_Mutation,
 } from "@/app/config/gql-queries/task-management.query";
-import { Task } from "@/app/config/gql-types";
+import { MatchOperator, Task, USER_ROLE } from "@/app/config/gql-types";
 import { fileUploader } from "@/app/config/logic/fileUploader";
 import { useGetSession } from "@/app/config/logic/getSession";
 import { useMutation, useQuery } from "@apollo/client";
@@ -31,7 +31,7 @@ import {
 import { DateInput } from "@mantine/dates";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { IconX } from "@tabler/icons-react";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useMemo, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { FiUpload } from "react-icons/fi";
 import { HiOutlinePhotograph } from "react-icons/hi";
@@ -61,6 +61,11 @@ const TaskForm: React.FC<{
     variables: {
       input: {
         page: 1,
+        where: {
+          key: "role",
+          operator: MatchOperator.Eq,
+          value: USER_ROLE.EMPLOYEE,
+        },
       },
     },
   });
@@ -84,11 +89,7 @@ const TaskForm: React.FC<{
   });
 
   // files array fileds
-  const {
-    append: addFile,
-    fields: fileFields,
-    remove: removeFile,
-  } = useFieldArray({
+  const { append: addFile, remove: removeFile } = useFieldArray({
     control,
     name: "files",
   });
@@ -175,7 +176,7 @@ const TaskForm: React.FC<{
           input: {
             ...payload,
             taskCreatedBy: user?._id,
-            taskId: `#TK${Date.now().toString().slice(0, 4)}`,
+            taskId: `#TK${Date.now().toString().slice(9, 13)}`,
             dueAmount: payload?.totalBillAmount - payload?.paidBillAmount,
           },
         },
@@ -191,6 +192,36 @@ const TaskForm: React.FC<{
       });
     }
   };
+
+  // employee id
+  const taskAssignToId = watch("taskDetails.taskAssignTo");
+  // employees
+  const employees = employeesData?.teams?.nodes || [];
+
+  // find employee
+  const assignedEmployee = useMemo(() => {
+    return employees.find((employee) => employee._id === taskAssignToId);
+  }, [taskAssignToId, employees]);
+
+  // employee name, email and phone
+  const employeeName = assignedEmployee?.name;
+  const employeePhone = assignedEmployee?.phone;
+  const employeeEmail = assignedEmployee?.email;
+
+  // client id
+  const selectedClientId = watch("client");
+  // clients
+  const clientsData = clients?.Clients?.nodes || [];
+
+  // find client
+  const selectedClient = useMemo(() => {
+    return clientsData?.find((client) => client?._id === selectedClientId);
+  }, [selectedClientId, clients]);
+
+  // employee name, email and phone
+  const clientName = selectedClient?.name;
+  const clientPhone = selectedClient?.phone;
+  const clientEmail = selectedClient?.email;
 
   return (
     <div>
@@ -214,7 +245,9 @@ const TaskForm: React.FC<{
         >
           <Select
             size="lg"
-            data={getEmployeeSelectInputData(clients?.Clients?.nodes)}
+            data={useMemo(() => {
+              return getEmployeeSelectInputData(clients?.Clients?.nodes);
+            }, [clients])}
             itemComponent={SelectItemEmployee}
             value={watch("client")}
             searchable
@@ -232,7 +265,9 @@ const TaskForm: React.FC<{
         >
           <Select
             size="lg"
-            data={getEmployeeSelectInputData(employeesData?.teams?.nodes)}
+            data={useMemo(() => {
+              return getEmployeeSelectInputData(employeesData?.teams?.nodes);
+            }, [employeesData])}
             itemComponent={SelectItemEmployee}
             value={watch("taskDetails.taskAssignTo")}
             searchable
@@ -408,24 +443,13 @@ const TaskForm: React.FC<{
 
               <Flex justify={"start"} gap={15} align={"center"}>
                 <Avatar color="teal" radius={100} size={"lg"}>
-                  {findUserById(
-                    watch("client"),
-                    clients?.Clients?.nodes!
-                  )?.name?.slice(0, 1)}
+                  {clientName?.slice(0, 1) || clientEmail?.slice(0, 1)}
                 </Avatar>
 
                 <div>
-                  <Text fw={500}>
-                    {
-                      findUserById(watch("client"), clients?.Clients?.nodes!)
-                        ?.name
-                    }
-                  </Text>
+                  <Text fw={500}>{clientName || "N/A"}</Text>
                   <Text size={"sm"} color="dimmed">
-                    {
-                      findUserById(watch("client"), clients?.Clients?.nodes!)
-                        ?.phone
-                    }
+                    {clientPhone || "N/A"}
                   </Text>
                 </div>
               </Flex>
@@ -441,39 +465,17 @@ const TaskForm: React.FC<{
 
               <Flex justify={"start"} gap={15} align={"center"}>
                 <Avatar
-                  src={
-                    findUserById(
-                      watch("taskDetails.taskAssignTo"),
-                      employeesData?.teams?.nodes!
-                    )?.avatar
-                  }
+                  src={assignedEmployee?.avatar}
                   color="teal"
                   radius={100}
                   size={"lg"}
                 >
-                  {findUserById(
-                    watch("taskDetails.taskAssignTo"),
-                    employeesData?.teams?.nodes!
-                  )?.name?.slice(0, 1)}
+                  {employeeName?.slice(0, 1)}
                 </Avatar>
                 <div>
-                  <Text fw={500}>
-                    {
-                      findUserById(
-                        watch("taskDetails.taskAssignTo"),
-                        employeesData?.teams?.nodes!
-                      )?.name
-                    }
-                  </Text>
+                  <Text fw={500}>{employeeName || "N/A"}</Text>
                   <Text size={"sm"} color="dimmed">
-                    {findUserById(
-                      watch("taskDetails.taskAssignTo"),
-                      employeesData?.teams?.nodes!
-                    )?.phone ||
-                      findUserById(
-                        watch("taskDetails.taskAssignTo"),
-                        employeesData?.teams?.nodes!
-                      )?.email}
+                    {employeePhone || employeeEmail || "N/A"}
                   </Text>
                 </div>
               </Flex>
@@ -536,7 +538,13 @@ export const Task_Form_Validation_Schema = Yup.object().shape({
   ),
   client: Yup.string().required().label("Client"),
   totalBillAmount: Yup.number().required().label("Total amount"),
-  paidBillAmount: Yup.number().required().label("Paid amount"),
+  paidBillAmount: Yup.number()
+    .required()
+    .max(
+      Yup.ref("totalBillAmount"),
+      "Paid amount must be less than or equal to the total amount"
+    )
+    .label("Paid amount"),
   deadLine: Yup.date().required().label("Deadline"),
 });
 

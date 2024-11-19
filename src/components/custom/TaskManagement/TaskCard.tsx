@@ -97,7 +97,7 @@ const TaskCard: React.FC<ITaskCardProps> = ({
         </Text>
       </div>
       <Space h={"md"} />
-      <Flex justify={"space-between"} align={"center"}>
+      {/* <Flex justify={"space-between"} align={"center"}>
         <Group>
           <Menu>
             <Menu.Target>
@@ -301,7 +301,7 @@ const TaskCard: React.FC<ITaskCardProps> = ({
             </Avatar>
           </Tooltip>
         </Group>
-      </Flex>
+      </Flex> */}
     </Paper>
   );
 };

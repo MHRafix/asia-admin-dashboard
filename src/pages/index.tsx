@@ -1,34 +1,28 @@
 import { ITravelPackage } from "@/app/api/models/travelPackage.model";
 import { useGetDashboardOverviewData } from "@/app/api/rest-api-hooks/rest.api";
 import protectWithSession from "@/app/config/authProtection/protectWithSession";
+import {
+  All_Employee_ID,
+  Task_Revinew_Query,
+} from "@/app/config/gql-queries/dashboard.query";
 import { GET_TRAVEL_PACKAGES } from "@/app/config/gql-queries/travelPackage.query";
 import { SortType } from "@/app/config/gql-types";
 import { useGetDateFilteredBookings } from "@/app/config/logic/getDateFromRange";
-import {
-  getBookingsDateRange,
-  getTransactionDateRange,
-} from "@/app/config/logic/getDateRanges";
-import DateRangePicker from "@/components/common/DateRangePicker";
+import { getBookingsDateRange } from "@/app/config/logic/getDateRanges";
 import PageTitleArea from "@/components/common/PageTitleArea";
 import TourCard from "@/components/common/Tour/TourCard";
-import {
-  ChartBookingAnalytics,
-  ChartTransactionAnalytics,
-} from "@/components/custom/Dashboard/Charts/ChartAnalytics";
 import DashboardSkeleton from "@/components/custom/Dashboard/DashboardSkeleton";
 import GridOverViewCard from "@/components/custom/Dashboard/OverViewCard.tsx/GridOverViewCard";
+import TaskRevinewCard from "@/components/custom/Dashboard/OverViewCard.tsx/TaskRevinewCard";
 import AdminLayout from "@/components/layouts/AdminLayout";
 import { useQuery as ApolloQuery } from "@apollo/client";
-import { Title } from "@mantine/core";
+import { Space, Title } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useQuery } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 
 const Dashboard = () => {
-  const [transactionDate, onChangeTransactionDate] = useState<[Date, Date]>(
-    getTransactionDateRange()
-  );
   const [bookingsFilterDate, onChangeBookingsFilterDate] = useState<
     [Date, Date]
   >(getBookingsDateRange());
@@ -50,6 +44,28 @@ const Dashboard = () => {
       },
     }
   );
+
+  // All employee ids api
+  const { data: employeeIds, loading: employeeIdsLoading } = ApolloQuery<{
+    allEmployeeIds: string[];
+  }>(All_Employee_ID);
+
+  // task revinew api
+  const {
+    data: taskRevinewData,
+    loading: taskRevinewLoading,
+    refetch: refetchTaskRevinew,
+  } = ApolloQuery<{
+    taskRevinew: number[];
+  }>(Task_Revinew_Query, {
+    variables: {
+      employeeId: employeeIds?.allEmployeeIds,
+    },
+    skip: employeeIdsLoading,
+  });
+
+  console.log({ taskRevinewData: taskRevinewData?.taskRevinew });
+
   // dashboard overview api
   const { triggerApi } = useGetDashboardOverviewData();
   const {
@@ -86,6 +102,7 @@ const Dashboard = () => {
           color: "red",
         });
   }, [bookingsFilterDate]);
+
   const { getDaysArray } = useGetDateFilteredBookings(bookingsFilterDate);
 
   const dates = getDaysArray(
@@ -113,38 +130,20 @@ const Dashboard = () => {
           />
 
           <div className="grid mt-10 mb-10">
-            <div className="xl:flex grid gap-5 items-center">
-              <div className="xl:w-7/12 bg-[#212231] px-2 shadow-2xl rounded-sm">
-                {" "}
-                <div className="mt-2">
-                  <DateRangePicker
-                    dateRange={bookingsFilterDate}
-                    onChangeDate={onChangeBookingsFilterDate}
-                  />
-                </div>
-                <ChartBookingAnalytics
-                  date={dates}
-                  chartData={dashboardOverviewData?.bookingsChartAnalytics!}
-                />
-              </div>
+            <div>
+              <Title fw={500} fz={25} ff={"Nunito sans, sans-serif"} mb={10}>
+                Task Revinew
+              </Title>
 
-              <div className="xl:w-5/12 bg-[#212231] px-2 shadow-2xl rounded-sm">
-                <ChartTransactionAnalytics
-                  transactions={{
-                    totalTransactions:
-                      dashboardOverviewData?.overViewCardData
-                        ?.totalTransactions!,
-                    newAppointments:
-                      dashboardOverviewData?.overViewCardData
-                        ?.totalTransactions!,
-                    newBookings:
-                      dashboardOverviewData?.overViewCardData
-                        ?.totalTransactions!,
-                    newFlights:
-                      dashboardOverviewData?.overViewCardData
-                        ?.totalTransactions!,
-                  }}
-                />
+              <Space h={30} />
+
+              <div className="grid lg:grid-cols-5 gap-5">
+                {new Array(10).fill(10).map((_, idx: number) => (
+                  <TaskRevinewCard
+                    key={idx}
+                    revinew={taskRevinewData?.taskRevinew as number[]}
+                  />
+                ))}
               </div>
             </div>
 
@@ -173,31 +172,30 @@ const Dashboard = () => {
 
 export default protectWithSession(Dashboard);
 /**
- * 	<div className='lg:flex grid gap-8'>
-						<div className='lg:w-7/12 '>
-							<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
-								Transaction analytics
-							</Title>
-							<div className=' bg-[#212231] shadow-2xl rounded-sm'>
-								 <div className='mt-2'>
-								<DateRangePicker
-								dateRange={transactionDate}
-								onChangeDate={onChangeTransactionDate}
-								/>
-							</div> 
-							<ChartTransactionAnalytics
-							transactions={dashboardOverviewData?.overViewCardData!}
-						/>
-					</div>
-				</div>
-				<div className='lg:w-5/12'>
-					
-					<TourCardSkeleton show={!packages?.length} />
-					
-				
-					<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={20}>
-						Popular packages
-					</Title>
-				</div>
-			</div>
+ <ChartTransactionAnalytics
+                  transactions={{
+                    totalTransactions:
+                      dashboardOverviewData?.overViewCardData
+                        ?.totalTransactions!,
+                    newAppointments:
+                      dashboardOverviewData?.overViewCardData
+                        ?.totalTransactions!,
+                    newBookings:
+                      dashboardOverviewData?.overViewCardData
+                        ?.totalTransactions!,
+                    newFlights:
+                      dashboardOverviewData?.overViewCardData
+                        ?.totalTransactions!,
+                  }}
+                />
+                <div className="mt-2">
+                  <DateRangePicker
+                    dateRange={bookingsFilterDate}
+                    onChangeDate={onChangeBookingsFilterDate}
+                  />
+                </div>
+                <ChartBookingAnalytics
+                  date={dates}
+                  chartData={dashboardOverviewData?.bookingsChartAnalytics!}
+                />
  */

@@ -1,94 +1,98 @@
 /* google font import here */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap');
 body {
-  padding: 0;
-  margin: 0;
-  font-family: "Nunito Sans", sans-serif !important;
-  background-color: #ebf0f4;
+	padding: 0;
+	margin: 0;
+	font-family: 'Nunito Sans', sans-serif !important;
+	background-color: #ebf0f4;
 }
 /* @tailwind base; */
 @tailwind components;
 @tailwind utilities;
 
 @layer utilities {
-  .rest_time_wrapper {
-    width: 180px;
-    /* padding: 10px 12px; */
-    text-align: center;
-  }
+	.rest_time_wrapper {
+		width: 180px;
+		/* padding: 10px 12px; */
+		text-align: center;
+	}
 
-  .rest_time_wrapper {
-    display: grid;
-    grid-template-columns: 22% 3% 22% 3% 22% 3% 22%;
-  }
+	.rest_time_wrapper {
+		display: grid;
+		grid-template-columns: 22% 3% 22% 3% 22% 3% 22%;
+	}
 
-  .timer_devider {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 25px;
-    /* color: #00e1ffbb; */
-  }
+	.timer_devider {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 25px;
+		/* color: #00e1ffbb; */
+	}
 }
 
 body {
-  font-size: 18px;
+	font-size: 18px;
 }
 
 .ql-toolbar.ql-snow {
-  border: 1px solid #32344b !important;
+	border: 1px solid #32344b !important;
 }
 
 .ql-container.ql-snow {
-  border: 1px solid #32344b !important;
+	border: 1px solid #32344b !important;
 }
 .PhoneInput .PhoneInputCountry {
-  border: 1px solid #32344b;
-  background-color: transparent;
-  padding: 5px;
-  border-radius: 4px;
+	border: 1px solid #32344b;
+	background-color: transparent;
+	padding: 5px;
+	border-radius: 4px;
 }
 
 .PhoneInput input.PhoneInputInput {
-  font-family: Poppins, sans-serif;
-  height: 42px;
-  -webkit-tap-highlight-color: transparent;
-  line-height: 34px;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  appearance: none;
-  resize: none;
-  box-sizing: border-box;
-  font-size: 14px;
-  width: 100%;
-  color: #fff;
-  display: block;
-  text-align: left;
-  min-height: 36px;
-  padding-left: 12px;
-  padding-right: 12px;
-  border-radius: 4px;
-  outline: none;
-  border: 1px solid #32344b;
-  background-color: transparent;
+	font-family: Poppins, sans-serif;
+	height: 42px;
+	-webkit-tap-highlight-color: transparent;
+	line-height: 34px;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	resize: none;
+	box-sizing: border-box;
+	font-size: 14px;
+	width: 100%;
+	color: #fff;
+	display: block;
+	text-align: left;
+	min-height: 36px;
+	padding-left: 12px;
+	padding-right: 12px;
+	border-radius: 4px;
+	outline: none;
+	border: 1px solid #32344b;
+	background-color: transparent;
 }
 
 .task_status_area::-webkit-scrollbar {
-  width: 0.3rem;
+	width: 0.3rem;
 }
 
 .task_status_area::-webkit-scrollbar-track {
-  background: transparent;
+	background: transparent;
 }
 
 .task_status_area::-webkit-scrollbar-thumb {
-  background: gray;
-  border-radius: 5rem;
+	background: gray;
+	border-radius: 5rem;
 }
 
 .task_status_area {
-  /* height: 680px; */
-  overflow-y: scroll;
+	/* height: 680px; */
+	overflow-y: scroll;
+}
+
+input#mantine-qt4w8yz6l {
+	background-color: #32344b !important;
 }

@@ -1,4 +1,4 @@
-import { Skeleton, Space } from '@mantine/core';
+import { Skeleton } from '@mantine/core';
 import React from 'react';
 
 const DashboardSkeleton: React.FC = () => {
@@ -10,20 +10,18 @@ const DashboardSkeleton: React.FC = () => {
 				<Skeleton h={125} radius={5} />
 				<Skeleton h={125} radius={5} />
 			</div>
-			<div>
-				<Skeleton h={500} radius={5} />
-			</div>
-			<div className='lg:flex grid gap-5'>
-				<div className='lg:w-7/12'>
-					<Skeleton w={300} h={40} radius={5} />
-					<Space h={10} />
-					<Skeleton h={500} radius={5} />
-				</div>
-				<div className='lg:w-5/12'>
-					<Skeleton w={300} h={40} radius={5} />
-					<Space h={10} />
-					<Skeleton h={300} radius={5} />
-				</div>
+
+			<div className='mt-10 grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-5'>
+				<Skeleton h={123} radius={5} />
+				<Skeleton h={123} radius={5} />
+				<Skeleton h={123} radius={5} />
+				<Skeleton h={123} radius={5} />
+				<Skeleton h={123} radius={5} />
+				<Skeleton h={123} radius={5} />
+				<Skeleton h={123} radius={5} />
+				<Skeleton h={123} radius={5} />
+				<Skeleton h={123} radius={5} />
+				<Skeleton h={123} radius={5} />
 			</div>
 		</div>
 	);

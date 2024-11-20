@@ -27,18 +27,13 @@ import { useSetState } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
 import { IconTrash } from '@tabler/icons-react';
 import { MRT_ColumnDef } from 'mantine-react-table';
-import { useRouter } from 'next/router';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { BiCopy } from 'react-icons/bi';
 import { FaCheck } from 'react-icons/fa';
 import { FiTrash } from 'react-icons/fi';
 import TrackPackagePopover from './TrackPackagePopover';
 
 const BookingTable: React.FC<{}> = () => {
-	const router = useRouter();
-	const [page, setPage] = useState<number>(1);
-	const [limit, setLimit] = useState<number>(1000000);
-
 	const [state, setState] = useSetState<IState>({
 		modalOpened: false,
 		operationType: 'create',

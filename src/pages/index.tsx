@@ -28,14 +28,14 @@ const Dashboard = () => {
 	// dashboard overview data
 	const [grandRevinewData, setGrandRevinewData] =
 		useState<IGrandRevinewOverviewData>();
-	const [isLoadingOveviewData, setIsLoadingOverviewData] =
-		useState<boolean>(false);
+	const [isLoadingGrandRevinewData, setIsLoadingGrandRevinewData] =
+		useState<boolean>(true);
 
 	// employee revinew data
 	const [employeeRevinewData, setEmployeeRevinewData] =
 		useState<ITaskRevinewDataType[]>();
 	const [isLoadingEmployeeRevinewData, setIsLoadingEmployeeRevinewData] =
-		useState<boolean>(false);
+		useState<boolean>(true);
 
 	// travel packages api
 	const { data: travelPackages } = ApolloQuery<{
@@ -61,33 +61,33 @@ const Dashboard = () => {
 		useGetDashboardAnalyticsData();
 
 	useEffect(() => {
-		// if (bookingsFilterDate[1]) {
-		// 	setIsLoadingOverviewData(true);
-		// 	overViewDataApi({
-		// 		firstDate: bookingsFilterDate[0]?.toISOString(),
-		// 		lastDate: bookingsFilterDate[1]?.toISOString(),
-		// 	}).then((res) => {
-		// 		setIsLoadingOverviewData(false);
-		// 		setDashboardOverviewData(res?.data);
-		// 	});
-		// }
-
-		taskGrandRevinewApi().then((res) => {
-			setGrandRevinewData(res?.data);
-		});
-	}, [bookingsFilterDate]);
-
-	useEffect(() => {
-		if (!employeeIdsLoading) {
+		try {
+			setIsLoadingGrandRevinewData(true);
 			setIsLoadingEmployeeRevinewData(true);
-			taskRevinewByEmployeeApi({
-				employeeIds: employeeIds?.allEmployeeIds,
-			}).then((res) => {
-				setIsLoadingEmployeeRevinewData(false);
-				setEmployeeRevinewData(res?.data);
+
+			taskGrandRevinewApi().then((res) => {
+				setGrandRevinewData(res?.data);
 			});
+
+			if (!employeeIdsLoading) {
+				setIsLoadingEmployeeRevinewData(true);
+				taskRevinewByEmployeeApi({
+					employeeIds: employeeIds?.allEmployeeIds,
+				}).then((res) => {
+					setEmployeeRevinewData(res?.data);
+					setIsLoadingGrandRevinewData(false);
+					setIsLoadingEmployeeRevinewData(false);
+				});
+			}
+		} catch (error) {
+			setIsLoadingGrandRevinewData(false);
+			setIsLoadingEmployeeRevinewData(false);
 		}
 	}, [employeeIds?.allEmployeeIds]);
+
+	// useEffect(() => {
+
+	// }, [employeeIds?.allEmployeeIds]);
 
 	return (
 		<AdminLayout title='Dashboard'>
@@ -104,7 +104,7 @@ const Dashboard = () => {
 			/>
 
 			<div className='grid gap-8'>
-				{isLoadingOveviewData || isLoadingEmployeeRevinewData ? (
+				{isLoadingGrandRevinewData || isLoadingEmployeeRevinewData ? (
 					<DashboardSkeleton />
 				) : (
 					<div>

@@ -1,37 +1,42 @@
-import { IOverViewCardData } from '@/app/api/models/dashboard.model';
+import { IGrandRevinewOverviewData } from '@/app/api/models/dashboard.model';
 import { Space, Text, ThemeIcon } from '@mantine/core';
+import {
+	IconCircleCheck,
+	IconCurrencyTaka,
+	IconSortDescending,
+	IconTimeline,
+} from '@tabler/icons-react';
 import { useRouter } from 'next/router';
-import { BsBookmarkCheck } from 'react-icons/bs';
-import { SiGotomeeting } from 'react-icons/si';
-import { TbPlaneInflight, TbTransform } from 'react-icons/tb';
+import { TbTransform } from 'react-icons/tb';
 import { CountUp } from 'use-count-up';
 
-const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
-	overViewCardData,
-}) => {
+const GridOverViewCard: React.FC<{
+	grandRevinewData: IGrandRevinewOverviewData;
+}> = ({ grandRevinewData }) => {
 	const router = useRouter();
 
 	return (
-		<div className='grid lg:grid-cols-4 sm:grid-cols-2 gap-5'>
+		<div className='grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5'>
 			<div
 				onClick={() => router.push('/reception_management/appointments')}
 				className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'
 			>
 				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
-					<SiGotomeeting size={30} />
+					<IconCurrencyTaka size={30} />
 				</ThemeIcon>
 				<div>
 					<Text fw={700} fz={25}>
 						<CountUp
 							isCounting
-							end={overViewCardData?.newAppointments}
+							end={grandRevinewData?.grandRevinew}
 							duration={3}
+							thousandsSeparator=','
 						/>
 					</Text>
 
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>
-						New Appointments
+						Grand Revinew
 					</Text>
 				</div>
 			</div>
@@ -40,19 +45,20 @@ const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 				className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'
 			>
 				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
-					<BsBookmarkCheck size={30} />
+					<IconTimeline size={30} />
 				</ThemeIcon>
 				<div>
 					<Text fw={700} fz={25}>
 						<CountUp
 							isCounting
-							end={overViewCardData?.newBookings}
+							end={grandRevinewData?.totalRevinew}
 							duration={3}
+							thousandsSeparator=','
 						/>
 					</Text>
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>
-						New Bookings
+						Total Revinew
 					</Text>
 				</div>
 			</div>
@@ -61,19 +67,42 @@ const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 				className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'
 			>
 				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
-					<TbPlaneInflight size={30} />
+					<IconCircleCheck size={30} />
 				</ThemeIcon>
 				<div>
 					<Text fw={700} fz={25}>
 						<CountUp
 							isCounting
-							end={overViewCardData?.newFlights}
+							end={grandRevinewData?.totalPaidRevinew}
 							duration={3}
+							thousandsSeparator=','
 						/>
 					</Text>
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>
-						New Flight
+						Total Paid Revinew
+					</Text>
+				</div>
+			</div>
+			<div
+				onClick={() => router.push('/')}
+				className='flex items-center bg-[#212231] px-4 py-5 rounded-md cursor-pointer gap-5 shadow-2xl'
+			>
+				<ThemeIcon color='violet' size={60} variant='light' radius={8}>
+					<IconSortDescending size={30} />
+				</ThemeIcon>
+				<div>
+					<Text fw={700} fz={25}>
+						<CountUp
+							isCounting
+							end={grandRevinewData?.totalDueRavinew}
+							duration={3}
+							thousandsSeparator=','
+						/>
+					</Text>
+					<Space h={0} />
+					<Text fz={15} fw={400} color='#55587b'>
+						Total Due Revinew
 					</Text>
 				</div>
 			</div>
@@ -88,13 +117,14 @@ const GridOverViewCard: React.FC<{ overViewCardData: IOverViewCardData }> = ({
 					<Text fw={700} fz={25}>
 						<CountUp
 							isCounting
-							end={overViewCardData?.totalTransactions}
+							end={grandRevinewData?.totalExpence}
 							duration={3}
+							thousandsSeparator=','
 						/>
 					</Text>
 					<Space h={0} />
 					<Text fz={15} fw={400} color='#55587b'>
-						Total Transaction
+						Total Expence
 					</Text>
 				</div>
 			</div>

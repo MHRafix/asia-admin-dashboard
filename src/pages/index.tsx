@@ -1,5 +1,5 @@
 import {
-	IDashboardOverview,
+	IGrandRevinewOverviewData,
 	ITaskRevinewDataType,
 } from '@/app/api/models/dashboard.model';
 import { ITravelPackage } from '@/app/api/models/travelPackage.model';
@@ -17,22 +17,24 @@ import GridOverViewCard from '@/components/custom/Dashboard/OverViewCard.tsx/Gri
 import TaskRevinewCard from '@/components/custom/Dashboard/OverViewCard.tsx/TaskRevinewCard';
 import AdminLayout from '@/components/layouts/AdminLayout';
 import { useQuery as ApolloQuery } from '@apollo/client';
-import { Select, Space, Title } from '@mantine/core';
+import { Space, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 const Dashboard = () => {
 	const [bookingsFilterDate, onChangeBookingsFilterDate] = useState<
 		[Date, Date]
 	>(getBookingsDateRange());
-	const [dashboardOverviewData, setDashboardOverviewData] =
-		useState<IDashboardOverview>();
+
+	// dashboard overview data
+	const [grandRevinewData, setGrandRevinewData] =
+		useState<IGrandRevinewOverviewData>();
 	const [isLoadingOveviewData, setIsLoadingOverviewData] =
 		useState<boolean>(false);
 
-	const [revinewType, setRevinewType] = useState<string>('By Employee');
-
-	const [revinewData, setRevinewData] = useState<ITaskRevinewDataType[]>();
-	const [isLoadingRevinewData, setIsLoadingRevinewData] =
+	// employee revinew data
+	const [employeeRevinewData, setEmployeeRevinewData] =
+		useState<ITaskRevinewDataType[]>();
+	const [isLoadingEmployeeRevinewData, setIsLoadingEmployeeRevinewData] =
 		useState<boolean>(false);
 
 	// travel packages api
@@ -55,34 +57,37 @@ const Dashboard = () => {
 	}>(All_Employee_ID);
 
 	// dashboard overview api
-	const { overViewDataApi, taskRevinewDataApi } =
+	const { taskGrandRevinewApi, taskRevinewByEmployeeApi } =
 		useGetDashboardAnalyticsData();
 
 	useEffect(() => {
-		if (bookingsFilterDate[1]) {
-			setIsLoadingOverviewData(true);
-			overViewDataApi({
-				firstDate: bookingsFilterDate[0]?.toISOString(),
-				lastDate: bookingsFilterDate[1]?.toISOString(),
-			}).then((res) => {
-				setIsLoadingOverviewData(false);
-				setDashboardOverviewData(res?.data);
-			});
-		}
+		// if (bookingsFilterDate[1]) {
+		// 	setIsLoadingOverviewData(true);
+		// 	overViewDataApi({
+		// 		firstDate: bookingsFilterDate[0]?.toISOString(),
+		// 		lastDate: bookingsFilterDate[1]?.toISOString(),
+		// 	}).then((res) => {
+		// 		setIsLoadingOverviewData(false);
+		// 		setDashboardOverviewData(res?.data);
+		// 	});
+		// }
+
+		taskGrandRevinewApi().then((res) => {
+			setGrandRevinewData(res?.data);
+		});
 	}, [bookingsFilterDate]);
 
 	useEffect(() => {
 		if (!employeeIdsLoading) {
-			setIsLoadingRevinewData(true);
-			taskRevinewDataApi({
-				employeeIds:
-					revinewType === 'Grand Total' ? [] : employeeIds?.allEmployeeIds,
+			setIsLoadingEmployeeRevinewData(true);
+			taskRevinewByEmployeeApi({
+				employeeIds: employeeIds?.allEmployeeIds,
 			}).then((res) => {
-				setIsLoadingRevinewData(false);
-				setRevinewData(res?.data);
+				setIsLoadingEmployeeRevinewData(false);
+				setEmployeeRevinewData(res?.data);
 			});
 		}
-	}, [employeeIds?.allEmployeeIds, revinewType]);
+	}, [employeeIds?.allEmployeeIds]);
 
 	return (
 		<AdminLayout title='Dashboard'>
@@ -99,13 +104,11 @@ const Dashboard = () => {
 			/>
 
 			<div className='grid gap-8'>
-				{isLoadingOveviewData || isLoadingRevinewData ? (
+				{isLoadingOveviewData || isLoadingEmployeeRevinewData ? (
 					<DashboardSkeleton />
 				) : (
 					<div>
-						<GridOverViewCard
-							overViewCardData={dashboardOverviewData?.overViewCardData!}
-						/>
+						<GridOverViewCard grandRevinewData={grandRevinewData!} />
 
 						<div className='grid mt-10 mb-10'>
 							<div>
@@ -124,14 +127,6 @@ const Dashboard = () => {
 											dateRange={bookingsFilterDate}
 											onChangeDate={onChangeBookingsFilterDate}
 										/>
-
-										<Select
-											data={['Grand Total', 'By Employee']}
-											onChange={(e) => setRevinewType(e!)}
-											value={revinewType}
-											size='md'
-											className='mt-2'
-										/>
 									</div>
 								</div>
 
@@ -139,7 +134,7 @@ const Dashboard = () => {
 
 								<div className='grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5'>
 									<>
-										{revinewData?.map(
+										{employeeRevinewData?.map(
 											(taskRevinew: ITaskRevinewDataType, idx: number) => (
 												<TaskRevinewCard
 													key={idx}

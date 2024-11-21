@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import {
-	IDashboardOverview,
+	IGrandRevinewOverviewData,
 	ITaskRevinewDataType,
 } from '../models/dashboard.model';
 
@@ -19,24 +19,29 @@ export const getCities = async (placeName: string) => {
 
 export const useGetDashboardAnalyticsData = () => {
 	const userInfo = Cookies.get('user') && JSON.parse(Cookies.get('user')!);
-	const overViewDataApi = (query: IDashboardOverviewQueryParams) =>
-		axios.get<IDashboardOverview>(
-			`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/overview`,
-			{
-				params: query,
-				headers: {
-					Authorization: `Bearer ${userInfo?.accessToken}`,
-				},
-			}
-		);
+	// const overViewDataApi = (query: IDashboardOverviewQueryParams) =>
+	// 	axios.get<IDashboardOverview>(
+	// 		`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/overview`,
+	// 		{
+	// 			params: query,
+	// 			headers: {
+	// 				Authorization: `Bearer ${userInfo?.accessToken}`,
+	// 			},
+	// 		}
+	// 	);
 
-	const taskRevinewDataApi = (body: ITaskRevinewApiBodyType) =>
+	const taskRevinewByEmployeeApi = (body: ITaskRevinewApiBodyType) =>
 		axios.post<ITaskRevinewDataType[]>(
-			`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/task-revinew`,
+			`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/task-revinew-by-employee`,
 			body
 		);
 
-	return { overViewDataApi, taskRevinewDataApi };
+	const taskGrandRevinewApi = () =>
+		axios.get<IGrandRevinewOverviewData>(
+			`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/task-grand-revinew`
+		);
+
+	return { taskRevinewByEmployeeApi, taskGrandRevinewApi };
 };
 
 export interface IDashboardOverviewQueryParams {

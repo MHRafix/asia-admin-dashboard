@@ -32,14 +32,14 @@ const BusinessData = () => {
 	const {
 		data: clients,
 		loading: fetching__clients,
-		refetch: reFetching__clients,
+		refetch: isRefetching,
 	} = useQuery<{
 		Clients: ClientWithPagination;
 	}>(GET_CLIENTS_QUERY);
 
 	const handleRefetch = (variables: any) => {
 		setState({ refetching: true, operationId: '', modalOpened: false });
-		reFetching__clients(variables).finally(() => {
+		isRefetching(variables).finally(() => {
 			setState({ refetching: false });
 		});
 	};
@@ -58,10 +58,6 @@ const BusinessData = () => {
 				accessorKey: 'phone',
 				header: 'Phone Number',
 			},
-			{
-				accessorKey: 'address',
-				header: 'Address',
-			},
 		],
 		[]
 	);
@@ -71,7 +67,7 @@ const BusinessData = () => {
 		Remove_Client_Data,
 		Notify({
 			sucTitle: 'Client data removed',
-			action: () => reFetching__clients(),
+			action: () => isRefetching(),
 		})
 	);
 
@@ -79,8 +75,8 @@ const BusinessData = () => {
 		<AdminLayout>
 			<PageTitleArea
 				title='Clients contact list'
-				tagline='Track contact details of clients'
-				currentPathName='Clients list'
+				tagline='Client business data'
+				currentPathName='Client list'
 				othersPath={[
 					{
 						pathName: 'Home',
@@ -102,7 +98,7 @@ const BusinessData = () => {
 			>
 				<ClientDataForm
 					onSuccess={() => {
-						reFetching__clients();
+						isRefetching();
 						setState({
 							modalOpened: false,
 						});
@@ -182,7 +178,7 @@ const BusinessData = () => {
 						</Button>
 					</>
 				}
-				loading={state.refetching}
+				loading={state.refetching || removing}
 			/>
 
 			<Space h={30} />

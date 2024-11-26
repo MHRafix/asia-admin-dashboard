@@ -13,17 +13,19 @@ import { useMutation } from '@apollo/client';
 import { Button } from '@mantine/core';
 import { NextPage } from 'next';
 import Router from 'next/router';
+import { useEffect } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 const Services: NextPage = () => {
+	const { user } = useGetSession(); // user session
 	const { getingServices, services, refetchServices } = useGetServices();
-	const { user } = useGetSession();
 
+	// when service creation success
 	const onSuccess = (res: { createService: IService }) => {
-		refetchServices();
 		Router?.push(`/it_sector/services/${res?.createService?._id}`);
 	};
 
+	// create service API
 	const [createService, { loading: creatingService }] = useMutation(
 		CREATE_SERVICE,
 		Notify({
@@ -33,6 +35,11 @@ const Services: NextPage = () => {
 			action: onSuccess,
 		})
 	);
+
+	// refetch services
+	useEffect(() => {
+		refetchServices();
+	}, []);
 
 	return (
 		<AdminLayout title='Services'>
@@ -75,13 +82,17 @@ const Services: NextPage = () => {
 
 			<div className='grid md:grid-cols-2 lg:grid-cols-3 gap-5'>
 				<ServiceSkeleton show={getingServices} />
-				{services?.map((service: IService, idx: number) => (
-					<ServiceCard
-						key={idx}
-						service={service}
-						refetchServices={refetchServices}
-					/>
-				))}
+				{!getingServices && (
+					<>
+						{services?.map((service: IService, idx: number) => (
+							<ServiceCard
+								key={idx}
+								service={service}
+								refetchServices={refetchServices}
+							/>
+						))}
+					</>
+				)}
 			</div>
 
 			<EmptyPanel

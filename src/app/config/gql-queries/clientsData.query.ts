@@ -6,7 +6,6 @@ export const GET_CLIENTS_QUERY = gql`
 			nodes {
 				_id
 				name
-				address
 				email
 				phone
 			}

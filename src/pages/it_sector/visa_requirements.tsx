@@ -12,19 +12,20 @@ import AdminLayout from '@/components/layouts/AdminLayout';
 import { useMutation } from '@apollo/client';
 import { Button, Space } from '@mantine/core';
 import Router from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 const VisaRequirements: React.FC = () => {
-	const { gettingRequirements, requirements, refetchRequirements } =
-		useGetRequirements(); // visa requirements fetching
+	const { requirementsLoading, requirements, onRefetch } = useGetRequirements(); // visa requirements fetching
 
 	const { user } = useGetSession(); // user session
 
+	// when update success
 	const onSuccess = (res: { createVisaReq: IVisaReq }) => {
-		refetchRequirements();
 		Router?.push(`/it_sector/visa_requirements/${res?.createVisaReq?._id}`);
 	};
+
+	// requirement create API
 	const [createRequirement, { loading: creatingRequirement }] = useMutation(
 		CREATE_REQUIREMENT,
 		Notify({
@@ -34,6 +35,11 @@ const VisaRequirements: React.FC = () => {
 			action: onSuccess,
 		})
 	);
+
+	// refetch requirements API
+	useEffect(() => {
+		onRefetch();
+	}, []);
 
 	return (
 		<AdminLayout title='Visa requirements'>
@@ -74,18 +80,22 @@ const VisaRequirements: React.FC = () => {
 			<Space h={'sm'} />
 
 			<div className='grid md:grid-cols-2 lg:grid-cols-3 gap-5'>
-				<ServiceSkeleton show={gettingRequirements} />
+				<ServiceSkeleton show={requirementsLoading} />
 
-				{requirements?.map((req: IVisaReq, idx: number) => (
-					<RequirementCard
-						key={idx}
-						visaReq={req}
-						refetchVisaReq={refetchRequirements}
-					/>
-				))}
+				{!requirementsLoading && (
+					<>
+						{requirements?.map((req: IVisaReq, idx: number) => (
+							<RequirementCard
+								key={idx}
+								visaReq={req}
+								refetchVisaReq={onRefetch}
+							/>
+						))}
+					</>
+				)}
 			</div>
 			<EmptyPanel
-				isShow={!requirements?.length && !gettingRequirements}
+				isShow={!requirements?.length && !requirementsLoading}
 				title='Oops sorry, No visa requirements article found!'
 				imgPath='/req.png'
 			/>

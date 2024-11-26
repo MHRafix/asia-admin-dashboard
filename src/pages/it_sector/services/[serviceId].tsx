@@ -29,6 +29,7 @@ import {
 import { useForm, yupResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import Image from 'next/image';
+import Router from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { HiOutlinePhotograph } from 'react-icons/hi';
@@ -64,7 +65,10 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 		setThumbnail(service?.thumbnail!);
 	}, [service]);
 
-	const { updateService, updatingService } = useUpdateService(refetchService);
+	const { updateService, updatingService } = useUpdateService(() => {
+		refetchService();
+		Router?.push('/it_sector/services');
+	});
 
 	const handleUploadPackageThumbnail = async (
 		file: File,
@@ -142,7 +146,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 								loading={updatingService}
 								mb={20}
 							>
-								Save Details
+								Save
 							</Button>
 						}
 					/>

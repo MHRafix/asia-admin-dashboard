@@ -13,6 +13,7 @@ import { Button, FileButton, Input, Space, Text } from '@mantine/core';
 import { useForm, yupResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import Image from 'next/image';
+import Router from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { FiUpload } from 'react-icons/fi';
 import { HiOutlinePhotograph } from 'react-icons/hi';
@@ -23,7 +24,6 @@ const EditBlog: React.FC<{ blogId: string }> = ({ blogId }) => {
 	const [banner, setBanner] = useState('');
 
 	const { gettingBlog, blog, refetchBlog } = useGetBlog(blogId);
-	console.log(blog);
 
 	const [description, setDescription] = useState(blog?.description);
 
@@ -43,7 +43,10 @@ const EditBlog: React.FC<{ blogId: string }> = ({ blogId }) => {
 		setThumbnail(blog?.image!);
 	}, [blog]);
 
-	const { updateBlog, updatingBlog } = useUpdateBlog(refetchBlog);
+	const { updateBlog, updatingBlog } = useUpdateBlog(() => {
+		refetchBlog();
+		Router?.push('/it_sector/blogs');
+	});
 
 	const handleUploadPackageThumbnail = async (
 		file: File,
@@ -117,7 +120,7 @@ const EditBlog: React.FC<{ blogId: string }> = ({ blogId }) => {
 						]}
 						actionComponent={
 							<Button color='teal' type='submit' loading={updatingBlog} mb={20}>
-								Save Details
+								Save
 							</Button>
 						}
 					/>

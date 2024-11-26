@@ -11,8 +11,8 @@ import { IBlog } from '../models/blog.model';
 export const useGetBlogs = () => {
 	const {
 		data,
-		loading: gettingBlogs,
-		refetch: refetchBlogs,
+		loading: blogsLoading,
+		refetch: onRefetch,
 	} = useQuery<{
 		Blogs: { nodes: IBlog[] };
 	}>(GET_BLOGS_QUERY, {
@@ -21,7 +21,7 @@ export const useGetBlogs = () => {
 			limit: 100,
 		},
 	});
-	return { blogs: data?.Blogs?.nodes, gettingBlogs, refetchBlogs };
+	return { blogs: data?.Blogs?.nodes, blogsLoading, onRefetch };
 };
 
 export const useGetBlog = (id: string) => {

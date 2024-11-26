@@ -12,18 +12,22 @@ import AdminLayout from '@/components/layouts/AdminLayout';
 import { useMutation } from '@apollo/client';
 import { Button, Space } from '@mantine/core';
 import Router from 'next/router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 const Blogs: React.FC = () => {
-	const { gettingBlogs, blogs, refetchBlogs } = useGetBlogs();
-
+	// user session
 	const { user } = useGetSession();
 
+	// blogs API
+	const { blogsLoading, blogs, onRefetch } = useGetBlogs();
+
+	// when blog update success
 	const onSuccess = (res: { createBlog: IBlog }) => {
-		refetchBlogs();
 		Router?.push(`/it_sector/blogs/${res?.createBlog?._id}`);
 	};
+
+	// create blog API
 	const [createBlog, { loading: creatingBlog }] = useMutation(
 		CREATE_BLOG,
 		Notify({
@@ -33,6 +37,11 @@ const Blogs: React.FC = () => {
 			action: onSuccess,
 		})
 	);
+
+	// refetch blogs API
+	useEffect(() => {
+		onRefetch();
+	}, []);
 
 	return (
 		<AdminLayout title='Blog posts'>
@@ -73,16 +82,20 @@ const Blogs: React.FC = () => {
 			<Space h={'sm'} />
 
 			<div className='grid md:grid-cols-2 lg:grid-cols-3 gap-5'>
-				<ServiceSkeleton show={gettingBlogs} />
+				<ServiceSkeleton show={blogsLoading} />
 
-				{blogs?.map((blog: IBlog, idx: number) => (
-					<BlogCard key={idx} blog={blog} refetchBlog={refetchBlogs} />
-				))}
+				{!blogsLoading && (
+					<>
+						{blogs?.map((blog: IBlog, idx: number) => (
+							<BlogCard key={idx} blog={blog} refetchBlog={onRefetch} />
+						))}
+					</>
+				)}
 			</div>
 
 			<EmptyPanel
 				imgPath='/emptyBlog.png'
-				isShow={!blogs?.length && !gettingBlogs}
+				isShow={!blogs?.length && !blogsLoading}
 				title='There is no blogs found!'
 			/>
 		</AdminLayout>

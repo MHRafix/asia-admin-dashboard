@@ -11,7 +11,7 @@ import { IVisaReq } from '../models/visaRequirements.model';
 export const useGetRequirements = () => {
 	const {
 		data,
-		loading: gettingRequirements,
+		loading: requirementsLoading,
 		refetch: refetchRequirements,
 	} = useQuery<{
 		VisaRequirements: { nodes: IVisaReq[] };
@@ -23,8 +23,8 @@ export const useGetRequirements = () => {
 	});
 	return {
 		requirements: data?.VisaRequirements?.nodes,
-		gettingRequirements,
-		refetchRequirements,
+		requirementsLoading,
+		onRefetch: refetchRequirements,
 	};
 };
 

@@ -37,7 +37,6 @@ const ClientDataForm: React.FC<{
 		Notify({
 			sucTitle: 'Client data created',
 			action: () => {
-				// reset({ name: '', address: '', email: '', phone: '' });
 				onSuccess();
 			},
 		})
@@ -49,7 +48,6 @@ const ClientDataForm: React.FC<{
 		Notify({
 			sucTitle: 'Client data updated',
 			action: () => {
-				// reset({ name: '', address: '', email: '', phone: '' });
 				onSuccess();
 			},
 		})
@@ -60,11 +58,11 @@ const ClientDataForm: React.FC<{
 		setValue('name', operationPayload?.name as string);
 		setValue('email', operationPayload?.email as string);
 		setValue('phone', operationPayload?.phone as string);
-		setValue('address', operationPayload?.address as string);
 	}, [operationPayload]);
 
 	// submit form function
 	const onSubmit = (payload: IClientDataFormState) => {
+		console.log(payload);
 		// if create
 		if (operationType === 'create') {
 			createClientData({
@@ -123,25 +121,12 @@ const ClientDataForm: React.FC<{
 
 				<Space h={'sm'} />
 
-				<Input.Wrapper
-					size='md'
-					label='Address'
-					error={<ErrorMessage name='address' errors={errors} />}
-				>
-					<Input
-						size='lg'
-						{...register('address')}
-						placeholder='Type address'
-					/>
-				</Input.Wrapper>
-
-				<Space h={'sm'} />
-
 				<Button
 					type='submit'
 					loading={creating || updating}
 					color='teal'
 					fullWidth
+					size='md'
 				>
 					Save
 				</Button>

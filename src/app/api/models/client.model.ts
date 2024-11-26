@@ -8,7 +8,6 @@ export interface ClientWithPagination {
 export interface IClient {
 	_id: string;
 	name: string;
-	address: string;
 	email: string;
 	phone: string;
 }

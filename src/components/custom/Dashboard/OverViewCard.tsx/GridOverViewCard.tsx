@@ -117,7 +117,7 @@ const GridOverViewCard: React.FC<{
 					<Text fw={700} fz={25}>
 						<CountUp
 							isCounting
-							end={grandRevinewData?.totalExpence}
+							end={grandRevinewData?.totalExpense}
 							duration={3}
 							thousandsSeparator=','
 						/>

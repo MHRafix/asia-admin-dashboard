@@ -8,7 +8,7 @@ export interface IBookingsChartChartAnalytics {
 }
 
 export interface IGrandRevinewOverviewData {
-	totalExpence: number;
+	totalExpense: number;
 	totalRevinew: number;
 	totalPaidRevinew: number;
 	totalDueRavinew: number;

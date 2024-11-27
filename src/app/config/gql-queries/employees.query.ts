@@ -40,6 +40,7 @@ export const EMPLOYEES_DROPDOWN_QUERY = gql`
 				avatar
 				email
 				phone
+				role
 			}
 		}
 	}

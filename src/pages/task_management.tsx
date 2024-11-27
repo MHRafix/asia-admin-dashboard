@@ -1,6 +1,5 @@
 import { useGetTasksByStatus } from '@/app/api/gql-api-hooks/task-management.api';
 import { IEmployees } from '@/app/api/models/employees.model';
-import { IUser } from '@/app/api/models/users.model';
 import protectWithSession from '@/app/config/authProtection/protectWithSession';
 import { EMPLOYEES_DROPDOWN_QUERY } from '@/app/config/gql-queries/employees.query';
 import { MatchOperator, Task, USER_ROLE } from '@/app/config/gql-types';
@@ -66,7 +65,12 @@ const TaskManagement = () => {
 
 	// get task query
 	const { taskByStatus, __LoadingTask, __refetchTaskList } =
-		useGetTasksByStatus(user as IUser, filterQuery);
+		useGetTasksByStatus(
+			employeesData?.teams?.nodes?.find(
+				(member: IEmployees) => member?.email === user?.email
+			) as IEmployees,
+			filterQuery
+		);
 
 	return (
 		<AdminLayout title='Task Management'>

@@ -160,17 +160,17 @@ export const menus = [
 			},
 		],
 	},
-
+	{
+		label: 'Expense Calculation',
+		icon: <MdOutlineCalculate size={20} />,
+		href: '/expense_calculation',
+	},
 	{
 		label: 'Rating & Reviews',
 		icon: <MdOutlineRateReview size={20} />,
 		href: '/rating_&&_reviews',
 	},
-	{
-		label: 'Expenses Calculation',
-		icon: <MdOutlineCalculate size={20} />,
-		href: '/expenses_calculation',
-	},
+
 	// {
 	// 	label: 'Notifications',
 	// 	icon: <MdOutlineNotifications />,

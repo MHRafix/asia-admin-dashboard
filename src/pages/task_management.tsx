@@ -204,11 +204,13 @@ const TaskManagement = () => {
 									</>
 								)}
 							</Box>
-							<EmptyPanel
-								isShow={Boolean(!taskByStatus?.pendingTasks?.length)}
-								title='No pending task'
-								imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
-							/>
+							{!__LoadingTask && (
+								<EmptyPanel
+									isShow={Boolean(!taskByStatus?.pendingTasks?.length)}
+									title='No pending task'
+									imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
+								/>
+							)}
 						</div>
 					</Tabs.Panel>
 
@@ -239,11 +241,13 @@ const TaskManagement = () => {
 									</>
 								)}
 							</Box>
-							<EmptyPanel
-								isShow={Boolean(!taskByStatus?.inProgressTask?.length)}
-								title='No in-progress task'
-								imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
-							/>
+							{!__LoadingTask && (
+								<EmptyPanel
+									isShow={Boolean(!taskByStatus?.inProgressTask?.length)}
+									title='No in-progress task'
+									imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
+								/>
+							)}
 						</div>
 					</Tabs.Panel>
 
@@ -275,11 +279,13 @@ const TaskManagement = () => {
 									</>
 								)}
 							</Box>
-							<EmptyPanel
-								isShow={Boolean(!taskByStatus?.doneTask?.length)}
-								title='No done task'
-								imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
-							/>
+							{!__LoadingTask && (
+								<EmptyPanel
+									isShow={Boolean(!taskByStatus?.doneTask?.length)}
+									title='No done task'
+									imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
+								/>
+							)}
 						</div>
 					</Tabs.Panel>
 					<Tabs.Panel value='revision_task'>
@@ -310,11 +316,13 @@ const TaskManagement = () => {
 									</>
 								)}
 							</Box>
-							<EmptyPanel
-								isShow={Boolean(!taskByStatus?.revisionTask?.length)}
-								title='No revision task'
-								imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
-							/>
+							{!__LoadingTask && (
+								<EmptyPanel
+									isShow={Boolean(!taskByStatus?.revisionTask?.length)}
+									title='No revision task'
+									imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
+								/>
+							)}
 						</div>
 					</Tabs.Panel>
 				</Tabs>

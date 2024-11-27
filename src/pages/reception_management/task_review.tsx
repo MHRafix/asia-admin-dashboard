@@ -199,13 +199,13 @@ const TaskReview = () => {
 									</>
 								)}
 							</Box>
-							{!__LoadingTask && (
-								<EmptyPanel
-									isShow={Boolean(!taskByStatus?.revisionTask?.length)}
-									title='No revision task'
-									imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
-								/>
-							)}
+							<EmptyPanel
+								isShow={
+									Boolean(!taskByStatus?.revisionTask?.length) && !__LoadingTask
+								}
+								title='No revision task'
+								imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
+							/>
 						</div>
 					</Tabs.Panel>
 
@@ -236,13 +236,14 @@ const TaskReview = () => {
 									</>
 								)}
 							</Box>
-							{!__LoadingTask && (
-								<EmptyPanel
-									isShow={Boolean(!taskByStatus?.completedTask?.length)}
-									title='No completed task'
-									imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
-								/>
-							)}
+							<EmptyPanel
+								isShow={
+									Boolean(!taskByStatus?.completedTask?.length) &&
+									!__LoadingTask
+								}
+								title='No completed task'
+								imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
+							/>
 						</div>
 					</Tabs.Panel>
 
@@ -274,13 +275,14 @@ const TaskReview = () => {
 									</>
 								)}
 							</Box>
-							{!__LoadingTask && (
-								<EmptyPanel
-									isShow={Boolean(!taskByStatus?.cancelledTask?.length)}
-									title='No cancelled task'
-									imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
-								/>
-							)}
+							<EmptyPanel
+								isShow={
+									Boolean(!taskByStatus?.cancelledTask?.length) &&
+									!__LoadingTask
+								}
+								title='No cancelled task'
+								imgPath='https://icons.veryicon.com/png/o/education-technology/education-industry-linear-icon/task-7.png'
+							/>
 						</div>
 					</Tabs.Panel>
 				</Tabs>

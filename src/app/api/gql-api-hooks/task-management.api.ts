@@ -81,7 +81,7 @@ export const useGetTasksByStatus = (user: IEmployees, filterQuery: any) => {
 		taskList: TaskManagementWithPagination;
 	}>(Get_Task_List_Query, {
 		variables: handleVariableForQuery(user?.role),
-		skip: !user?._id,
+		// skip: !user?._id,
 	});
 
 	const pendingTasks = tasks?.taskList?.nodes?.filter(

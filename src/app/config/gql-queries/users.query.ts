@@ -40,6 +40,14 @@ export const USERS_QUERY_FOR_DROPDOWN = gql`
 	}
 `;
 
+export const Update_User_And_Employee_Role = gql`
+	mutation Update_User_And_Employee_Role(
+		$input: UpdateUserAndEmployeeRoleInput!
+	) {
+		updateUserAndEmployeeRole(input: $input)
+	}
+`;
+
 // remove user
 export const REMOVE_USER = gql`
 	mutation REMOVE_CUSTOMER($id: String) {

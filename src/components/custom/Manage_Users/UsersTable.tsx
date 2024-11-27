@@ -1,12 +1,11 @@
 import { IPaginationMeta } from '@/app/api/models/CommonPagination.model';
+import { IEmployees } from '@/app/api/models/employees.model';
 import { IUser } from '@/app/api/models/users.model';
 import { Notify } from '@/app/config/alertNotification/Notification';
+import { EMPLOYEES_QUERY } from '@/app/config/gql-queries/employees.query';
+import { CREATE_USER_MUTATION } from '@/app/config/gql-queries/user.query';
 import {
-	CREATE_USER_MUTATION,
-	MANAGE_USER_ACCESS_MUTATION,
-} from '@/app/config/gql-queries/user.query';
-import {
-	BULK_REMOVE_USER,
+	Update_User_And_Employee_Role,
 	USERS_QUERY,
 } from '@/app/config/gql-queries/users.query';
 import { SortType, USER_ROLE } from '@/app/config/gql-types';
@@ -35,12 +34,10 @@ import {
 	Text,
 } from '@mantine/core';
 import { useDisclosure, useSetState } from '@mantine/hooks';
-import { showNotification } from '@mantine/notifications';
 import { IconAccessible, IconPlus } from '@tabler/icons-react';
 import { MRT_ColumnDef } from 'mantine-react-table';
 import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FiTrash } from 'react-icons/fi';
 import { TbUsers } from 'react-icons/tb';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
@@ -71,22 +68,6 @@ const UsersTable: React.FC<{}> = () => {
 			input: { limit: 10000000, page: 1, sort: SortType.Desc, sortBy: '_id' },
 		},
 	});
-
-	// remove bulk bookings
-	const [bulkDeleteCustomer, { loading: bulkDeleting }] = useMutation(
-		BULK_REMOVE_USER,
-		{
-			onCompleted: () => {
-				refetch();
-				showNotification({
-					title: 'Customers bulk delete successful!',
-					color: 'red',
-					icon: <FiTrash size={20} />,
-					message: '',
-				});
-			},
-		}
-	);
 
 	// form initiate
 	const {
@@ -188,7 +169,7 @@ const UsersTable: React.FC<{}> = () => {
 
 	// update user access
 	const [accessMutate, { loading: access__loading }] = useMutation(
-		MANAGE_USER_ACCESS_MUTATION,
+		Update_User_And_Employee_Role,
 		Notify({
 			sucTitle: 'User access changed',
 			action: () => {
@@ -198,6 +179,11 @@ const UsersTable: React.FC<{}> = () => {
 			},
 		})
 	);
+
+	// get all employee
+	const { data: employeesData, loading: loadingEmployee } = useQuery<{
+		teams: { nodes: IEmployees[]; meta: IPaginationMeta };
+	}>(EMPLOYEES_QUERY);
 
 	return (
 		<>
@@ -249,8 +235,12 @@ const UsersTable: React.FC<{}> = () => {
 								accessMutate({
 									variables: {
 										input: {
-											_id: user?._id,
+											user_id: user?._id,
 											role: access,
+											employee_id: employeesData?.teams?.nodes?.find(
+												(employee: IEmployees) =>
+													employee?.email === user?.email
+											)?._id,
 										},
 									},
 								})
@@ -258,6 +248,7 @@ const UsersTable: React.FC<{}> = () => {
 							loading={access__loading}
 							size='sm'
 							color='teal'
+							disabled={loadingEmployee}
 						>
 							Change access
 						</Button>

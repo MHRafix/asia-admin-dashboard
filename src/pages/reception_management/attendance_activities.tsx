@@ -305,7 +305,7 @@
 // export default protectWithSession(AttendanceActivities);
 export interface IState {
 	modalOpened: boolean;
-	operationType: 'create' | 'update';
+	operationType: 'create' | 'update' | null;
 	operationId?: string | null;
 	operationPayload?: any;
 	refetching: boolean;

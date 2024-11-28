@@ -10,7 +10,8 @@ import {
 	Expenses_List_Query,
 	Update_Expense_Mutation,
 } from '@/app/config/gql-queries/expense.query';
-import { MatchOperator } from '@/app/config/gql-types';
+import { MatchOperator, USER_ROLE } from '@/app/config/gql-types';
+import { useGetSession } from '@/app/config/logic/getSession';
 import DrawerWrapper from '@/components/common/Drawer/DrawerWrapper';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
@@ -30,6 +31,9 @@ import * as Yup from 'yup';
 import { IState } from './reception_management/attendance_activities';
 
 const ExpenseList: NextPage = () => {
+	const { user } = useGetSession(); // user session
+
+	// states
 	const [state, setState] = useSetState<IState>({
 		modalOpened: false,
 		operationType: 'create',
@@ -134,6 +138,7 @@ const ExpenseList: NextPage = () => {
 		Expense_Remove_Mutation,
 		Notify({
 			sucTitle: 'Expense removed successfully',
+			errMessage: 'Failed to remove expense.',
 			action: () => refetchExpense(),
 		})
 	);
@@ -194,6 +199,7 @@ const ExpenseList: NextPage = () => {
 									operationPayload: row,
 								});
 							}}
+							disabled={user?.role !== USER_ROLE.ADMIN}
 						>
 							Edit
 						</Menu.Item>
@@ -216,7 +222,7 @@ const ExpenseList: NextPage = () => {
 									onConfirm: () =>
 										removeExpense({
 											variables: {
-												payload: {
+												input: {
 													key: '_id',
 													operator: MatchOperator.Eq,
 													value: row?._id,
@@ -225,6 +231,7 @@ const ExpenseList: NextPage = () => {
 										}),
 								})
 							}
+							disabled={user?.role !== USER_ROLE.ADMIN}
 						>
 							Remove
 						</Menu.Item>
@@ -237,7 +244,11 @@ const ExpenseList: NextPage = () => {
 							variant='light'
 							leftIcon={<IconPlus size={16} />}
 							onClick={() =>
-								setState({ modalOpened: true, operationType: 'create' })
+								setState({
+									modalOpened: true,
+									operationType: 'create',
+									operationPayload: {},
+								})
 							}
 							size='sm'
 						>

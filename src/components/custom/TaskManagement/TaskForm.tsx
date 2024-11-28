@@ -22,6 +22,7 @@ import {
 	Group,
 	Input,
 	Loader,
+	LoadingOverlay,
 	NumberInput,
 	Paper,
 	Select,
@@ -442,7 +443,8 @@ const TaskForm: React.FC<{
 				{/* summaries */}
 				<div className='grid lg:grid-cols-3 gap-3'>
 					{watch('client') && (
-						<Paper p={10} radius={0} withBorder>
+						<Paper p={10} radius={0} withBorder pos={'relative'}>
+							<LoadingOverlay visible={__clientsLoading} color='violet' />
 							<Text fw={700} fz={18}>
 								Client
 							</Text>
@@ -463,7 +465,8 @@ const TaskForm: React.FC<{
 						</Paper>
 					)}
 					{watch('taskDetails.taskAssignTo') && (
-						<Paper p={10} radius={0} withBorder>
+						<Paper p={10} radius={0} withBorder pos={'relative'}>
+							<LoadingOverlay visible={__employeeLoading} color='violet' />
 							<Text fw={700} fz={18}>
 								Assign to
 							</Text>

@@ -103,7 +103,7 @@ const BusinessData = () => {
 							modalOpened: false,
 						});
 					}}
-					operationType={state.operationType}
+					operationType={state.operationType!}
 					operationPayload={state.operationPayload}
 				/>
 			</Drawer>

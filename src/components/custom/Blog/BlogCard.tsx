@@ -6,7 +6,6 @@ import { getTimeDistance } from '@/app/config/logic/getTimeDistance';
 import { useMutation } from '@apollo/client';
 import { Avatar, Box, Button, Flex, Space, Text } from '@mantine/core';
 import { openConfirmModal } from '@mantine/modals';
-import { IconThumbUp } from '@tabler/icons-react';
 import Link from 'next/link';
 import React from 'react';
 import { FiEdit, FiTrash } from 'react-icons/fi';
@@ -39,8 +38,8 @@ const BlogCard: React.FC<IBlogProps> = ({ blog, refetchBlog }) => {
 			<img
 				src={blog?.image ?? '/placeholderImage.jpg'}
 				alt='blog img'
-				height={200}
-				className='w-full'
+				height={300}
+				className='w-full rounded-t-md'
 			/>
 
 			<Space h={'sm'} />
@@ -50,9 +49,18 @@ const BlogCard: React.FC<IBlogProps> = ({ blog, refetchBlog }) => {
 					{blog?.title}
 				</Text>
 				<Space h={5} />
-				<Text size='md' color='dimmed' ff={'Nunito sans, sans-serif'}>
-					{blog?.description.slice(0, 120)}
-				</Text>
+				<Text
+					size='md'
+					ff={'Nunito sans, sans-serif'}
+					color='dimmed'
+					dangerouslySetInnerHTML={{
+						__html:
+							blog?.shortDescription?.length! > 220
+								? blog?.shortDescription?.slice(0, 220) + '.....'
+								: blog?.shortDescription?.slice(0, 220)!,
+					}}
+				/>
+				<Space h={5} />
 			</Box>
 
 			<Space h={'md'} />
@@ -71,14 +79,14 @@ const BlogCard: React.FC<IBlogProps> = ({ blog, refetchBlog }) => {
 					</div>
 				</Flex>
 
-				<Button
+				{/* <Button
 					size='sm'
 					leftIcon={<IconThumbUp />}
 					color='red'
 					variant='subtle'
 				>
 					<Text ff={'Nunito sans, sans-serif'}>{blog?.like ?? 0}</Text>
-				</Button>
+				</Button> */}
 			</Flex>
 
 			<Space h={'md'} />

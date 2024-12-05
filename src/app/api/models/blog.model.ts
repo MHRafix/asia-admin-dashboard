@@ -7,6 +7,7 @@ export interface IBlog {
 	date: Date;
 	title: string;
 	description: string;
+	shortDescription: string;
 	country: string;
 	like: number;
 	image: string;

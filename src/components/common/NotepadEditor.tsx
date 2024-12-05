@@ -36,7 +36,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 			height: '60%',
 		},
 		quillBody: {
-			height: '100px',
+			height: '300px',
 		},
 	};
 });

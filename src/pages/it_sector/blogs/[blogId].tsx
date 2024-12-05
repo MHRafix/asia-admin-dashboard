@@ -9,7 +9,14 @@ import CircularLoader from '@/components/common/Loader';
 import NotepadEditor from '@/components/common/NotepadEditor';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import AdminLayout from '@/components/layouts/AdminLayout';
-import { Button, FileButton, Input, Space, Text } from '@mantine/core';
+import {
+	Button,
+	FileButton,
+	Input,
+	Space,
+	Text,
+	Textarea,
+} from '@mantine/core';
 import { useForm, yupResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
 import Image from 'next/image';
@@ -38,6 +45,7 @@ const EditBlog: React.FC<{ blogId: string }> = ({ blogId }) => {
 		form.setValues({
 			title: blog?.title,
 			description: blog?.description,
+			shortDescription: blog?.shortDescription,
 		});
 		setBanner(blog?.cover!);
 		setThumbnail(blog?.image!);
@@ -142,7 +150,24 @@ const EditBlog: React.FC<{ blogId: string }> = ({ blogId }) => {
 							{...form.getInputProps('title')}
 						/>
 					</Input.Wrapper>
-					<div className='block h-[200px]'>
+
+					<Input.Wrapper
+						label={
+							<Text fz={18} my={5}>
+								Short description
+							</Text>
+						}
+						my={10}
+						error={form.errors.shortDescription}
+					>
+						<Textarea
+							variant='unstyled'
+							size={'md'}
+							className='!border-[1px] !border-[#32344b] border-solid px-2'
+							{...form.getInputProps('shortDescription')}
+						/>
+					</Input.Wrapper>
+					<div className='block h-[400px]'>
 						<Input.Wrapper
 							label={
 								<Text fz={18} my={5}>
@@ -208,8 +233,8 @@ const EditBlog: React.FC<{ blogId: string }> = ({ blogId }) => {
 									<Image
 										src={banner}
 										alt='Thumbnail'
-										width={200}
-										className='!w-full'
+										width={400}
+										className='!w-full rounded-md object-fill'
 										height={300}
 									/>
 								) : (

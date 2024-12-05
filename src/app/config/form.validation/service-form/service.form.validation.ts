@@ -9,6 +9,7 @@ export const UPDATE_SERVICE_DEFAULT_VALUES = {
 export const UPDATE_BLOG_DEFAULT_VALUES = {
 	title: '',
 	description: '',
+	shortDescription: '',
 };
 
 export const UPDATE_REQ_DEFAULT_VALUES = {
@@ -36,6 +37,7 @@ export const updateServiceSchema = Yup.object().shape({
 export const updateBlogSchema = Yup.object().shape({
 	title: Yup.string().required().label('Title'),
 	description: Yup.string().required().label('Description'),
+	shortDescription: Yup.string().required().label('Short description'),
 });
 
 export const updateReqSchema = Yup.object().shape({

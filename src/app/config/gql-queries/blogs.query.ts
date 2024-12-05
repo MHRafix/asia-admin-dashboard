@@ -9,6 +9,7 @@ export const GET_BLOGS_QUERY = gql`
 				title
 				description
 				like
+				shortDescription
 				image
 				createdAt
 				author {
@@ -26,8 +27,10 @@ export const GET_BLOG_QUERY = gql`
 			status
 			title
 			description
+			shortDescription
 			like
 			image
+			cover
 			createdAt
 			author {
 				name

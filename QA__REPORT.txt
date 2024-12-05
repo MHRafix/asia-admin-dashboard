@@ -1,26 +1,28 @@
 Rest Development Implementations:------
 ------------------------------------------
-01. Dashboard Analysis
-02. Reception Module ---- [
-    **. Task Review ---- 1. Full Module
-]
 03. IT Sector Module ---- [
     ** Offers ---- Full Module
 ]
-
-04. Task Management Module ---- Full
-
-05. Manage Employee Module ---- [
-]
-
 06. Rating and Reviews Module ---- Full
-
-07. Expense Calculations Module ---- Full
-
 08. Notifications Module ---- Full
-
 09. Auth Module ---- [
     **. Forget Password & Reset Password
     **. My Password Change
-
 ]
+
+
+00. Kiamul Lail
+00. Fajr Time
+00. Ishraq
+00. Quran Tilwat Para
+00. Reading Books
+00. Jahar Time
+00. Sleeping
+00. Jahar Time
+00. Ajkar
+00. Durud S.A
+00. Istigfar
+00. Surah Waqiwa
+00. Surah Mulk
+00. Total Nafal
+00. Sadaqah

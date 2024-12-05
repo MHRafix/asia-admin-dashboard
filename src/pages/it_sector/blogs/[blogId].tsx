@@ -86,6 +86,7 @@ const EditBlog: React.FC<{ blogId: string }> = ({ blogId }) => {
 			variables: {
 				input: {
 					...values,
+					description,
 					_id: blogId,
 					image: thumbnail,
 					cover: banner,
@@ -153,20 +154,20 @@ const EditBlog: React.FC<{ blogId: string }> = ({ blogId }) => {
 						</Input.Wrapper>
 					</div>
 					<Space h={10} />
-					<div className='grid grid-cols-2 gap-5'>
+					<div className='flex items-center gap-5'>
 						<Input.Wrapper
-							label={`Upload blog thumbnail (size 300/250 px)`}
+							label={`Upload blog thumbnail (size 400/300 px)`}
 							size='md'
-							className='relative'
+							className='relative lg:w-4/12'
 						>
-							<div className='h-[250px] bg-[#212231] flex items-center justify-center'>
+							<div className='h-[300px] bg-[#212231] flex items-center justify-center'>
 								{thumbnail ? (
 									<Image
 										src={thumbnail}
 										alt='Thumbnail'
-										width={200}
-										className='!w-full'
-										height={250}
+										width={400}
+										className='rounded-md !w-full object-cover'
+										height={300}
 									/>
 								) : (
 									<HiOutlinePhotograph color='#5F3DC4' size={50} />
@@ -200,16 +201,16 @@ const EditBlog: React.FC<{ blogId: string }> = ({ blogId }) => {
 						<Input.Wrapper
 							label={`Upload blog banner (size 750/300 px)`}
 							size='md'
-							className='relative'
+							className='relative lg:w-5/12'
 						>
-							<div className='h-[250px] bg-[#212231] flex items-center justify-center'>
+							<div className='h-[300px] bg-[#212231] flex items-center justify-center'>
 								{banner ? (
 									<Image
 										src={banner}
 										alt='Thumbnail'
 										width={200}
 										className='!w-full'
-										height={250}
+										height={300}
 									/>
 								) : (
 									<HiOutlinePhotograph color='#5F3DC4' size={50} />

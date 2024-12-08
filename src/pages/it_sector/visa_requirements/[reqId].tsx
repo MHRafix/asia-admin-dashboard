@@ -20,7 +20,6 @@ import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, FileButton, Input, Select, Space } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -215,14 +214,13 @@ const EditVisaReq: React.FC<{ reqId: string }> = ({ reqId }) => {
 								size='md'
 								className='relative'
 							>
-								<div className='h-[250px] bg-[#212231] flex items-center justify-center'>
+								<div className='h-[350px] bg-[#212231] flex items-center justify-center'>
 									{thumbnail ? (
-										<Image
+										<img
 											src={thumbnail}
 											alt='Thumbnail'
-											width={200}
-											className='!w-full rounded-md'
-											height={250}
+											className='!w-full rounded-md object-cover'
+											height={350}
 										/>
 									) : (
 										<HiOutlinePhotograph color='#5F3DC4' size={50} />
@@ -261,14 +259,13 @@ const EditVisaReq: React.FC<{ reqId: string }> = ({ reqId }) => {
 								size='md'
 								className='relative'
 							>
-								<div className='h-[250px] bg-[#212231] flex items-center justify-center'>
+								<div className='h-[350px] bg-[#212231] flex items-center justify-center'>
 									{banner ? (
-										<Image
+										<img
 											src={banner}
 											alt='Thumbnail'
-											width={200}
-											className='!w-full rounded-md'
-											height={250}
+											className='!w-full rounded-md object-cover'
+											height={350}
 										/>
 									) : (
 										<HiOutlinePhotograph color='#5F3DC4' size={50} />

@@ -41,8 +41,8 @@ const RequirementCard: React.FC<IVisaReqProps> = ({
 			<img
 				src={visaReq?.image ?? '/placeholderImage.jpg'}
 				alt='visa req img'
-				height={200}
-				className='w-full'
+				height={250}
+				className='w-full object-cover rounded-t-md'
 			/>
 
 			<Space h={'sm'} />

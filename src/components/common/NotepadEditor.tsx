@@ -37,6 +37,8 @@ const useStyles = createStyles((theme, _params, getRef) => {
 		},
 		quillBody: {
 			height: '300px',
+			position: 'relative',
+			display: 'block',
 		},
 	};
 });

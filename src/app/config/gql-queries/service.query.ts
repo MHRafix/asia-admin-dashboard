@@ -16,9 +16,7 @@ export const GET_SERVICE_QUERY = gql`
 				title
 				shortDesc
 				desc
-				preRequirements
 				thumbnail
-				price
 			}
 		}
 	}
@@ -31,12 +29,8 @@ export const GET_SINGLE_SERVICE = gql`
 			title
 			shortDesc
 			desc
-			preRequirements
-			price
-			visaCategory
 			thumbnail
 			banner
-			country
 		}
 	}
 `;
@@ -47,12 +41,8 @@ export const UPDATE_SERVICE = gql`
 		$title: String
 		$shortDesc: String
 		$desc: String
-		$price: Float
-		$preRequirements: String
 		$thumbnail: String
 		$banner: String
-		$visaCategory: String
-		$country: String
 	) {
 		updateService(
 			input: {
@@ -60,12 +50,8 @@ export const UPDATE_SERVICE = gql`
 				title: $title
 				shortDesc: $shortDesc
 				desc: $desc
-				price: $price
-				preRequirements: $preRequirements
 				thumbnail: $thumbnail
 				banner: $banner
-				visaCategory: $visaCategory
-				country: $country
 			}
 		) {
 			_id

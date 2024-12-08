@@ -1,8 +1,4 @@
 import {
-	countriesSelectInputData,
-	visa_categories,
-} from '@/app/api/fakeData/data';
-import {
 	useGetService,
 	useUpdateService,
 } from '@/app/api/gql-api-hooks/service.api';
@@ -20,11 +16,10 @@ import {
 	Button,
 	FileButton,
 	Input,
-	NumberInput,
-	Select,
 	Space,
 	Text,
 	Textarea,
+	ThemeIcon,
 } from '@mantine/core';
 import { useForm, yupResolver } from '@mantine/form';
 import { showNotification } from '@mantine/notifications';
@@ -40,9 +35,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 	const [banner, setBanner] = useState('');
 
 	const { getingService, service, refetchService } = useGetService(serviceId);
-	const [preRequirements, setPreRequirements] = useState(
-		service?.preRequirements
-	);
+
 	const [description, setDescription] = useState(service?.desc);
 
 	const form = useForm({
@@ -52,14 +45,10 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 
 	// update initial info with service data
 	useEffect(() => {
-		setPreRequirements(service?.preRequirements);
 		setDescription(service?.desc);
 		form.setValues({
 			title: service?.title,
 			shortDesc: service?.shortDesc,
-			price: service?.price,
-			country: service?.country,
-			visaCategory: service?.visaCategory,
 		});
 		setBanner(service?.banner!);
 		setThumbnail(service?.thumbnail!);
@@ -108,7 +97,6 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 			variables: {
 				...values,
 				desc: description,
-				preRequirements,
 				id: serviceId,
 				thumbnail: thumbnail ? thumbnail : service?.thumbnail,
 				banner: banner ? banner : service?.banner,
@@ -151,80 +139,23 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 						}
 					/>
 
-					<div className='grid lg:grid-cols-2 lg:gap-5'>
-						<Input.Wrapper
-							label={
-								<Text fz={18} my={5}>
-									Title
-								</Text>
-							}
-							my={10}
-							error={form.errors.title}
-						>
-							<Input
-								variant='unstyled'
-								size={'md'}
-								className='!border-[1px] !border-[#32344b] border-solid px-2'
-								{...form.getInputProps('title')}
-							/>
-						</Input.Wrapper>
+					<Input.Wrapper
+						label={
+							<Text fz={18} my={5}>
+								Title
+							</Text>
+						}
+						my={10}
+						error={form.errors.title}
+					>
+						<Input
+							variant='unstyled'
+							size={'md'}
+							className='!border-[1px] !border-[#32344b] border-solid px-2'
+							{...form.getInputProps('title')}
+						/>
+					</Input.Wrapper>
 
-						<Input.Wrapper
-							label={
-								<Text fz={18} my={5}>
-									Price
-								</Text>
-							}
-							my={10}
-							error={form.errors.price}
-						>
-							<NumberInput
-								variant='unstyled'
-								size={'md'}
-								className='!border-[1px] !border-[#32344b] border-solid px-2'
-								{...form.getInputProps('price')}
-							/>
-						</Input.Wrapper>
-					</div>
-					<div className='grid lg:grid-cols-2 lg:gap-5'>
-						<Input.Wrapper
-							label={
-								<Text fz={18} my={5}>
-									Country
-								</Text>
-							}
-							my={10}
-							error={form.errors.country}
-						>
-							<Select
-								data={countriesSelectInputData}
-								variant='unstyled'
-								size={'md'}
-								placeholder='Pick a country'
-								className='!border-[1px] !border-[#32344b] border-solid px-2'
-								{...form.getInputProps('country')}
-							/>
-						</Input.Wrapper>
-
-						<Input.Wrapper
-							label={
-								<Text fz={18} my={5}>
-									Visa Category
-								</Text>
-							}
-							my={10}
-							error={form.errors.visaCategory}
-						>
-							<Select
-								data={visa_categories}
-								variant='unstyled'
-								size={'md'}
-								placeholder='Pick a category'
-								className='!border-[1px] !border-[#32344b] border-solid px-2'
-								{...form.getInputProps('visaCategory')}
-							/>
-						</Input.Wrapper>
-					</div>
 					<Input.Wrapper
 						label={
 							<Text fz={18} my={5}>
@@ -241,21 +172,8 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							{...form.getInputProps('shortDesc')}
 						/>
 					</Input.Wrapper>
-					<div className='block h-[200px] my-2'>
-						<Input.Wrapper
-							label={
-								<Text fz={18} my={5}>
-									Pre Requirements
-								</Text>
-							}
-						>
-							<NotepadEditor
-								value={preRequirements!}
-								setValue={setPreRequirements}
-							/>
-						</Input.Wrapper>
-					</div>
-					<div className='block h-[200px]'>
+
+					<div className='relative'>
 						<Input.Wrapper
 							label={
 								<Text fz={18} my={5}>
@@ -266,26 +184,32 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							<NotepadEditor value={description!} setValue={setDescription} />
 						</Input.Wrapper>
 					</div>
-					<Space h={10} />
-					<div className='grid grid-cols-2 gap-5'>
+
+					<Space h={80} />
+
+					<div className='relative flex gap-5'>
 						<Input.Wrapper
-							label={`Upload service thumbnail (size 300/250 px)`}
+							label={`Upload service icon (size 40/40 px)`}
 							size='md'
 							className='relative'
 						>
-							<div className='h-[250px] bg-[#212231] flex items-center justify-center'>
-								{thumbnail ? (
-									<Image
-										src={thumbnail}
-										alt='Thumbnail'
-										width={200}
-										className='!w-full'
-										height={250}
-									/>
-								) : (
+							{thumbnail ? (
+								<div className='h-[250px]  bg-[#212231] flex items-center justify-center'>
+									{' '}
+									<ThemeIcon variant='light' radius={200} size={120}>
+										<Image
+											src={thumbnail}
+											alt='servie icon'
+											width={80}
+											height={80}
+										/>
+									</ThemeIcon>
+								</div>
+							) : (
+								<div className='h-[250px] bg-[#212231] flex items-center '>
 									<HiOutlinePhotograph color='#5F3DC4' size={50} />
-								)}
-							</div>
+								</div>
+							)}
 							<div className='absolute bottom-3 right-3 gap-1 flex items-center'>
 								<div>
 									<FileButton
@@ -316,7 +240,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							size='md'
 							className='relative'
 						>
-							<div className='h-[250px] bg-[#212231] flex items-center justify-center'>
+							<div className='h-[250px] w-[750px] bg-[#212231] flex items-center justify-center'>
 								{banner ? (
 									<Image
 										src={banner}

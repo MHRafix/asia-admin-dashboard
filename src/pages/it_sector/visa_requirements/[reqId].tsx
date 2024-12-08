@@ -60,8 +60,6 @@ const EditVisaReq: React.FC<{ reqId: string }> = ({ reqId }) => {
 		setThumbnail(requirement?.image!);
 	}, [requirement]);
 
-	// console.log(requirement);
-
 	const { updateRequirement, updatingRequirement } = useUpdateRequirement(
 		() => {
 			refetchRequirement();
@@ -102,7 +100,6 @@ const EditVisaReq: React.FC<{ reqId: string }> = ({ reqId }) => {
 	};
 
 	const handleUpdateForm = (values: any) => {
-		// if (form.isDirty()) return;
 		updateRequirement({
 			variables: {
 				input: {
@@ -209,7 +206,7 @@ const EditVisaReq: React.FC<{ reqId: string }> = ({ reqId }) => {
 						</Input.Wrapper>
 					</div>
 
-					<Space h={10} />
+					<Space h={200} />
 
 					<div className='flex justify-between items-center gap-4'>
 						<div className='lg:w-4/12'>

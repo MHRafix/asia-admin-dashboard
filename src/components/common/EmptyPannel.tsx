@@ -1,6 +1,5 @@
-import { Button, Text } from '@mantine/core';
+import { Button, Paper, Text } from '@mantine/core';
 import React from 'react';
-import { BsBookmarkPlus } from 'react-icons/bs';
 
 interface IEmptyPannelProps {
 	isShow: boolean;
@@ -21,7 +20,7 @@ const EmptyPannel: React.FC<IEmptyPannelProps> = ({
 		return null;
 	}
 	return (
-		<div className='text-center my-5'>
+		<Paper className='text-center p-10 my-5 lg:w-6/12 w-full mx-auto'>
 			<div>{Icon}</div>
 			<Text color='red' fw={500}>
 				{title}
@@ -37,7 +36,7 @@ const EmptyPannel: React.FC<IEmptyPannelProps> = ({
 					{actionBtnLabel}
 				</Button>
 			)}
-		</div>
+		</Paper>
 	);
 };
 

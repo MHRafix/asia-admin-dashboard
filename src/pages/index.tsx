@@ -12,6 +12,7 @@ import { getBookingsDateRange } from '@/app/config/logic/getDateRanges';
 import DateRangePicker from '@/components/common/DateRangePicker';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import TourCard from '@/components/common/Tour/TourCard';
+import TourCardSkeleton from '@/components/common/Tour/TourCardSkeleton';
 import DashboardSkeleton from '@/components/custom/Dashboard/DashboardSkeleton';
 import GridOverViewCard from '@/components/custom/Dashboard/OverViewCard.tsx/GridOverViewCard';
 import TaskRevinewCard from '@/components/custom/Dashboard/OverViewCard.tsx/TaskRevinewCard';
@@ -21,9 +22,9 @@ import { Space, Title } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
 const Dashboard = () => {
-	const [bookingsFilterDate, onChangeBookingsFilterDate] = useState<
-		[Date, Date]
-	>(getBookingsDateRange());
+	const [filterDate, onChangeFilterDate] = useState<[Date, Date]>(
+		getBookingsDateRange()
+	);
 
 	// dashboard overview data
 	const [grandRevinewData, setGrandRevinewData] =
@@ -62,32 +63,32 @@ const Dashboard = () => {
 
 	useEffect(() => {
 		try {
-			setIsLoadingGrandRevinewData(true);
-			setIsLoadingEmployeeRevinewData(true);
-
-			taskGrandRevinewApi().then((res) => {
-				setGrandRevinewData(res?.data);
-			});
-
-			if (!employeeIdsLoading) {
+			if (filterDate[1]) {
+				setIsLoadingGrandRevinewData(true);
 				setIsLoadingEmployeeRevinewData(true);
-				taskRevinewByEmployeeApi({
-					employeeIds: employeeIds?.allEmployeeIds,
-				}).then((res) => {
-					setEmployeeRevinewData(res?.data);
-					setIsLoadingGrandRevinewData(false);
-					setIsLoadingEmployeeRevinewData(false);
+				taskGrandRevinewApi(filterDate).then((res) => {
+					setGrandRevinewData(res?.data);
 				});
+
+				if (!employeeIdsLoading) {
+					setIsLoadingEmployeeRevinewData(true);
+					taskRevinewByEmployeeApi(
+						{
+							employeeIds: employeeIds?.allEmployeeIds,
+						},
+						filterDate
+					).then((res) => {
+						setEmployeeRevinewData(res?.data);
+						setIsLoadingGrandRevinewData(false);
+						setIsLoadingEmployeeRevinewData(false);
+					});
+				}
 			}
 		} catch (error) {
 			setIsLoadingGrandRevinewData(false);
 			setIsLoadingEmployeeRevinewData(false);
 		}
-	}, [employeeIds?.allEmployeeIds]);
-
-	// useEffect(() => {
-
-	// }, [employeeIds?.allEmployeeIds]);
+	}, [employeeIds?.allEmployeeIds, filterDate]);
 
 	return (
 		<AdminLayout title='Dashboard'>
@@ -108,26 +109,26 @@ const Dashboard = () => {
 					<DashboardSkeleton />
 				) : (
 					<div>
-						<GridOverViewCard grandRevinewData={grandRevinewData!} />
+						{' '}
+						<div className='lg:flex justify-between items-center gap-5 mb-5'>
+							<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'}>
+								Accounts Analytics
+							</Title>
 
+							<div className='md:flex items-center gap-3'>
+								<DateRangePicker
+									dateRange={filterDate}
+									onChangeDate={onChangeFilterDate}
+								/>
+							</div>
+						</div>
+						<GridOverViewCard grandRevinewData={grandRevinewData!} />
 						<div className='grid mt-10 mb-10'>
 							<div>
 								<div className='lg:flex justify-between items-center gap-5'>
-									<Title
-										fw={500}
-										fz={25}
-										ff={'Nunito sans, sans-serif'}
-										mb={10}
-									>
-										Task Revinew
+									<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'}>
+										Task Revenue
 									</Title>
-
-									<div className='md:flex items-center gap-3'>
-										<DateRangePicker
-											dateRange={bookingsFilterDate}
-											onChangeDate={onChangeBookingsFilterDate}
-										/>
-									</div>
 								</div>
 
 								<Space h={20} />
@@ -160,6 +161,13 @@ const Dashboard = () => {
 							<TourCard key={idx} TPackage={TPackage} actionBtn={false} />
 						)
 					)}
+
+					{new Array(12).fill(12).map((_, idx: number) => (
+						<TourCardSkeleton
+							key={idx}
+							show={!Boolean(travelPackages?.travelPackages?.nodes?.length)}
+						/>
+					))}
 				</div>
 			</div>
 		</AdminLayout>

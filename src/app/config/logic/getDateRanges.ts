@@ -16,8 +16,8 @@ export const getDateRange = (): [Date, Date] => {
 };
 
 export const getBookingsDateRange = (): [Date, Date] => {
-	const firstDate = new Date();
-	firstDate.setDate(firstDate.getDate() - 5);
+	const secondDate = new Date();
+	secondDate.setDate(secondDate.getDate() + 1);
 
-	return [firstDate, new Date()];
+	return [new Date(), secondDate];
 };

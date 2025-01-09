@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import {
 	IGrandRevinewOverviewData,
 	ITaskRevinewDataType,
@@ -18,7 +17,7 @@ export const getCities = async (placeName: string) => {
 };
 
 export const useGetDashboardAnalyticsData = () => {
-	const userInfo = Cookies.get('user') && JSON.parse(Cookies.get('user')!);
+	// const userInfo = Cookies.get('user') && JSON.parse(Cookies.get('user')!);
 	// const overViewDataApi = (query: IDashboardOverviewQueryParams) =>
 	// 	axios.get<IDashboardOverview>(
 	// 		`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/overview`,
@@ -30,17 +29,30 @@ export const useGetDashboardAnalyticsData = () => {
 	// 		}
 	// 	);
 
-	const taskRevinewByEmployeeApi = (body: ITaskRevinewApiBodyType) =>
-		axios.post<ITaskRevinewDataType[]>(
-			`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/task-revinew-by-employee`,
+	// take the date only from date string
+
+	// task revenue by employee
+	const taskRevinewByEmployeeApi = (
+		body: ITaskRevinewApiBodyType,
+		filterDate: Date[]
+	) => {
+		const startDate = filterDate[0]?.toISOString().split('T')[0];
+		const endDate = filterDate[1]?.toISOString().split('T')[0];
+
+		return axios.post<ITaskRevinewDataType[]>(
+			`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/task-revinew-by-employee?startDate=${startDate}&endDate=${endDate}`,
 			body
 		);
+	};
 
-	const taskGrandRevinewApi = () =>
-		axios.get<IGrandRevinewOverviewData>(
-			`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/task-grand-revinew`
+	// grand revenue api
+	const taskGrandRevinewApi = (filterDate: Date[]) => {
+		const startDate = filterDate[0]?.toISOString().split('T')[0];
+		const endDate = filterDate[1]?.toISOString().split('T')[0];
+		return axios.get<IGrandRevinewOverviewData>(
+			`${process.env.NEXT_PUBLIC_REST_API_URL}/dashboard/task-grand-revinew?startDate=${startDate}&endDate=${endDate}`
 		);
-
+	};
 	return { taskRevinewByEmployeeApi, taskGrandRevinewApi };
 };
 

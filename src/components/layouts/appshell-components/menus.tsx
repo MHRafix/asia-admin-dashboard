@@ -15,7 +15,6 @@ import {
 	TbDeviceDesktop,
 	TbListCheck,
 	TbListDetails,
-	TbReceipt2,
 	TbTextPlus,
 	TbUsers,
 } from 'react-icons/tb';
@@ -40,11 +39,11 @@ export const menus = [
 			// 	href: '/reception_management/attendance_activities',
 			// },
 
-			{
-				label: 'Money receipt',
-				href: '/reception_management/money_receipt',
-				icon: <TbReceipt2 size={18} />,
-			},
+			// {
+			// 	label: 'Money receipt',
+			// 	href: '/reception_management/money_receipt',
+			// 	icon: <TbReceipt2 size={18} />,
+			// },
 			{
 				label: 'Appointments',
 				icon: <SiGotomeeting size={20} />,

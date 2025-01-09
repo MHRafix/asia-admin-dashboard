@@ -39,7 +39,7 @@ const Dashboard = () => {
 		useState<boolean>(true);
 
 	// travel packages api
-	const { data: travelPackages } = ApolloQuery<{
+	const { data: travelPackages, loading: travelPackageLoading } = ApolloQuery<{
 		travelPackages: { nodes: ITravelPackage[] };
 	}>(GET_TRAVEL_PACKAGES, {
 		variables: {
@@ -151,24 +151,38 @@ const Dashboard = () => {
 				)}
 
 				{/* popular travel packages */}
-				<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={10}>
-					Popular packages
-				</Title>
+				{!travelPackageLoading ? (
+					<>
+						{travelPackages?.travelPackages?.nodes?.length ? (
+							<div>
+								<Title fw={500} fz={25} ff={'Nunito sans, sans-serif'} mb={10}>
+									Popular packages
+								</Title>
 
-				<div className='grid lg:grid-cols-4 gap-5'>
-					{travelPackages?.travelPackages?.nodes?.map(
-						(TPackage: ITravelPackage, idx: number) => (
-							<TourCard key={idx} TPackage={TPackage} actionBtn={false} />
-						)
-					)}
-
-					{new Array(12).fill(12).map((_, idx: number) => (
-						<TourCardSkeleton
-							key={idx}
-							show={!Boolean(travelPackages?.travelPackages?.nodes?.length)}
-						/>
-					))}
-				</div>
+								<div className='grid lg:grid-cols-4 gap-5'>
+									{travelPackages?.travelPackages?.nodes?.map(
+										(TPackage: ITravelPackage, idx: number) => (
+											<TourCard
+												key={idx}
+												TPackage={TPackage}
+												actionBtn={false}
+											/>
+										)
+									)}
+								</div>
+							</div>
+						) : null}
+					</>
+				) : (
+					<div className='grid lg:grid-cols-4 gap-5'>
+						{new Array(12).fill(12).map((_, idx: number) => (
+							<TourCardSkeleton
+								key={idx}
+								show={!Boolean(travelPackages?.travelPackages?.nodes?.length)}
+							/>
+						))}
+					</div>
+				)}
 			</div>
 		</AdminLayout>
 	);

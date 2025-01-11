@@ -8,6 +8,7 @@ export const Expenses_List_Query = gql`
 				title
 				description
 				amount
+				createdAt
 			}
 		}
 	}

@@ -5,6 +5,7 @@ export interface IExpensesType {
 	title: string;
 	description: string;
 	amount: string;
+	createdAt: Date;
 }
 
 export interface IExpensesWithPagination {

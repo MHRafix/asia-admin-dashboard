@@ -194,7 +194,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 							className='relative'
 						>
 							{thumbnail ? (
-								<div className='h-[250px]  bg-[#212231] flex items-center justify-center'>
+								<div className='h-[250px] bg-[#212231] flex items-center !justify-center'>
 									{' '}
 									<ThemeIcon variant='light' radius={200} size={120}>
 										<Image
@@ -206,7 +206,7 @@ const SingleService: React.FC<{ serviceId: string }> = ({ serviceId }) => {
 									</ThemeIcon>
 								</div>
 							) : (
-								<div className='h-[250px] bg-[#212231] flex items-center '>
+								<div className='h-[250px] bg-[#212231] !justify-center flex items-center '>
 									<HiOutlinePhotograph color='#5F3DC4' size={50} />
 								</div>
 							)}

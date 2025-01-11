@@ -67,7 +67,6 @@ const Services: NextPage = () => {
 											title: `New service ${services?.length! + 1}`,
 											shortDesc: 'This short description ... ... ...',
 											desc: 'This is description ... ... ...',
-											price: 100,
 											author: user?._id,
 										},
 									},

@@ -11,10 +11,10 @@ import DrawerWrapper from '@/components/common/Drawer/DrawerWrapper';
 import PageTitleArea from '@/components/common/PageTitleArea';
 import DataTable from '@/components/common/Table/DataTable';
 import { useMutation, useQuery } from '@apollo/client';
-import { Badge, Button, Menu, Text } from '@mantine/core';
+import { Badge, Menu, Text } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
-import { IconMessage, IconPlus, IconTrash } from '@tabler/icons-react';
+import { IconMessage, IconTrash } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { MRT_ColumnDef } from 'mantine-react-table';
 import React, { useMemo } from 'react';
@@ -121,7 +121,7 @@ const AppointmentsTable: React.FC<{}> = () => {
 			{/*  create, & reply drawer */}
 			<DrawerWrapper
 				opened={state.modalOpened}
-				size={state.operationType === 'reply' ? '50%' : 'md'}
+				size={state.operationType === 'reply' ? '50%' : 'lg'}
 				title={`Appointment ${state.operationType}`}
 				close={() => {
 					setState({
@@ -131,7 +131,16 @@ const AppointmentsTable: React.FC<{}> = () => {
 				}}
 			>
 				{state.operationType === 'answer' ? (
-					<ReplyDrawer clientQuestions={state?.appointment?.clientQuestions} />
+					<ReplyDrawer
+						clientQuestions={state?.appointment?.clientQuestions}
+						onClose={() => {
+							refetch();
+							setState({ modalOpened: false });
+						}}
+						_id={state?.appointment?._id}
+						name={state?.appointment?.name}
+						email={state?.appointment?.email}
+					/>
 				) : // <MoneyReceiptCreateForm
 				// 	operationType={state.operationType}
 				// 	receipt={receipt!}
@@ -188,21 +197,21 @@ const AppointmentsTable: React.FC<{}> = () => {
 						</Menu.Item>
 					</>
 				)}
-				ActionArea={
-					<>
-						<Button
-							color='violet'
-							variant='light'
-							leftIcon={<IconPlus size={16} />}
-							onClick={() =>
-								setState({ modalOpened: true, operationType: 'create' })
-							}
-							size='sm'
-						>
-							Add new
-						</Button>
-					</>
-				}
+				// ActionArea={
+				// 	<>
+				// 		<Button
+				// 			color='violet'
+				// 			variant='light'
+				// 			leftIcon={<IconPlus size={16} />}
+				// 			onClick={() =>
+				// 				setState({ modalOpened: true, operationType: 'create' })
+				// 			}
+				// 			size='sm'
+				// 		>
+				// 			Add new
+				// 		</Button>
+				// 	</>
+				// }
 				loading={state.refetching}
 			/>{' '}
 		</>

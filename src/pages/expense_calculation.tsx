@@ -23,6 +23,7 @@ import { Button, Input, Menu, NumberInput, Space, Text } from '@mantine/core';
 import { useSetState } from '@mantine/hooks';
 import { modals } from '@mantine/modals';
 import { IconPencil, IconPlus, IconTrash } from '@tabler/icons-react';
+import { format } from 'date-fns';
 import { MRT_ColumnDef } from 'mantine-react-table';
 import { NextPage } from 'next';
 import { useEffect, useMemo } from 'react';
@@ -125,6 +126,20 @@ const ExpenseList: NextPage = () => {
 					return (
 						<Text className='!text-red-500 font-bold'>
 							{expense?.amount || 0} BDT
+						</Text>
+					);
+				},
+			},
+			{
+				accessorKey: 'createdAt',
+				header: 'Date',
+				accessorFn: (expense: IExpensesType) => {
+					return (
+						<Text className='!text-red-500 font-bold'>
+							{format(
+								expense?.createdAt ? new Date(expense?.createdAt) : new Date(),
+								'PPP'
+							)}
 						</Text>
 					);
 				},

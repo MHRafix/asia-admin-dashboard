@@ -37,7 +37,7 @@ export const useGetTasksByStatus = (user: IEmployees, filterQuery: any) => {
 			page: 1,
 			sort: SortType.Desc,
 			sortBy: '_id',
-			where: filterQuery,
+			// where: filterQuery ??,
 		},
 	};
 
@@ -56,7 +56,7 @@ export const useGetTasksByStatus = (user: IEmployees, filterQuery: any) => {
 
 	// handle variable switch
 	const handleVariableForQuery = (role: USER_ROLE) => {
-		console.log(user);
+		// console.log(role);
 		switch (role) {
 			case USER_ROLE.ADMIN:
 				return variableForAdmin;
@@ -81,7 +81,7 @@ export const useGetTasksByStatus = (user: IEmployees, filterQuery: any) => {
 		taskList: TaskManagementWithPagination;
 	}>(Get_Task_List_Query, {
 		variables: handleVariableForQuery(user?.role),
-		// skip: !user?._id,
+		skip: !user?.role,
 	});
 
 	const pendingTasks = tasks?.taskList?.nodes?.filter(

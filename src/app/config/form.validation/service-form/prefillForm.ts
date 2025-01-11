@@ -6,6 +6,5 @@ export const prefillUpdateServiceForm = (service: IService) => {
 		shortDesc: service?.shortDesc,
 		desc: service?.desc,
 		preRequirements: service?.preRequirements,
-		price: service?.price,
 	};
 };

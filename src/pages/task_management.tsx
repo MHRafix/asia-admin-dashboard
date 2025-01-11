@@ -44,7 +44,6 @@ const TaskManagement = () => {
 	// refetch state
 	const [isRefetching, setIsRefetching] = useState<boolean>(false);
 
-	// get users
 	// get employees
 	const { data: employeesData, loading: __employeeLoading } = useQuery<{
 		teams: { nodes: IEmployees[] };
@@ -69,7 +68,7 @@ const TaskManagement = () => {
 			employeesData?.teams?.nodes?.find(
 				(member: IEmployees) => member?.email === user?.email
 			) as IEmployees,
-			filterQuery
+			filterQuery?.value ? filterQuery : null
 		);
 
 	return (
